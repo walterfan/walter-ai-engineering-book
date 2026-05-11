@@ -1,0 +1,1177 @@
+
+<!DOCTYPE html>
+
+
+<html lang="zh-CN" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>第十五章：超越氛围编程 — 意图驱动开发 &#8212; AI 时代的软件工程</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="_static/documentation_options.js?v=546e450b"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script src="_static/translations.js?v=beaddf03"></script>
+    <script type="module" src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs"></script>
+    <script type="module" src="https://cdn.jsdelivr.net/npm/@mermaid-js/layout-elk@0.2.0/dist/mermaid-layout-elk.esm.min.mjs"></script>
+    <script type="module">mermaid.initialize({startOnLoad:true, theme:'default'});</script>
+    <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+    <script type="module">import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";
+
+const defaultStyle = document.createElement('style');
+defaultStyle.textContent = `pre.mermaid {
+    /* Same as .mermaid-container > pre */
+    display: block;
+    width: 100%;
+}
+
+pre.mermaid > svg {
+    /* Same as .mermaid-container > pre > svg */
+    height: 500px;
+    width: 100%;
+    max-width: 100% !important;
+}
+`;
+document.head.appendChild(defaultStyle);
+
+const fullscreenStyle = document.createElement('style');
+fullscreenStyle.textContent = `.mermaid-container {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+
+.mermaid-container > pre {
+    display: block;
+    width: 100%;
+}
+
+.mermaid-container > pre > svg {
+    height: 500px;
+    width: 100%;
+    max-width: 100% !important;
+}
+
+.mermaid-fullscreen-btn {
+    width: 28px;
+    height: 28px;
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    font-size: 14px;
+    line-height: 1;
+    padding: 0;
+    color: #333;
+}
+
+.mermaid-fullscreen-btn:hover {
+    opacity: 100% !important;
+    background: rgba(255, 255, 255, 1);
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+    transform: scale(1.1);
+}
+
+.mermaid-fullscreen-btn.dark-theme {
+    background: rgba(50, 50, 50, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: #e0e0e0;
+}
+
+.mermaid-fullscreen-btn.dark-theme:hover {
+    background: rgba(60, 60, 60, 1);
+    box-shadow: 0 3px 10px rgba(255, 255, 255, 0.2);
+}
+
+.mermaid-fullscreen-modal {
+    display: none;
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 95vw;
+    height: 100vh;
+    background: rgba(255, 255, 255, 0.98);
+    z-index: 9999;
+    padding: 20px;
+    overflow: auto;
+}
+
+.mermaid-fullscreen-modal.dark-theme {
+    background: rgba(0, 0, 0, 0.98);
+}
+
+.mermaid-fullscreen-modal.active {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mermaid-container-fullscreen {
+    position: relative;
+    width: 95vw;
+    height: 90vh;
+    max-width: 95vw;
+    max-height: 90vh;
+    background: white;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    overflow: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mermaid-container-fullscreen.dark-theme {
+    background: #1a1a1a;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
+}
+
+.mermaid-container-fullscreen pre.mermaid {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mermaid-container-fullscreen .mermaid svg {
+    height: 100% !important;
+    width: 100% !important;
+    cursor: grab;
+}
+
+.mermaid-fullscreen-close {
+    position: fixed !important;
+    top: 20px !important;
+    right: 20px !important;
+    width: 40px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    transition: all 0.2s;
+    font-size: 24px;
+    line-height: 1;
+    color: #333;
+}
+
+.mermaid-fullscreen-close:hover {
+    background: white;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+    transform: scale(1.1);
+}
+
+.mermaid-fullscreen-close.dark-theme {
+    background: rgba(50, 50, 50, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #e0e0e0;
+}
+
+.mermaid-fullscreen-close.dark-theme:hover {
+    background: rgba(60, 60, 60, 1);
+    box-shadow: 0 6px 16px rgba(255, 255, 255, 0.2);
+}
+
+.mermaid-fullscreen-modal .mermaid-fullscreen-btn {
+    display: none !important;
+}`;
+document.head.appendChild(fullscreenStyle);
+
+// Detect if page has dark background
+const isDarkTheme = () => {
+    const bgColor = window.getComputedStyle(document.body).backgroundColor;
+    const match = bgColor.match(/rgb\((\d+),\s*(\d+),\s*(\d+)/);
+    if (match) {
+        const r = parseInt(match[1]);
+        const g = parseInt(match[2]);
+        const b = parseInt(match[3]);
+        const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+        return brightness < 128;
+    }
+    return false;
+};
+
+const load = async () => {
+    await mermaid.run();
+
+    const all_mermaids = document.querySelectorAll(".mermaid");
+    const mermaids_processed = document.querySelectorAll(".mermaid[data-processed='true']");
+
+    if ("False" === "True") {
+        const mermaids_to_add_zoom = -1 === -1 ? all_mermaids.length : -1;
+        if(mermaids_to_add_zoom > 0) {
+            var svgs = d3.selectAll("");
+            if(all_mermaids.length !== mermaids_processed.length) {
+                setTimeout(load, 200);
+                return;
+            } else if(svgs.size() !== mermaids_to_add_zoom) {
+                setTimeout(load, 200);
+                return;
+            } else {
+                svgs.each(function() {
+                    var svg = d3.select(this);
+                    svg.html("<g class='wrapper'>" + svg.html() + "</g>");
+                    var inner = svg.select("g");
+                    var zoom = d3.zoom().on("zoom", function(event) {
+                        inner.attr("transform", event.transform);
+                    });
+                    svg.call(zoom);
+                });
+            }
+        }
+    } else if(all_mermaids.length !== mermaids_processed.length) {
+        // Wait for mermaid to process all diagrams
+        setTimeout(load, 200);
+        return;
+    }
+
+    const darkTheme = isDarkTheme();
+
+    // Stop here if not adding fullscreen capability
+    if ("True" !== "True") return;
+
+    const modal = document.createElement('div');
+    modal.className = 'mermaid-fullscreen-modal' + (darkTheme ? ' dark-theme' : '');
+    modal.setAttribute('role', 'dialog');
+    modal.setAttribute('aria-modal', 'true');
+    modal.setAttribute('aria-label', 'Fullscreen diagram viewer');
+    modal.innerHTML = `
+        <button class="mermaid-fullscreen-close${darkTheme ? ' dark-theme' : ''}" aria-label="Close fullscreen">✕</button>
+        <div class="mermaid-container-fullscreen${darkTheme ? ' dark-theme' : ''}"></div>
+    `;
+    document.body.appendChild(modal);
+
+    const modalContent = modal.querySelector('.mermaid-container-fullscreen');
+    const closeBtn = modal.querySelector('.mermaid-fullscreen-close');
+
+    let previousScrollOffset = [window.scrollX, window.scrollY];
+
+    const closeModal = () => {
+        modal.classList.remove('active');
+        modalContent.innerHTML = '';
+        document.body.style.overflow = ''
+        window.scrollTo({left: previousScrollOffset[0], top: previousScrollOffset[1], behavior: 'instant'});
+    };
+
+    closeBtn.addEventListener('click', closeModal);
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) closeModal();
+    });
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && modal.classList.contains('active')) {
+            closeModal();
+        }
+    });
+
+    const allButtons = [];
+
+    document.querySelectorAll('.mermaid').forEach((mermaidDiv) => {
+        if (mermaidDiv.parentNode.classList.contains('mermaid-container') ||
+            mermaidDiv.closest('.mermaid-fullscreen-modal')) {
+            return;
+        }
+
+        const container = document.createElement('div');
+        container.className = 'mermaid-container';
+        mermaidDiv.parentNode.insertBefore(container, mermaidDiv);
+        container.appendChild(mermaidDiv);
+
+        const fullscreenBtn = document.createElement('button');
+        fullscreenBtn.className = 'mermaid-fullscreen-btn' + (darkTheme ? ' dark-theme' : '');
+        fullscreenBtn.setAttribute('aria-label', 'View diagram in fullscreen');
+        fullscreenBtn.textContent = '⛶';
+        fullscreenBtn.style.opacity = '50%';
+
+        // Calculate dynamic position based on diagram's margin and padding
+        const diagramStyle = window.getComputedStyle(mermaidDiv);
+        const marginTop = parseFloat(diagramStyle.marginTop) || 0;
+        const marginRight = parseFloat(diagramStyle.marginRight) || 0;
+        const paddingTop = parseFloat(diagramStyle.paddingTop) || 0;
+        const paddingRight = parseFloat(diagramStyle.paddingRight) || 0;
+        fullscreenBtn.style.top = `${marginTop + paddingTop + 4}px`;
+        fullscreenBtn.style.right = `${marginRight + paddingRight + 4}px`;
+
+        fullscreenBtn.addEventListener('click', () => {
+            previousScrollOffset = [window.scroll, window.scrollY];
+            const clone = mermaidDiv.cloneNode(true);
+            modalContent.innerHTML = '';
+            modalContent.appendChild(clone);
+
+            const svg = clone.querySelector('svg');
+            if (svg) {
+                svg.removeAttribute('width');
+                svg.removeAttribute('height');
+                svg.style.width = '100%';
+                svg.style.height = 'auto';
+                svg.style.maxWidth = '100%';
+                svg.style.sdisplay = 'block';
+
+                if ("False" === "True") {
+                    setTimeout(() => {
+                        const g = svg.querySelector('g');
+                        if (g) {
+                            var svgD3 = d3.select(svg);
+                            svgD3.html("<g class='wrapper'>" + svgD3.html() + "</g>");
+                            var inner = svgD3.select("g");
+                            var zoom = d3.zoom().on("zoom", function(event) {
+                                inner.attr("transform", event.transform);
+                            });
+                            svgD3.call(zoom);
+                        }
+                    }, 100);
+                }
+            }
+
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        });
+
+        container.appendChild(fullscreenBtn);
+        allButtons.push(fullscreenBtn);
+    });
+
+    // Update theme classes when theme changes
+    const updateTheme = () => {
+        const dark = isDarkTheme();
+        allButtons.forEach(btn => {
+            if (dark) {
+                btn.classList.add('dark-theme');
+            } else {
+                btn.classList.remove('dark-theme');
+            }
+        });
+        if (dark) {
+            modal.classList.add('dark-theme');
+            modalContent.classList.add('dark-theme');
+            closeBtn.classList.add('dark-theme');
+        } else {
+            modal.classList.remove('dark-theme');
+            modalContent.classList.remove('dark-theme');
+            closeBtn.classList.remove('dark-theme');
+        }
+    };
+
+    // Watch for theme changes
+    const observer = new MutationObserver(updateTheme);
+    observer.observe(document.documentElement, {
+        attributes: true,
+        attributeFilter: ['class', 'style', 'data-theme']
+    });
+    observer.observe(document.body, {
+        attributes: true,
+        attributeFilter: ['class', 'style']
+    });
+};
+
+window.addEventListener("load", load);
+</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'chapter15';</script>
+    <link rel="index" title="索引" href="genindex.html" />
+    <link rel="search" title="搜索" href="search.html" />
+    <link rel="next" title="第十六章：AI Agent 概论 — 从聊天机器人到自主智能体" href="chapter16.html" />
+    <link rel="prev" title="第十四章：氛围编程的边界与风险" href="chapter14.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="zh-CN"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">跳转至主要内容</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>回到顶部</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="版本警告"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">AI 时代的软件工程</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="搜索" aria-label="搜索" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">搜索</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">第一部分：回顾与反思 — 软件工程的前世今生</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="chapter01.html">第一章：软件工程的起源与演进</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter02.html">第二章：敏捷革命 — 从计划驱动到价值驱动</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter03.html">第三章：DevOps 与云原生 — 打破开发与运维的壁垒</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter04.html">第四章：软件架构的演进 — 从单体到智能体</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter05.html">第五章：软件质量与工程实践的变迁</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">第二部分：变革之风 — AI 如何重塑软件开发</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="chapter06.html">第六章：AI 编程助手的崛起</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter07.html">第七章：大语言模型基础 — 开发者需要知道的</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter08.html">第八章：AI 驱动的软件开发生命周期</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter09.html">第九章：AI 时代的代码审查与质量保证</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter10.html">第十章：AI 时代的团队协作与项目管理</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">第三部分：氛围编程 — 新范式的崛起</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="chapter11.html">第十一章：什么是氛围编程（Vibe Coding）</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter12.html">第十二章：Cursor — 重新定义代码编辑器</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter13.html">第十三章：Claude Code — 终端中的 AI 软件工程师</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter14.html">第十四章：氛围编程的边界与风险</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">第十五章：超越氛围编程 — 意图驱动开发</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">第四部分：AI Agent 开发深度解析</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="chapter16.html">第十六章：AI Agent 概论 — 从聊天机器人到自主智能体</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter17.html">第十七章：Agent 架构模式深度解析</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter18.html">第十八章：Agent 开发框架对比与实战</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter19.html">第十九章：Agent 的工具系统设计</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter20.html">第二十章：Agent 的记忆与状态管理</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter21.html">第二十一章：多 Agent 系统与协作模式</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter22.html">第二十二章：Agent 的评估、测试与可观测性</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">第五部分：工程师的自我进化</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="chapter23.html">第二十三章：程序员的认知转变 — 从编码者到架构师</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter24.html">第二十四章：AI 时代的学习方法论</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter25.html">第二十五章：AI 时代的职业发展路径</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter26.html">第二十六章：AI 时代的工程文化与团队建设</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter27.html">第二十七章：AI 时代的工程伦理与责任</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">第六部分：展望未来</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="chapter28.html">第二十八章：软件工程的下一个十年</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter29.html">第二十九章：构建你的 AI 工具箱</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter30.html">第三十章：写给每一位软件工程师的信</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">附录：实战项目</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="appendix_a.html">附录 A：实战项目 — AI Coach 虚拟学习教练</a></li>
+<li class="toctree-l1"><a class="reference internal" href="appendix_b.html">附录 B：实战项目 — AI Editor 虚拟书稿编辑</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/walterfan/walter-ai-engineering-book" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="源码库"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/walterfan/walter-ai-engineering-book/edit/main/chapter15.md" target="_blank"
+   class="btn btn-sm btn-source-edit-button dropdown-item"
+   title="Suggest edit"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="btn__text-container">Suggest edit</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/walterfan/walter-ai-engineering-book/issues/new?title=Issue%20on%20page%20%2Fchapter15.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="创建议题"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="下载此页面">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/chapter15.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="下载源文件"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="列印成 PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="全屏模式"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="亮色"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="暗色"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="搜索" aria-label="搜索" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>第十五章：超越氛围编程 — 意图驱动开发</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> 目录 </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#vibe-coding-intent-driven-development">15.1 从 Vibe Coding 到 Intent-Driven Development</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">15.2 核心理念：声明"做什么"而非"怎么做"</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#spec-as-code">15.3 Spec as Code：规格即代码</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">Spec as Code 的优势</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ai">15.4 AI 原生的开发流程</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">15.5 人机协作的最佳模式</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">人类的不可替代价值</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#idd">15.6 从个人到团队级 IDD</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">个人级 IDD</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id7">团队级 IDD</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id8">团队 IDD 工作流</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id9">15.7 这是终极形态吗？</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id10">15.8 本章小结</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="chapter15">
+<span id="id1"></span><h1>第十五章：超越氛围编程 — 意图驱动开发<a class="headerlink" href="#chapter15" title="Link to this heading">#</a></h1>
+<pre  class="mermaid">
+        mindmap
+  root((意图驱动开发))
+    从Vibe到IDD
+      非正式到结构化
+      随意到精确
+    核心理念
+      声明式意图
+      做什么vs怎么做
+    Spec as Code
+      YAML规格
+      版本化管理
+      可审查
+    AI原生流程
+      修改Spec非代码
+      自动生成
+      自动测试
+    人机协作
+      人负责Why/What
+      AI负责How
+    团队级IDD
+      协作工作流
+      CI/CD集成
+    </pre><blockquote>
+<div><p>“未来的编程不是告诉计算机怎么做，而是告诉它你想要什么。”</p>
+</div></blockquote>
+<section id="vibe-coding-intent-driven-development">
+<h2>15.1 从 Vibe Coding 到 Intent-Driven Development<a class="headerlink" href="#vibe-coding-intent-driven-development" title="Link to this heading">#</a></h2>
+<p>Vibe Coding 的本质是<strong>非正式的意图表达</strong>——你用自然语言随意描述想法，AI 尝试理解并实现。这很灵活，但也很随意。</p>
+<p><strong>意图驱动开发（Intent-Driven Development, IDD）</strong> 是 Vibe Coding 的进化版：将随意的 Prompt 升级为<strong>结构化的意图描述</strong>，让 AI 更准确地理解和实现你的需求。</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>Vibe Coding:
+&quot;帮我做一个用户登录功能&quot;  →  AI 猜测你要什么
+
+Intent-Driven Development:
+结构化的意图规格  →  AI 精确理解并实现
+</pre></div>
+</div>
+</section>
+<section id="id2">
+<h2>15.2 核心理念：声明&quot;做什么&quot;而非&quot;怎么做&quot;<a class="headerlink" href="#id2" title="Link to this heading">#</a></h2>
+<p>IDD 的哲学与声明式编程一脉相承：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>命令式（传统编程）：
+  &quot;创建一个数组，遍历用户列表，如果年龄大于18，
+   放入新数组，然后按名字排序&quot;
+
+声明式（SQL）：
+  SELECT * FROM users WHERE age &gt; 18 ORDER BY name
+
+意图驱动（IDD）：
+  &quot;获取所有成年用户，按名字排序&quot;
+  + 结构化的上下文和约束
+</pre></div>
+</div>
+</section>
+<section id="spec-as-code">
+<h2>15.3 Spec as Code：规格即代码<a class="headerlink" href="#spec-as-code" title="Link to this heading">#</a></h2>
+<p>IDD 的核心实践是将意图写成结构化的规格文件：</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># specs/user-auth.intent.yaml</span>
+<span class="nt">intent</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;用户认证系统&quot;</span>
+<span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1.0&quot;</span>
+
+<span class="nt">context</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">project</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;电商平台&quot;</span>
+<span class="w">  </span><span class="nt">tech_stack</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">backend</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Python</span><span class="nv"> </span><span class="s">FastAPI&quot;</span>
+<span class="w">    </span><span class="nt">database</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;PostgreSQL&quot;</span>
+<span class="w">    </span><span class="nt">auth</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;JWT</span><span class="nv"> </span><span class="s">+</span><span class="nv"> </span><span class="s">OAuth2&quot;</span>
+
+<span class="nt">features</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;用户注册&quot;</span>
+<span class="w">    </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;新用户通过邮箱注册账户&quot;</span>
+<span class="w">    </span><span class="nt">inputs</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">field</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">email</span>
+<span class="w">        </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span>
+<span class="w">        </span><span class="nt">validation</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;RFC</span><span class="nv"> </span><span class="s">5322</span><span class="nv"> </span><span class="s">邮箱格式&quot;</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">field</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">password</span>
+<span class="w">        </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span>
+<span class="w">        </span><span class="nt">validation</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;至少8位，包含大小写字母和数字&quot;</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">field</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">display_name</span>
+<span class="w">        </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span>
+<span class="w">        </span><span class="nt">validation</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;2-50个字符&quot;</span>
+<span class="w">    </span><span class="nt">outputs</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">success</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;返回用户信息和</span><span class="nv"> </span><span class="s">JWT</span><span class="nv"> </span><span class="s">token&quot;</span>
+<span class="w">      </span><span class="nt">errors</span><span class="p">:</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;邮箱已注册</span><span class="nv"> </span><span class="s">→</span><span class="nv"> </span><span class="s">409</span><span class="nv"> </span><span class="s">Conflict&quot;</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;验证失败</span><span class="nv"> </span><span class="s">→</span><span class="nv"> </span><span class="s">422</span><span class="nv"> </span><span class="s">Unprocessable</span><span class="nv"> </span><span class="s">Entity&quot;</span>
+<span class="w">    </span><span class="nt">security</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;密码使用</span><span class="nv"> </span><span class="s">bcrypt</span><span class="nv"> </span><span class="s">哈希&quot;</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;注册后发送验证邮件&quot;</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;实施</span><span class="nv"> </span><span class="s">rate</span><span class="nv"> </span><span class="s">limiting:</span><span class="nv"> </span><span class="s">5次/分钟&quot;</span>
+
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;用户登录&quot;</span>
+<span class="w">    </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;已注册用户通过邮箱密码登录&quot;</span>
+<span class="w">    </span><span class="nt">inputs</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">field</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">email</span>
+<span class="w">        </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">field</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">password</span>
+<span class="w">        </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">string</span>
+<span class="w">    </span><span class="nt">outputs</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">success</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;返回</span><span class="nv"> </span><span class="s">access_token</span><span class="nv"> </span><span class="s">和</span><span class="nv"> </span><span class="s">refresh_token&quot;</span>
+<span class="w">      </span><span class="nt">errors</span><span class="p">:</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;凭证错误</span><span class="nv"> </span><span class="s">→</span><span class="nv"> </span><span class="s">401</span><span class="nv"> </span><span class="s">Unauthorized&quot;</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;账户锁定</span><span class="nv"> </span><span class="s">→</span><span class="nv"> </span><span class="s">423</span><span class="nv"> </span><span class="s">Locked&quot;</span>
+<span class="w">    </span><span class="nt">security</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;连续5次失败后锁定账户15分钟&quot;</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;记录登录日志&quot;</span>
+
+<span class="nt">testing</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">unit_tests</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">  </span><span class="nt">integration_tests</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">  </span><span class="nt">security_tests</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">  </span><span class="nt">coverage_target</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">90%</span>
+
+<span class="nt">non_functional</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">performance</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;登录响应时间</span><span class="nv"> </span><span class="s">&lt;</span><span class="nv"> </span><span class="s">200ms</span><span class="nv"> </span><span class="s">(P99)&quot;</span>
+<span class="w">  </span><span class="nt">availability</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;99.9%</span><span class="nv"> </span><span class="s">uptime&quot;</span>
+<span class="w">  </span><span class="nt">scalability</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;支持</span><span class="nv"> </span><span class="s">10000</span><span class="nv"> </span><span class="s">并发用户&quot;</span>
+</pre></div>
+</div>
+<section id="id3">
+<h3>Spec as Code 的优势<a class="headerlink" href="#id3" title="Link to this heading">#</a></h3>
+<ol class="arabic simple">
+<li><p><strong>精确性</strong>：比自然语言 Prompt 更精确</p></li>
+<li><p><strong>可版本化</strong>：可以用 Git 管理</p></li>
+<li><p><strong>可审查</strong>：团队可以审查意图规格</p></li>
+<li><p><strong>可复现</strong>：相同的规格生成一致的代码</p></li>
+<li><p><strong>可测试</strong>：规格本身就是测试的依据</p></li>
+</ol>
+</section>
+</section>
+<section id="ai">
+<h2>15.4 AI 原生的开发流程<a class="headerlink" href="#ai" title="Link to this heading">#</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>传统流程：
+需求文档 → 设计文档 → 编码 → 测试 → 部署
+
+IDD 流程：
+意图规格(Spec) → AI 生成代码 → 人工审查 → AI 生成测试 → 自动部署
+      ↑                                                        │
+      └──────────── 反馈循环（修改 Spec 而非代码）──────────────┘
+</pre></div>
+</div>
+<p>关键变化：</p>
+<ul class="simple">
+<li><p><strong>修改 Spec 而非代码</strong>：当需要变更时，修改意图规格，重新生成代码</p></li>
+<li><p><strong>Spec 是唯一的真实来源</strong>：代码是 Spec 的产物，可以随时重新生成</p></li>
+<li><p><strong>测试验证 Spec</strong>：测试用例从 Spec 自动生成，验证代码是否符合意图</p></li>
+</ul>
+</section>
+<section id="id4">
+<h2>15.5 人机协作的最佳模式<a class="headerlink" href="#id4" title="Link to this heading">#</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>人类负责（Why &amp; What）：        AI 负责（How）：
+├── 定义业务目标                ├── 生成实现代码
+├── 确定用户需求                ├── 选择最佳算法
+├── 设计系统架构                ├── 编写测试用例
+├── 制定安全策略                ├── 优化性能
+├── 审查和验证                  ├── 生成文档
+└── 做最终决策                  └── 处理样板代码
+</pre></div>
+</div>
+<section id="id5">
+<h3>人类的不可替代价值<a class="headerlink" href="#id5" title="Link to this heading">#</a></h3>
+<div class="highlight-markdown notranslate"><div class="highlight"><pre><span></span>AI 无法替代的人类能力：
+<span class="k">1.</span> <span class="gs">**同理心**</span>：理解用户的真实需求和痛点
+<span class="k">2.</span> <span class="gs">**创造力**</span>：提出创新的解决方案
+<span class="k">3.</span> <span class="gs">**判断力**</span>：在模糊情况下做出权衡
+<span class="k">4.</span> <span class="gs">**责任感**</span>：对系统的安全和可靠性负责
+<span class="k">5.</span> <span class="gs">**沟通力**</span>：与利益相关者有效沟通
+</pre></div>
+</div>
+</section>
+</section>
+<section id="idd">
+<h2>15.6 从个人到团队级 IDD<a class="headerlink" href="#idd" title="Link to this heading">#</a></h2>
+<section id="id6">
+<h3>个人级 IDD<a class="headerlink" href="#id6" title="Link to this heading">#</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>开发者 → 编写 Spec → AI 生成代码 → 自己审查
+</pre></div>
+</div>
+</section>
+<section id="id7">
+<h3>团队级 IDD<a class="headerlink" href="#id7" title="Link to this heading">#</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>产品经理 → 编写业务 Spec
+架构师 → 编写技术 Spec
+AI → 生成代码
+开发者 → 审查和调整
+测试工程师 → 验证 Spec 合规性
+</pre></div>
+</div>
+</section>
+<section id="id8">
+<h3>团队 IDD 工作流<a class="headerlink" href="#id8" title="Link to this heading">#</a></h3>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># .github/workflows/idd-pipeline.yaml</span>
+<span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Intent-Driven Development Pipeline</span>
+<span class="nt">on</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">push</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">paths</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&#39;specs/**&#39;</span><span class="p p-Indicator">]</span><span class="w">  </span><span class="c1"># 只在 Spec 变更时触发</span>
+
+<span class="nt">jobs</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">generate</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">steps</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Validate Specs</span>
+<span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">spec-validator specs/</span>
+<span class="w">      </span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Generate Code from Specs</span>
+<span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ai-codegen --specs specs/ --output src/</span>
+<span class="w">      </span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Generate Tests from Specs</span>
+<span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ai-testgen --specs specs/ --output tests/</span>
+<span class="w">      </span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Run Tests</span>
+<span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pytest tests/ --cov=src/</span>
+<span class="w">      </span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Create PR</span>
+<span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<span class="w">          </span><span class="no">git checkout -b auto/spec-update-${{ github.sha }}</span>
+<span class="w">          </span><span class="no">git add src/ tests/</span>
+<span class="w">          </span><span class="no">git commit -m &quot;Auto-generated from spec changes&quot;</span>
+<span class="w">          </span><span class="no">gh pr create --title &quot;Spec Update&quot; --body &quot;Auto-generated code from spec changes&quot;</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="id9">
+<h2>15.7 这是终极形态吗？<a class="headerlink" href="#id9" title="Link to this heading">#</a></h2>
+<p>IDD 可能不是终极形态，但它代表了一个重要的方向：<strong>将人类的认知负担从&quot;如何实现&quot;转移到&quot;实现什么&quot;</strong>。</p>
+<p>未来可能的演进：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>2025: Vibe Coding（自然语言 → 代码）
+2026: Intent-Driven Development（结构化意图 → 代码）
+2028: Goal-Driven Development（目标 → 系统）
+2030: Outcome-Driven Development（期望结果 → 自适应系统）
+</pre></div>
+</div>
+<p>每一步都在提高抽象层次，让人类更专注于&quot;为什么&quot;和&quot;做什么&quot;，而将&quot;怎么做&quot;交给越来越智能的 AI。</p>
+</section>
+<section id="id10">
+<h2>15.8 本章小结<a class="headerlink" href="#id10" title="Link to this heading">#</a></h2>
+<p>从 Vibe Coding 到 Intent-Driven Development，我们看到了编程范式的持续演进。IDD 不是要取代传统编程，而是在 AI 能力足够强大的场景下，提供一种更高效的开发方式。</p>
+<p>核心要点：</p>
+<ol class="arabic simple">
+<li><p><strong>Spec as Code</strong> 是 IDD 的基础</p></li>
+<li><p><strong>人负责 Why/What，AI 负责 How</strong></p></li>
+<li><p><strong>修改 Spec 而非代码</strong></p></li>
+<li><p><strong>测试验证意图，而非实现</strong></p></li>
+</ol>
+<div class="hint admonition">
+<p class="admonition-title">思考题</p>
+<ol class="arabic simple">
+<li><p>Spec as Code 和传统的需求文档有什么本质区别？</p></li>
+<li><p>如果代码可以随时从 Spec 重新生成，代码审查还有意义吗？</p></li>
+<li><p>IDD 对初级开发者和高级开发者的影响有什么不同？</p></li>
+</ol>
+</div>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="chapter14.html"
+       title="上一页">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">上一页</p>
+        <p class="prev-next-title">第十四章：氛围编程的边界与风险</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="chapter16.html"
+       title="下一页">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">下一页</p>
+        <p class="prev-next-title">第十六章：AI Agent 概论 — 从聊天机器人到自主智能体</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> 目录
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#vibe-coding-intent-driven-development">15.1 从 Vibe Coding 到 Intent-Driven Development</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">15.2 核心理念：声明"做什么"而非"怎么做"</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#spec-as-code">15.3 Spec as Code：规格即代码</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">Spec as Code 的优势</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ai">15.4 AI 原生的开发流程</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">15.5 人机协作的最佳模式</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">人类的不可替代价值</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#idd">15.6 从个人到团队级 IDD</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">个人级 IDD</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id7">团队级 IDD</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id8">团队 IDD 工作流</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id9">15.7 这是终极形态吗？</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id10">15.8 本章小结</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+作者： Walter Fan, AI Agent
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026, Walter Fan, AI 辅助创作.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

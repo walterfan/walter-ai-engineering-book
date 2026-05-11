@@ -1,0 +1,1413 @@
+
+<!DOCTYPE html>
+
+
+<html lang="zh-CN" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>第十一章：什么是氛围编程（Vibe Coding） &#8212; AI 时代的软件工程</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="_static/documentation_options.js?v=546e450b"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script src="_static/translations.js?v=beaddf03"></script>
+    <script type="module" src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs"></script>
+    <script type="module" src="https://cdn.jsdelivr.net/npm/@mermaid-js/layout-elk@0.2.0/dist/mermaid-layout-elk.esm.min.mjs"></script>
+    <script type="module">mermaid.initialize({startOnLoad:true, theme:'default'});</script>
+    <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+    <script type="module">import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";
+
+const defaultStyle = document.createElement('style');
+defaultStyle.textContent = `pre.mermaid {
+    /* Same as .mermaid-container > pre */
+    display: block;
+    width: 100%;
+}
+
+pre.mermaid > svg {
+    /* Same as .mermaid-container > pre > svg */
+    height: 500px;
+    width: 100%;
+    max-width: 100% !important;
+}
+`;
+document.head.appendChild(defaultStyle);
+
+const fullscreenStyle = document.createElement('style');
+fullscreenStyle.textContent = `.mermaid-container {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+
+.mermaid-container > pre {
+    display: block;
+    width: 100%;
+}
+
+.mermaid-container > pre > svg {
+    height: 500px;
+    width: 100%;
+    max-width: 100% !important;
+}
+
+.mermaid-fullscreen-btn {
+    width: 28px;
+    height: 28px;
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    font-size: 14px;
+    line-height: 1;
+    padding: 0;
+    color: #333;
+}
+
+.mermaid-fullscreen-btn:hover {
+    opacity: 100% !important;
+    background: rgba(255, 255, 255, 1);
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+    transform: scale(1.1);
+}
+
+.mermaid-fullscreen-btn.dark-theme {
+    background: rgba(50, 50, 50, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: #e0e0e0;
+}
+
+.mermaid-fullscreen-btn.dark-theme:hover {
+    background: rgba(60, 60, 60, 1);
+    box-shadow: 0 3px 10px rgba(255, 255, 255, 0.2);
+}
+
+.mermaid-fullscreen-modal {
+    display: none;
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 95vw;
+    height: 100vh;
+    background: rgba(255, 255, 255, 0.98);
+    z-index: 9999;
+    padding: 20px;
+    overflow: auto;
+}
+
+.mermaid-fullscreen-modal.dark-theme {
+    background: rgba(0, 0, 0, 0.98);
+}
+
+.mermaid-fullscreen-modal.active {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mermaid-container-fullscreen {
+    position: relative;
+    width: 95vw;
+    height: 90vh;
+    max-width: 95vw;
+    max-height: 90vh;
+    background: white;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    overflow: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mermaid-container-fullscreen.dark-theme {
+    background: #1a1a1a;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
+}
+
+.mermaid-container-fullscreen pre.mermaid {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mermaid-container-fullscreen .mermaid svg {
+    height: 100% !important;
+    width: 100% !important;
+    cursor: grab;
+}
+
+.mermaid-fullscreen-close {
+    position: fixed !important;
+    top: 20px !important;
+    right: 20px !important;
+    width: 40px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    transition: all 0.2s;
+    font-size: 24px;
+    line-height: 1;
+    color: #333;
+}
+
+.mermaid-fullscreen-close:hover {
+    background: white;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+    transform: scale(1.1);
+}
+
+.mermaid-fullscreen-close.dark-theme {
+    background: rgba(50, 50, 50, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #e0e0e0;
+}
+
+.mermaid-fullscreen-close.dark-theme:hover {
+    background: rgba(60, 60, 60, 1);
+    box-shadow: 0 6px 16px rgba(255, 255, 255, 0.2);
+}
+
+.mermaid-fullscreen-modal .mermaid-fullscreen-btn {
+    display: none !important;
+}`;
+document.head.appendChild(fullscreenStyle);
+
+// Detect if page has dark background
+const isDarkTheme = () => {
+    const bgColor = window.getComputedStyle(document.body).backgroundColor;
+    const match = bgColor.match(/rgb\((\d+),\s*(\d+),\s*(\d+)/);
+    if (match) {
+        const r = parseInt(match[1]);
+        const g = parseInt(match[2]);
+        const b = parseInt(match[3]);
+        const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+        return brightness < 128;
+    }
+    return false;
+};
+
+const load = async () => {
+    await mermaid.run();
+
+    const all_mermaids = document.querySelectorAll(".mermaid");
+    const mermaids_processed = document.querySelectorAll(".mermaid[data-processed='true']");
+
+    if ("False" === "True") {
+        const mermaids_to_add_zoom = -1 === -1 ? all_mermaids.length : -1;
+        if(mermaids_to_add_zoom > 0) {
+            var svgs = d3.selectAll("");
+            if(all_mermaids.length !== mermaids_processed.length) {
+                setTimeout(load, 200);
+                return;
+            } else if(svgs.size() !== mermaids_to_add_zoom) {
+                setTimeout(load, 200);
+                return;
+            } else {
+                svgs.each(function() {
+                    var svg = d3.select(this);
+                    svg.html("<g class='wrapper'>" + svg.html() + "</g>");
+                    var inner = svg.select("g");
+                    var zoom = d3.zoom().on("zoom", function(event) {
+                        inner.attr("transform", event.transform);
+                    });
+                    svg.call(zoom);
+                });
+            }
+        }
+    } else if(all_mermaids.length !== mermaids_processed.length) {
+        // Wait for mermaid to process all diagrams
+        setTimeout(load, 200);
+        return;
+    }
+
+    const darkTheme = isDarkTheme();
+
+    // Stop here if not adding fullscreen capability
+    if ("True" !== "True") return;
+
+    const modal = document.createElement('div');
+    modal.className = 'mermaid-fullscreen-modal' + (darkTheme ? ' dark-theme' : '');
+    modal.setAttribute('role', 'dialog');
+    modal.setAttribute('aria-modal', 'true');
+    modal.setAttribute('aria-label', 'Fullscreen diagram viewer');
+    modal.innerHTML = `
+        <button class="mermaid-fullscreen-close${darkTheme ? ' dark-theme' : ''}" aria-label="Close fullscreen">✕</button>
+        <div class="mermaid-container-fullscreen${darkTheme ? ' dark-theme' : ''}"></div>
+    `;
+    document.body.appendChild(modal);
+
+    const modalContent = modal.querySelector('.mermaid-container-fullscreen');
+    const closeBtn = modal.querySelector('.mermaid-fullscreen-close');
+
+    let previousScrollOffset = [window.scrollX, window.scrollY];
+
+    const closeModal = () => {
+        modal.classList.remove('active');
+        modalContent.innerHTML = '';
+        document.body.style.overflow = ''
+        window.scrollTo({left: previousScrollOffset[0], top: previousScrollOffset[1], behavior: 'instant'});
+    };
+
+    closeBtn.addEventListener('click', closeModal);
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) closeModal();
+    });
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && modal.classList.contains('active')) {
+            closeModal();
+        }
+    });
+
+    const allButtons = [];
+
+    document.querySelectorAll('.mermaid').forEach((mermaidDiv) => {
+        if (mermaidDiv.parentNode.classList.contains('mermaid-container') ||
+            mermaidDiv.closest('.mermaid-fullscreen-modal')) {
+            return;
+        }
+
+        const container = document.createElement('div');
+        container.className = 'mermaid-container';
+        mermaidDiv.parentNode.insertBefore(container, mermaidDiv);
+        container.appendChild(mermaidDiv);
+
+        const fullscreenBtn = document.createElement('button');
+        fullscreenBtn.className = 'mermaid-fullscreen-btn' + (darkTheme ? ' dark-theme' : '');
+        fullscreenBtn.setAttribute('aria-label', 'View diagram in fullscreen');
+        fullscreenBtn.textContent = '⛶';
+        fullscreenBtn.style.opacity = '50%';
+
+        // Calculate dynamic position based on diagram's margin and padding
+        const diagramStyle = window.getComputedStyle(mermaidDiv);
+        const marginTop = parseFloat(diagramStyle.marginTop) || 0;
+        const marginRight = parseFloat(diagramStyle.marginRight) || 0;
+        const paddingTop = parseFloat(diagramStyle.paddingTop) || 0;
+        const paddingRight = parseFloat(diagramStyle.paddingRight) || 0;
+        fullscreenBtn.style.top = `${marginTop + paddingTop + 4}px`;
+        fullscreenBtn.style.right = `${marginRight + paddingRight + 4}px`;
+
+        fullscreenBtn.addEventListener('click', () => {
+            previousScrollOffset = [window.scroll, window.scrollY];
+            const clone = mermaidDiv.cloneNode(true);
+            modalContent.innerHTML = '';
+            modalContent.appendChild(clone);
+
+            const svg = clone.querySelector('svg');
+            if (svg) {
+                svg.removeAttribute('width');
+                svg.removeAttribute('height');
+                svg.style.width = '100%';
+                svg.style.height = 'auto';
+                svg.style.maxWidth = '100%';
+                svg.style.sdisplay = 'block';
+
+                if ("False" === "True") {
+                    setTimeout(() => {
+                        const g = svg.querySelector('g');
+                        if (g) {
+                            var svgD3 = d3.select(svg);
+                            svgD3.html("<g class='wrapper'>" + svgD3.html() + "</g>");
+                            var inner = svgD3.select("g");
+                            var zoom = d3.zoom().on("zoom", function(event) {
+                                inner.attr("transform", event.transform);
+                            });
+                            svgD3.call(zoom);
+                        }
+                    }, 100);
+                }
+            }
+
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        });
+
+        container.appendChild(fullscreenBtn);
+        allButtons.push(fullscreenBtn);
+    });
+
+    // Update theme classes when theme changes
+    const updateTheme = () => {
+        const dark = isDarkTheme();
+        allButtons.forEach(btn => {
+            if (dark) {
+                btn.classList.add('dark-theme');
+            } else {
+                btn.classList.remove('dark-theme');
+            }
+        });
+        if (dark) {
+            modal.classList.add('dark-theme');
+            modalContent.classList.add('dark-theme');
+            closeBtn.classList.add('dark-theme');
+        } else {
+            modal.classList.remove('dark-theme');
+            modalContent.classList.remove('dark-theme');
+            closeBtn.classList.remove('dark-theme');
+        }
+    };
+
+    // Watch for theme changes
+    const observer = new MutationObserver(updateTheme);
+    observer.observe(document.documentElement, {
+        attributes: true,
+        attributeFilter: ['class', 'style', 'data-theme']
+    });
+    observer.observe(document.body, {
+        attributes: true,
+        attributeFilter: ['class', 'style']
+    });
+};
+
+window.addEventListener("load", load);
+</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'chapter11';</script>
+    <link rel="index" title="索引" href="genindex.html" />
+    <link rel="search" title="搜索" href="search.html" />
+    <link rel="next" title="第十二章：Cursor — 重新定义代码编辑器" href="chapter12.html" />
+    <link rel="prev" title="第十章：AI 时代的团队协作与项目管理" href="chapter10.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="zh-CN"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">跳转至主要内容</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>回到顶部</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="版本警告"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">AI 时代的软件工程</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="搜索" aria-label="搜索" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">搜索</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">第一部分：回顾与反思 — 软件工程的前世今生</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="chapter01.html">第一章：软件工程的起源与演进</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter02.html">第二章：敏捷革命 — 从计划驱动到价值驱动</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter03.html">第三章：DevOps 与云原生 — 打破开发与运维的壁垒</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter04.html">第四章：软件架构的演进 — 从单体到智能体</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter05.html">第五章：软件质量与工程实践的变迁</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">第二部分：变革之风 — AI 如何重塑软件开发</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="chapter06.html">第六章：AI 编程助手的崛起</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter07.html">第七章：大语言模型基础 — 开发者需要知道的</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter08.html">第八章：AI 驱动的软件开发生命周期</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter09.html">第九章：AI 时代的代码审查与质量保证</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter10.html">第十章：AI 时代的团队协作与项目管理</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">第三部分：氛围编程 — 新范式的崛起</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">第十一章：什么是氛围编程（Vibe Coding）</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter12.html">第十二章：Cursor — 重新定义代码编辑器</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter13.html">第十三章：Claude Code — 终端中的 AI 软件工程师</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter14.html">第十四章：氛围编程的边界与风险</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter15.html">第十五章：超越氛围编程 — 意图驱动开发</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">第四部分：AI Agent 开发深度解析</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="chapter16.html">第十六章：AI Agent 概论 — 从聊天机器人到自主智能体</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter17.html">第十七章：Agent 架构模式深度解析</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter18.html">第十八章：Agent 开发框架对比与实战</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter19.html">第十九章：Agent 的工具系统设计</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter20.html">第二十章：Agent 的记忆与状态管理</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter21.html">第二十一章：多 Agent 系统与协作模式</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter22.html">第二十二章：Agent 的评估、测试与可观测性</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">第五部分：工程师的自我进化</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="chapter23.html">第二十三章：程序员的认知转变 — 从编码者到架构师</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter24.html">第二十四章：AI 时代的学习方法论</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter25.html">第二十五章：AI 时代的职业发展路径</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter26.html">第二十六章：AI 时代的工程文化与团队建设</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter27.html">第二十七章：AI 时代的工程伦理与责任</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">第六部分：展望未来</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="chapter28.html">第二十八章：软件工程的下一个十年</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter29.html">第二十九章：构建你的 AI 工具箱</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter30.html">第三十章：写给每一位软件工程师的信</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">附录：实战项目</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="appendix_a.html">附录 A：实战项目 — AI Coach 虚拟学习教练</a></li>
+<li class="toctree-l1"><a class="reference internal" href="appendix_b.html">附录 B：实战项目 — AI Editor 虚拟书稿编辑</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/walterfan/walter-ai-engineering-book" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="源码库"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/walterfan/walter-ai-engineering-book/edit/main/chapter11.md" target="_blank"
+   class="btn btn-sm btn-source-edit-button dropdown-item"
+   title="Suggest edit"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="btn__text-container">Suggest edit</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/walterfan/walter-ai-engineering-book/issues/new?title=Issue%20on%20page%20%2Fchapter11.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="创建议题"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="下载此页面">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/chapter11.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="下载源文件"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="列印成 PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="全屏模式"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="亮色"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="暗色"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="搜索" aria-label="搜索" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>第十一章：什么是氛围编程（Vibe Coding）</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> 目录 </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">11.1 一条推文引发的范式讨论</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#karpathy">11.1.1 Karpathy 的背景与可信度</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">11.1.2 时代背景：为什么是 2025 年</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">11.2 Vibe Coding 的定义</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">11.2.1 核心定义</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">11.2.2 Vibe Coding 的核心特征</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">11.2.3 一个形象的类比</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id7">11.3 与传统编程的本质区别</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id8">11.3.1 范式对比</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#how-what">11.3.2 从"How"到"What"的转变</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id9">11.4 Vibe Coding 的典型工作流程</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id10">11.4.1 完整工作流</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id11">11.4.2 实际对话示例</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id12">11.5 Vibe Coding 的哲学</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id13">11.5.1 接受不完全理解</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id14">11.5.2 编程的民主化</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id15">11.5.3 从"工匠"到"导演"</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id16">11.6 争议与讨论</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id17">11.6.1 支持者的观点</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id18">11.6.2 反对者的观点</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id19">11.6.3 一个更平衡的视角</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id20">11.7 Vibe Coding 的光谱</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id21">11.8 本章小结</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="vibe-coding">
+<span id="chapter11"></span><h1>第十一章：什么是氛围编程（Vibe Coding）<a class="headerlink" href="#vibe-coding" title="Link to this heading">#</a></h1>
+<pre  class="mermaid">
+        mindmap
+  root((氛围编程的诞生))
+    Vibe Coding定义
+      Karpathy 2025
+      自然语言编程
+      拥抱指数增长
+    核心理念
+      意图优先
+      AI执行
+      快速迭代
+    与传统编程对比
+      编码方式变化
+      技能要求变化
+      工作流变化
+    适用场景
+      快速原型
+      个人项目
+      探索学习
+    争议与讨论
+      质量担忧
+      技能退化
+      民主化编程
+    历史定位
+      编程范式演进
+      第四次变革
+    </pre><blockquote class="epigraph">
+<div><p>I just see things, say things, run things, and copy-paste things, and mostly it works.</p>
+<p class="attribution">—Andrej Karpathy, 2025 年 2 月</p>
+</div></blockquote>
+<section id="id1">
+<h2>11.1 一条推文引发的范式讨论<a class="headerlink" href="#id1" title="Link to this heading">#</a></h2>
+<p>2025 年 2 月，前特斯拉 AI 总监、OpenAI 联合创始人 Andrej Karpathy 在社交媒体上发布了一条看似随意的帖子，却在整个软件工程界掀起了轩然大波。他写道：</p>
+<blockquote>
+<div><p>There’s a new kind of coding I call “vibe coding”, where you fully give in to the vibes, embrace exponentials, and forget that the code even exists. I just see things, say things, run things, and copy-paste things, and mostly it works.</p>
+<p>有一种新的编码方式，我称之为&quot;氛围编程&quot;（Vibe Coding），你完全沉浸在氛围中，拥抱指数级增长，甚至忘记代码的存在。我只是看着、说着、运行着、复制粘贴着，而且大部分时候它都能工作。</p>
+</div></blockquote>
+<p>这条帖子迅速获得了数百万次浏览，引发了开发者社区激烈的讨论。支持者认为这是编程民主化的里程碑，反对者则担忧这是对软件工程专业性的亵渎。无论立场如何，所有人都不得不承认：一种全新的编程范式正在悄然兴起。</p>
+<section id="karpathy">
+<h3>11.1.1 Karpathy 的背景与可信度<a class="headerlink" href="#karpathy" title="Link to this heading">#</a></h3>
+<p>要理解 Vibe Coding 这一概念的分量，我们需要了解提出者的背景。Andrej Karpathy 并非一个不懂编程的外行人——恰恰相反，他是深度学习领域最具影响力的研究者和工程师之一：</p>
+<ul class="simple">
+<li><p><strong>斯坦福大学博士</strong>：师从计算机视觉大师 Fei-Fei Li，研究深度学习与计算机视觉</p></li>
+<li><p><strong>OpenAI 联合创始人</strong>：参与了 GPT 系列模型的早期研发</p></li>
+<li><p><strong>特斯拉 AI 总监</strong>：领导了特斯拉自动驾驶（Autopilot）的视觉系统开发</p></li>
+<li><p><strong>顶级程序员</strong>：其开源项目 minGPT、nanoGPT 被广泛使用和引用</p></li>
+</ul>
+<p>当这样一位顶级技术专家说&quot;我不再真正编码了&quot;，这不是因为他不会编码，而是因为他发现了一种更高效的方式。这正是 Vibe Coding 概念如此震撼的原因——它来自一个最有资格谈论编程的人。</p>
+</section>
+<section id="id2">
+<h3>11.1.2 时代背景：为什么是 2025 年<a class="headerlink" href="#id2" title="Link to this heading">#</a></h3>
+<p>Vibe Coding 的出现并非偶然，它是多个技术趋势汇聚的必然结果：</p>
+<div class="pst-scrollable-table-container"><table class="table" id="id22">
+<caption><span class="caption-text">Vibe Coding 兴起的技术背景</span><a class="headerlink" href="#id22" title="Link to this table">#</a></caption>
+<colgroup>
+<col style="width: 30.0%" />
+<col style="width: 70.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>技术趋势</p></th>
+<th class="head"><p>关键进展</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>大语言模型能力飞跃</p></td>
+<td><p>GPT-4、Claude 3.5 Sonnet、Gemini 等模型在代码生成方面达到了前所未有的水平</p></td>
+</tr>
+<tr class="row-odd"><td><p>AI 编程工具成熟</p></td>
+<td><p>Cursor、GitHub Copilot、Windsurf 等工具从&quot;补全&quot;进化到&quot;生成&quot;</p></td>
+</tr>
+<tr class="row-even"><td><p>上下文窗口扩大</p></td>
+<td><p>从 4K 到 200K tokens，AI 可以理解整个项目的上下文</p></td>
+</tr>
+<tr class="row-odd"><td><p>多模态能力</p></td>
+<td><p>AI 可以从截图、草图直接生成代码</p></td>
+</tr>
+<tr class="row-even"><td><p>Agent 能力涌现</p></td>
+<td><p>AI 不仅能写代码，还能运行、调试、修复代码</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</section>
+<section id="id3">
+<h2>11.2 Vibe Coding 的定义<a class="headerlink" href="#id3" title="Link to this heading">#</a></h2>
+<section id="id4">
+<h3>11.2.1 核心定义<a class="headerlink" href="#id4" title="Link to this heading">#</a></h3>
+<p><strong>氛围编程（Vibe Coding）</strong> 是一种以自然语言为主要交互方式的编程范式，开发者通过描述意图和需求，让 AI 生成、修改和调试代码，而开发者的角色从&quot;代码编写者&quot;转变为&quot;意图引导者&quot;和&quot;结果验证者&quot;。</p>
+<p>用更通俗的话说：</p>
+<blockquote>
+<div><p>你告诉 AI 你想要什么，AI 帮你写出来，你看看对不对，不对就再说说哪里不对，直到满意为止。</p>
+</div></blockquote>
+</section>
+<section id="id5">
+<h3>11.2.2 Vibe Coding 的核心特征<a class="headerlink" href="#id5" title="Link to this heading">#</a></h3>
+<p>我们可以从以下几个维度来理解 Vibe Coding 的本质特征：</p>
+<p><strong>1. 自然语言优先（Natural Language First）</strong></p>
+<p>在 Vibe Coding 中，自然语言取代编程语言成为主要的&quot;编程&quot;工具。开发者不再需要记住语法细节、API 签名或框架约定，而是用人类语言描述自己的意图。</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># 传统编程：你需要知道 Flask 的 API</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">flask</span><span class="w"> </span><span class="kn">import</span> <span class="n">Flask</span><span class="p">,</span> <span class="n">jsonify</span><span class="p">,</span> <span class="n">request</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">wraps</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">jwt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">datetime</span>
+
+<span class="n">app</span> <span class="o">=</span> <span class="n">Flask</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+<span class="n">app</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;SECRET_KEY&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;your-secret-key&#39;</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">token_required</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
+    <span class="nd">@wraps</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">decorated</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">token</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;Authorization&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">token</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">jsonify</span><span class="p">({</span><span class="s1">&#39;message&#39;</span><span class="p">:</span> <span class="s1">&#39;Token is missing!&#39;</span><span class="p">}),</span> <span class="mi">401</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">token</span> <span class="o">=</span> <span class="n">token</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">jwt</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">token</span><span class="p">,</span> <span class="n">app</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;SECRET_KEY&#39;</span><span class="p">],</span> <span class="n">algorithms</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;HS256&quot;</span><span class="p">])</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">jsonify</span><span class="p">({</span><span class="s1">&#39;message&#39;</span><span class="p">:</span> <span class="s1">&#39;Token is invalid!&#39;</span><span class="p">}),</span> <span class="mi">401</span>
+        <span class="k">return</span> <span class="n">f</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">decorated</span>
+
+<span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;/api/protected&#39;</span><span class="p">)</span>
+<span class="nd">@token_required</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">protected</span><span class="p">():</span>
+    <span class="k">return</span> <span class="n">jsonify</span><span class="p">({</span><span class="s1">&#39;message&#39;</span><span class="p">:</span> <span class="s1">&#39;This is a protected endpoint&#39;</span><span class="p">})</span>
+</pre></div>
+</div>
+<div class="highlight-markdown notranslate"><div class="highlight"><pre><span></span><span class="gh"># Vibe Coding：你只需要描述意图</span>
+&quot;帮我创建一个 Flask API，有一个受 JWT 保护的端点 /api/protected，
+未认证用户返回 401，认证用户返回欢迎消息。&quot;
+</pre></div>
+</div>
+<p><strong>2. 结果导向（Outcome-Oriented）</strong></p>
+<p>Vibe Coding 关注的是&quot;程序做了什么&quot;，而非&quot;代码写了什么&quot;。开发者通过运行程序、观察结果来验证 AI 生成的代码是否正确，而不是逐行审查代码逻辑。</p>
+<p><strong>3. 迭代式对话（Iterative Dialogue）</strong></p>
+<p>Vibe Coding 的开发过程是一系列对话式的迭代：</p>
+<pre  class="mermaid">
+        graph TD
+    A[描述需求] --&gt; B[AI 生成代码]
+    B --&gt; C[运行/预览]
+    C --&gt; D{结果满意?}
+    D --&gt;|是| E[继续下一个功能]
+    D --&gt;|否| F[描述问题/调整需求]
+    F --&gt; B
+    E --&gt; A
+    </pre><p><strong>4. 接受模糊性（Embracing Ambiguity）</strong></p>
+<p>这是 Vibe Coding 最具争议的特征——开发者可能并不完全理解 AI 生成的每一行代码，但只要程序按预期工作，就接受这种状态。正如 Karpathy 所说：“I’m building a project or webapp, but I’m not really coding.”</p>
+</section>
+<section id="id6">
+<h3>11.2.3 一个形象的类比<a class="headerlink" href="#id6" title="Link to this heading">#</a></h3>
+<p>如果把编程比作建造房屋：</p>
+<ul class="simple">
+<li><p><strong>传统编程</strong>：你是建筑工人，亲手搬砖、砌墙、接水管</p></li>
+<li><p><strong>AI 辅助编程</strong>：你是工头，指挥工人干活，但你懂每个工序</p></li>
+<li><p><strong>Vibe Coding</strong>：你是业主，告诉建筑师你想要什么样的房子，建筑师（AI）负责设计和施工，你负责验收</p></li>
+</ul>
+</section>
+</section>
+<section id="id7">
+<h2>11.3 与传统编程的本质区别<a class="headerlink" href="#id7" title="Link to this heading">#</a></h2>
+<section id="id8">
+<h3>11.3.1 范式对比<a class="headerlink" href="#id8" title="Link to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table" id="id23">
+<caption><span class="caption-text">传统编程 vs AI 辅助编程 vs Vibe Coding</span><a class="headerlink" href="#id23" title="Link to this table">#</a></caption>
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 27.0%" />
+<col style="width: 27.0%" />
+<col style="width: 26.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>维度</p></th>
+<th class="head"><p>传统编程</p></th>
+<th class="head"><p>AI 辅助编程</p></th>
+<th class="head"><p>Vibe Coding</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>主要交互方式</p></td>
+<td><p>编程语言</p></td>
+<td><p>编程语言 + AI 补全</p></td>
+<td><p>自然语言</p></td>
+</tr>
+<tr class="row-odd"><td><p>开发者角色</p></td>
+<td><p>代码编写者</p></td>
+<td><p>代码编写者 + AI 协作者</p></td>
+<td><p>意图引导者</p></td>
+</tr>
+<tr class="row-even"><td><p>代码理解程度</p></td>
+<td><p>完全理解</p></td>
+<td><p>完全理解</p></td>
+<td><p>部分理解或不理解</p></td>
+</tr>
+<tr class="row-odd"><td><p>核心技能</p></td>
+<td><p>编程语言、算法、架构</p></td>
+<td><p>编程 + Prompt 工程</p></td>
+<td><p>需求表达、结果验证</p></td>
+</tr>
+<tr class="row-even"><td><p>开发速度</p></td>
+<td><p>慢</p></td>
+<td><p>中等</p></td>
+<td><p>快</p></td>
+</tr>
+<tr class="row-odd"><td><p>适用人群</p></td>
+<td><p>专业开发者</p></td>
+<td><p>专业开发者</p></td>
+<td><p>所有人</p></td>
+</tr>
+<tr class="row-even"><td><p>调试方式</p></td>
+<td><p>阅读代码、设断点</p></td>
+<td><p>阅读代码 + AI 解释</p></td>
+<td><p>描述问题让 AI 修复</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="how-what">
+<h3>11.3.2 从&quot;How&quot;到&quot;What&quot;的转变<a class="headerlink" href="#how-what" title="Link to this heading">#</a></h3>
+<p>传统编程的核心是告诉计算机 <strong>如何（How）</strong> 完成任务——你需要精确地指定每一个步骤、每一个条件、每一个循环。而 Vibe Coding 的核心是告诉 AI <strong>做什么（What）</strong>——你描述期望的结果，AI 负责找出实现路径。</p>
+<p>这种转变可以用 SQL 的历史来类比。在关系数据库出现之前，程序员需要手动编写数据遍历和查找的逻辑。SQL 的出现让程序员可以声明式地描述&quot;我要什么数据&quot;，而不需要关心&quot;如何查找数据&quot;。Vibe Coding 正在将这种声明式的理念推广到整个软件开发领域。</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="c1">-- SQL 是早期的&quot;Vibe Coding&quot;：声明你要什么，而非怎么做</span>
+<span class="k">SELECT</span><span class="w"> </span><span class="n">u</span><span class="p">.</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="k">COUNT</span><span class="p">(</span><span class="n">o</span><span class="p">.</span><span class="n">id</span><span class="p">)</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">order_count</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">users</span><span class="w"> </span><span class="n">u</span>
+<span class="k">JOIN</span><span class="w"> </span><span class="n">orders</span><span class="w"> </span><span class="n">o</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">u</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">o</span><span class="p">.</span><span class="n">user_id</span>
+<span class="k">WHERE</span><span class="w"> </span><span class="n">o</span><span class="p">.</span><span class="n">created_at</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="s1">&#39;2025-01-01&#39;</span>
+<span class="k">GROUP</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">u</span><span class="p">.</span><span class="n">name</span>
+<span class="k">HAVING</span><span class="w"> </span><span class="k">COUNT</span><span class="p">(</span><span class="n">o</span><span class="p">.</span><span class="n">id</span><span class="p">)</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">5</span>
+<span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">order_count</span><span class="w"> </span><span class="k">DESC</span><span class="p">;</span>
+</pre></div>
+</div>
+<div class="highlight-markdown notranslate"><div class="highlight"><pre><span></span><span class="gh"># Vibe Coding 将声明式推向极致</span>
+&quot;查询 2025 年以来下单超过 5 次的用户，按订单数降序排列，
+显示用户名和订单数量。&quot;
+</pre></div>
+</div>
+</section>
+</section>
+<section id="id9">
+<h2>11.4 Vibe Coding 的典型工作流程<a class="headerlink" href="#id9" title="Link to this heading">#</a></h2>
+<section id="id10">
+<h3>11.4.1 完整工作流<a class="headerlink" href="#id10" title="Link to this heading">#</a></h3>
+<p>一个典型的 Vibe Coding 工作流程包含以下步骤：</p>
+<pre  class="mermaid">
+        flowchart LR
+    A[&quot;🎯 构思&quot;] --&gt; B[&quot;💬 描述&quot;]
+    B --&gt; C[&quot;🤖 生成&quot;]
+    C --&gt; D[&quot;👀 审查&quot;]
+    D --&gt; E[&quot;▶️ 运行&quot;]
+    E --&gt; F{&quot;✅ 通过?&quot;}
+    F --&gt;|Yes| G[&quot;📦 提交&quot;]
+    F --&gt;|No| H[&quot;🔄 反馈&quot;]
+    H --&gt; C
+    </pre><p><strong>第一步：构思（Ideation）</strong></p>
+<p>在动手之前，先想清楚你要构建什么。这一步与传统开发没有区别，甚至更加重要——因为你的描述质量直接决定了 AI 生成代码的质量。</p>
+<p><strong>第二步：描述（Description）</strong></p>
+<p>用自然语言向 AI 描述你的需求。好的描述应该包含：</p>
+<ul class="simple">
+<li><p>功能目标：要实现什么</p></li>
+<li><p>技术约束：使用什么技术栈</p></li>
+<li><p>质量要求：性能、安全性等非功能需求</p></li>
+<li><p>上下文信息：与现有代码的关系</p></li>
+</ul>
+<p><strong>第三步：生成（Generation）</strong></p>
+<p>AI 根据你的描述生成代码。现代 AI 工具通常会：</p>
+<ul class="simple">
+<li><p>生成完整的文件结构</p></li>
+<li><p>包含必要的依赖配置</p></li>
+<li><p>添加基本的错误处理</p></li>
+<li><p>提供简要的代码说明</p></li>
+</ul>
+<p><strong>第四步：审查（Review）</strong></p>
+<p>快速浏览 AI 生成的代码，重点关注：</p>
+<ul class="simple">
+<li><p>整体结构是否合理</p></li>
+<li><p>是否使用了正确的技术栈</p></li>
+<li><p>是否有明显的安全问题</p></li>
+</ul>
+<p><strong>第五步：运行（Run）</strong></p>
+<p>运行代码，观察实际效果。这是 Vibe Coding 中最关键的验证步骤。</p>
+<p><strong>第六步：反馈与迭代（Feedback &amp; Iterate）</strong></p>
+<p>如果结果不满意，描述具体问题，让 AI 修改。</p>
+</section>
+<section id="id11">
+<h3>11.4.2 实际对话示例<a class="headerlink" href="#id11" title="Link to this heading">#</a></h3>
+<p>以下是一个真实的 Vibe Coding 对话流程：</p>
+<div class="highlight-markdown notranslate"><div class="highlight"><pre><span></span>👤 用户：
+创建一个 React 组件，显示一个待办事项列表。支持添加、删除、
+标记完成。使用 TypeScript，样式用 Tailwind CSS。数据存储在 localStorage。
+
+🤖 AI：
+[生成完整的 TodoList 组件代码，约 120 行]
+
+👤 用户：
+看起来不错，但我想要添加拖拽排序功能，
+而且完成的任务要有删除线效果，移到列表底部。
+
+🤖 AI：
+[修改代码，添加 <span class="ni">@dnd</span>-kit 拖拽库，调整样式和排序逻辑]
+
+👤 用户：
+拖拽的时候有点卡顿，能优化一下吗？另外加一个过滤功能，
+可以只看未完成的任务。
+
+🤖 AI：
+[优化拖拽性能，添加 useMemo 和 useCallback，增加过滤功能]
+
+👤 用户：
+完美！再加个导出功能，可以把待办事项导出为 Markdown 格式。
+
+🤖 AI：
+[添加导出按钮和 Markdown 生成逻辑]
+</pre></div>
+</div>
+<p>整个过程中，开发者没有写一行代码，但通过 4 轮对话，构建了一个功能完善的待办事项应用。</p>
+</section>
+</section>
+<section id="id12">
+<h2>11.5 Vibe Coding 的哲学<a class="headerlink" href="#id12" title="Link to this heading">#</a></h2>
+<section id="id13">
+<h3>11.5.1 接受不完全理解<a class="headerlink" href="#id13" title="Link to this heading">#</a></h3>
+<p>Vibe Coding 最具颠覆性的哲学观点是：<strong>你不需要完全理解代码也能构建软件</strong>。</p>
+<p>这在传统软件工程看来几乎是异端邪说。几十年来，&quot;理解你写的每一行代码&quot;被视为专业开发者的基本素养。但 Karpathy 提出了一个反问：</p>
+<blockquote>
+<div><p>你理解你使用的每一个库的源码吗？你理解操作系统内核的每一行代码吗？你理解编译器是如何将你的代码转换为机器指令的吗？</p>
+</div></blockquote>
+<p>事实上，现代软件开发早已建立在层层抽象之上。一个 Web 开发者使用 React 时，不需要理解虚拟 DOM 的 diff 算法细节；使用 PostgreSQL 时，不需要理解 B+ 树的实现。Vibe Coding 只是将这种抽象推进了一步——AI 成为了一个新的抽象层。</p>
+</section>
+<section id="id14">
+<h3>11.5.2 编程的民主化<a class="headerlink" href="#id14" title="Link to this heading">#</a></h3>
+<p>Vibe Coding 的另一个重要哲学意义在于<strong>编程的民主化</strong>。长期以来，软件开发是一项需要多年专业训练的技能。Vibe Coding 大幅降低了这个门槛：</p>
+<ul class="simple">
+<li><p><strong>产品经理</strong>可以直接将需求转化为原型</p></li>
+<li><p><strong>设计师</strong>可以将设计稿变成可交互的前端页面</p></li>
+<li><p><strong>数据分析师</strong>可以构建自己的数据处理工具</p></li>
+<li><p><strong>创业者</strong>可以在没有技术合伙人的情况下构建 MVP</p></li>
+</ul>
+<div class="note admonition">
+<p class="admonition-title">历史的回响</p>
+<p>每一次编程范式的变革都伴随着&quot;民主化&quot;的争论。从汇编到高级语言，从命令行到图形界面，从原生开发到低代码平台——每一次都有人担忧&quot;降低门槛会导致质量下降&quot;，但每一次都推动了更大规模的创新。</p>
+</div>
+</section>
+<section id="id15">
+<h3>11.5.3 从&quot;工匠&quot;到&quot;导演&quot;<a class="headerlink" href="#id15" title="Link to this heading">#</a></h3>
+<p>Vibe Coding 重新定义了开发者的角色。传统开发者像工匠，亲手打磨每一个细节；Vibe Coding 时代的开发者更像导演，负责构思愿景、指导执行、把控质量。</p>
+<p>这并不意味着技术能力不再重要。恰恰相反，一个懂技术的&quot;导演&quot;能够：</p>
+<ul class="simple">
+<li><p>给出更精确的指令</p></li>
+<li><p>更快地发现问题</p></li>
+<li><p>做出更好的架构决策</p></li>
+<li><p>在 AI 犯错时及时纠正</p></li>
+</ul>
+</section>
+</section>
+<section id="id16">
+<h2>11.6 争议与讨论<a class="headerlink" href="#id16" title="Link to this heading">#</a></h2>
+<section id="id17">
+<h3>11.6.1 支持者的观点<a class="headerlink" href="#id17" title="Link to this heading">#</a></h3>
+<p><strong>“这是生产力的巨大飞跃”</strong></p>
+<p>支持者认为，Vibe Coding 将开发效率提升了一个数量级。原本需要数天的工作，现在可能只需要数小时。这种效率提升对于创业公司、独立开发者和快速原型验证尤为重要。</p>
+<p><strong>“编程应该是手段，而非目的”</strong></p>
+<p>软件的价值在于解决问题，而非代码本身。如果 AI 能更快地将想法转化为可工作的软件，为什么要坚持手写每一行代码？</p>
+<p><strong>“这是自然的进化方向”</strong></p>
+<p>从机器码到汇编，从汇编到 C，从 C 到 Python，编程语言一直在向更高层次的抽象演进。自然语言编程是这条进化路径的逻辑延伸。</p>
+</section>
+<section id="id18">
+<h3>11.6.2 反对者的观点<a class="headerlink" href="#id18" title="Link to this heading">#</a></h3>
+<p><strong>“不理解代码是危险的”</strong></p>
+<p>反对者最核心的担忧是：如果开发者不理解代码，就无法预见和处理边界情况、安全漏洞和性能问题。在关键系统（金融、医疗、航空）中，这种&quot;不理解&quot;可能导致灾难性后果。</p>
+<p><strong>“这会导致技能退化”</strong></p>
+<p>如果新一代开发者从一开始就依赖 AI 写代码，他们可能永远无法建立深层的编程能力。当 AI 出错时（AI 一定会出错），他们将无力应对。</p>
+<p><strong>“Vibe Coding 只适用于简单场景”</strong></p>
+<p>批评者指出，Karpathy 展示的 Vibe Coding 案例大多是简单的 Web 应用和脚本。对于复杂的分布式系统、高性能计算或底层系统编程，Vibe Coding 的效果大打折扣。</p>
+</section>
+<section id="id19">
+<h3>11.6.3 一个更平衡的视角<a class="headerlink" href="#id19" title="Link to this heading">#</a></h3>
+<div class="important admonition">
+<p class="admonition-title">作者观点</p>
+<p>Vibe Coding 既不是银弹，也不是毒药。它是一种强大的新工具，适用于特定的场景和阶段。关键不在于&quot;是否使用 Vibe Coding&quot;，而在于&quot;何时以及如何使用 Vibe Coding&quot;。</p>
+<p>对于原型验证、个人项目、快速迭代——Vibe Coding 是极好的选择。
+对于生产系统、安全关键系统、需要长期维护的代码——需要更加审慎。</p>
+<p>最理想的状态是：<strong>具备深厚编程功底的开发者，善用 Vibe Coding 来加速开发</strong>。这样既能享受效率提升，又能在关键时刻把控质量。</p>
+</div>
+</section>
+</section>
+<section id="id20">
+<h2>11.7 Vibe Coding 的光谱<a class="headerlink" href="#id20" title="Link to this heading">#</a></h2>
+<p>Vibe Coding 并非一个非黑即白的概念，而是一个光谱。不同的开发者可以在这个光谱上找到适合自己的位置：</p>
+<div class="pst-scrollable-table-container"><table class="table" id="id24">
+<caption><span class="caption-text">Vibe Coding 的光谱</span><a class="headerlink" href="#id24" title="Link to this table">#</a></caption>
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 30.0%" />
+<col style="width: 50.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>级别</p></th>
+<th class="head"><p>描述</p></th>
+<th class="head"><p>典型行为</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Level 0：纯手写</p></td>
+<td><p>完全不使用 AI</p></td>
+<td><p>所有代码手动编写，手动查文档</p></td>
+</tr>
+<tr class="row-odd"><td><p>Level 1：AI 补全</p></td>
+<td><p>使用 AI 代码补全</p></td>
+<td><p>接受 Copilot 的行级建议，但主导代码结构</p></td>
+</tr>
+<tr class="row-even"><td><p>Level 2：AI 协作</p></td>
+<td><p>与 AI 对话式编程</p></td>
+<td><p>让 AI 生成函数/模块，自己审查和整合</p></td>
+</tr>
+<tr class="row-odd"><td><p>Level 3：轻度 Vibe</p></td>
+<td><p>大部分代码由 AI 生成</p></td>
+<td><p>描述需求，审查关键逻辑，快速浏览其余部分</p></td>
+</tr>
+<tr class="row-even"><td><p>Level 4：深度 Vibe</p></td>
+<td><p>几乎所有代码由 AI 生成</p></td>
+<td><p>只关注结果是否正确，不深入审查代码</p></td>
+</tr>
+<tr class="row-odd"><td><p>Level 5：纯 Vibe</p></td>
+<td><p>完全依赖 AI</p></td>
+<td><p>“看着、说着、运行着、复制粘贴着”</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>大多数专业开发者目前处于 Level 2-3 的位置，而 Karpathy 描述的是 Level 4-5 的体验。随着 AI 能力的持续提升，整个光谱可能会向右移动。</p>
+</section>
+<section id="id21">
+<h2>11.8 本章小结<a class="headerlink" href="#id21" title="Link to this heading">#</a></h2>
+<p>Vibe Coding 是 AI 时代软件开发的一个重要里程碑。它代表了一种全新的人机交互方式——开发者用自然语言表达意图，AI 负责将意图转化为代码。</p>
+<div class="tip admonition">
+<p class="admonition-title">关键要点</p>
+<ol class="arabic simple">
+<li><p><strong>Vibe Coding</strong> 由 Andrej Karpathy 于 2025 年 2 月提出，指用自然语言引导 AI 生成代码的编程方式</p></li>
+<li><p>其核心特征包括：自然语言优先、结果导向、迭代式对话、接受模糊性</p></li>
+<li><p>与传统编程的本质区别在于从&quot;How&quot;到&quot;What&quot;的转变</p></li>
+<li><p>Vibe Coding 是一个光谱，从 AI 补全到完全依赖 AI 有多个层次</p></li>
+<li><p>它既带来了巨大的效率提升，也引发了关于代码质量、技能退化的合理担忧</p></li>
+<li><p>最佳实践是：<strong>具备深厚功底，善用 AI 加速</strong></p></li>
+</ol>
+</div>
+<p>在下一章中，我们将深入探索 Vibe Coding 的工具生态——那些让 Vibe Coding 成为可能的强大工具。</p>
+<hr class="docutils" />
+<p class="rubric">参考文献</p>
+<ol class="arabic simple">
+<li><p>Karpathy, A. (2025). “Vibe Coding.” X/Twitter post, February 2025.</p></li>
+<li><p>Karpathy, A. (2025). “Software in the era of AI.” YouTube presentation.</p></li>
+<li><p>GitHub. (2025). “The State of AI in Software Development 2025.” GitHub Blog.</p></li>
+<li><p>Stack Overflow. (2025). “Developer Survey 2025: AI Tools and Practices.”</p></li>
+<li><p>Brooks, F. P. (1975). <em>The Mythical Man-Month</em>. Addison-Wesley.</p></li>
+</ol>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="chapter10.html"
+       title="上一页">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">上一页</p>
+        <p class="prev-next-title">第十章：AI 时代的团队协作与项目管理</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="chapter12.html"
+       title="下一页">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">下一页</p>
+        <p class="prev-next-title">第十二章：Cursor — 重新定义代码编辑器</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> 目录
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">11.1 一条推文引发的范式讨论</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#karpathy">11.1.1 Karpathy 的背景与可信度</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">11.1.2 时代背景：为什么是 2025 年</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">11.2 Vibe Coding 的定义</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">11.2.1 核心定义</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">11.2.2 Vibe Coding 的核心特征</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">11.2.3 一个形象的类比</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id7">11.3 与传统编程的本质区别</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id8">11.3.1 范式对比</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#how-what">11.3.2 从"How"到"What"的转变</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id9">11.4 Vibe Coding 的典型工作流程</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id10">11.4.1 完整工作流</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id11">11.4.2 实际对话示例</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id12">11.5 Vibe Coding 的哲学</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id13">11.5.1 接受不完全理解</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id14">11.5.2 编程的民主化</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id15">11.5.3 从"工匠"到"导演"</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id16">11.6 争议与讨论</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id17">11.6.1 支持者的观点</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id18">11.6.2 反对者的观点</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id19">11.6.3 一个更平衡的视角</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id20">11.7 Vibe Coding 的光谱</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id21">11.8 本章小结</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+作者： Walter Fan, AI Agent
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026, Walter Fan, AI 辅助创作.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

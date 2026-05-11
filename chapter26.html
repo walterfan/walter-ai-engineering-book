@@ -1,0 +1,1587 @@
+
+<!DOCTYPE html>
+
+
+<html lang="zh-CN" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>第二十六章：AI 时代的工程文化与团队建设 &#8212; AI 时代的软件工程</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="_static/documentation_options.js?v=546e450b"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script src="_static/translations.js?v=beaddf03"></script>
+    <script type="module" src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs"></script>
+    <script type="module" src="https://cdn.jsdelivr.net/npm/@mermaid-js/layout-elk@0.2.0/dist/mermaid-layout-elk.esm.min.mjs"></script>
+    <script type="module">mermaid.initialize({startOnLoad:true, theme:'default'});</script>
+    <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+    <script type="module">import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";
+
+const defaultStyle = document.createElement('style');
+defaultStyle.textContent = `pre.mermaid {
+    /* Same as .mermaid-container > pre */
+    display: block;
+    width: 100%;
+}
+
+pre.mermaid > svg {
+    /* Same as .mermaid-container > pre > svg */
+    height: 500px;
+    width: 100%;
+    max-width: 100% !important;
+}
+`;
+document.head.appendChild(defaultStyle);
+
+const fullscreenStyle = document.createElement('style');
+fullscreenStyle.textContent = `.mermaid-container {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+
+.mermaid-container > pre {
+    display: block;
+    width: 100%;
+}
+
+.mermaid-container > pre > svg {
+    height: 500px;
+    width: 100%;
+    max-width: 100% !important;
+}
+
+.mermaid-fullscreen-btn {
+    width: 28px;
+    height: 28px;
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    font-size: 14px;
+    line-height: 1;
+    padding: 0;
+    color: #333;
+}
+
+.mermaid-fullscreen-btn:hover {
+    opacity: 100% !important;
+    background: rgba(255, 255, 255, 1);
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+    transform: scale(1.1);
+}
+
+.mermaid-fullscreen-btn.dark-theme {
+    background: rgba(50, 50, 50, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: #e0e0e0;
+}
+
+.mermaid-fullscreen-btn.dark-theme:hover {
+    background: rgba(60, 60, 60, 1);
+    box-shadow: 0 3px 10px rgba(255, 255, 255, 0.2);
+}
+
+.mermaid-fullscreen-modal {
+    display: none;
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 95vw;
+    height: 100vh;
+    background: rgba(255, 255, 255, 0.98);
+    z-index: 9999;
+    padding: 20px;
+    overflow: auto;
+}
+
+.mermaid-fullscreen-modal.dark-theme {
+    background: rgba(0, 0, 0, 0.98);
+}
+
+.mermaid-fullscreen-modal.active {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mermaid-container-fullscreen {
+    position: relative;
+    width: 95vw;
+    height: 90vh;
+    max-width: 95vw;
+    max-height: 90vh;
+    background: white;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    overflow: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mermaid-container-fullscreen.dark-theme {
+    background: #1a1a1a;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
+}
+
+.mermaid-container-fullscreen pre.mermaid {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mermaid-container-fullscreen .mermaid svg {
+    height: 100% !important;
+    width: 100% !important;
+    cursor: grab;
+}
+
+.mermaid-fullscreen-close {
+    position: fixed !important;
+    top: 20px !important;
+    right: 20px !important;
+    width: 40px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    transition: all 0.2s;
+    font-size: 24px;
+    line-height: 1;
+    color: #333;
+}
+
+.mermaid-fullscreen-close:hover {
+    background: white;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+    transform: scale(1.1);
+}
+
+.mermaid-fullscreen-close.dark-theme {
+    background: rgba(50, 50, 50, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #e0e0e0;
+}
+
+.mermaid-fullscreen-close.dark-theme:hover {
+    background: rgba(60, 60, 60, 1);
+    box-shadow: 0 6px 16px rgba(255, 255, 255, 0.2);
+}
+
+.mermaid-fullscreen-modal .mermaid-fullscreen-btn {
+    display: none !important;
+}`;
+document.head.appendChild(fullscreenStyle);
+
+// Detect if page has dark background
+const isDarkTheme = () => {
+    const bgColor = window.getComputedStyle(document.body).backgroundColor;
+    const match = bgColor.match(/rgb\((\d+),\s*(\d+),\s*(\d+)/);
+    if (match) {
+        const r = parseInt(match[1]);
+        const g = parseInt(match[2]);
+        const b = parseInt(match[3]);
+        const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+        return brightness < 128;
+    }
+    return false;
+};
+
+const load = async () => {
+    await mermaid.run();
+
+    const all_mermaids = document.querySelectorAll(".mermaid");
+    const mermaids_processed = document.querySelectorAll(".mermaid[data-processed='true']");
+
+    if ("False" === "True") {
+        const mermaids_to_add_zoom = -1 === -1 ? all_mermaids.length : -1;
+        if(mermaids_to_add_zoom > 0) {
+            var svgs = d3.selectAll("");
+            if(all_mermaids.length !== mermaids_processed.length) {
+                setTimeout(load, 200);
+                return;
+            } else if(svgs.size() !== mermaids_to_add_zoom) {
+                setTimeout(load, 200);
+                return;
+            } else {
+                svgs.each(function() {
+                    var svg = d3.select(this);
+                    svg.html("<g class='wrapper'>" + svg.html() + "</g>");
+                    var inner = svg.select("g");
+                    var zoom = d3.zoom().on("zoom", function(event) {
+                        inner.attr("transform", event.transform);
+                    });
+                    svg.call(zoom);
+                });
+            }
+        }
+    } else if(all_mermaids.length !== mermaids_processed.length) {
+        // Wait for mermaid to process all diagrams
+        setTimeout(load, 200);
+        return;
+    }
+
+    const darkTheme = isDarkTheme();
+
+    // Stop here if not adding fullscreen capability
+    if ("True" !== "True") return;
+
+    const modal = document.createElement('div');
+    modal.className = 'mermaid-fullscreen-modal' + (darkTheme ? ' dark-theme' : '');
+    modal.setAttribute('role', 'dialog');
+    modal.setAttribute('aria-modal', 'true');
+    modal.setAttribute('aria-label', 'Fullscreen diagram viewer');
+    modal.innerHTML = `
+        <button class="mermaid-fullscreen-close${darkTheme ? ' dark-theme' : ''}" aria-label="Close fullscreen">✕</button>
+        <div class="mermaid-container-fullscreen${darkTheme ? ' dark-theme' : ''}"></div>
+    `;
+    document.body.appendChild(modal);
+
+    const modalContent = modal.querySelector('.mermaid-container-fullscreen');
+    const closeBtn = modal.querySelector('.mermaid-fullscreen-close');
+
+    let previousScrollOffset = [window.scrollX, window.scrollY];
+
+    const closeModal = () => {
+        modal.classList.remove('active');
+        modalContent.innerHTML = '';
+        document.body.style.overflow = ''
+        window.scrollTo({left: previousScrollOffset[0], top: previousScrollOffset[1], behavior: 'instant'});
+    };
+
+    closeBtn.addEventListener('click', closeModal);
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) closeModal();
+    });
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && modal.classList.contains('active')) {
+            closeModal();
+        }
+    });
+
+    const allButtons = [];
+
+    document.querySelectorAll('.mermaid').forEach((mermaidDiv) => {
+        if (mermaidDiv.parentNode.classList.contains('mermaid-container') ||
+            mermaidDiv.closest('.mermaid-fullscreen-modal')) {
+            return;
+        }
+
+        const container = document.createElement('div');
+        container.className = 'mermaid-container';
+        mermaidDiv.parentNode.insertBefore(container, mermaidDiv);
+        container.appendChild(mermaidDiv);
+
+        const fullscreenBtn = document.createElement('button');
+        fullscreenBtn.className = 'mermaid-fullscreen-btn' + (darkTheme ? ' dark-theme' : '');
+        fullscreenBtn.setAttribute('aria-label', 'View diagram in fullscreen');
+        fullscreenBtn.textContent = '⛶';
+        fullscreenBtn.style.opacity = '50%';
+
+        // Calculate dynamic position based on diagram's margin and padding
+        const diagramStyle = window.getComputedStyle(mermaidDiv);
+        const marginTop = parseFloat(diagramStyle.marginTop) || 0;
+        const marginRight = parseFloat(diagramStyle.marginRight) || 0;
+        const paddingTop = parseFloat(diagramStyle.paddingTop) || 0;
+        const paddingRight = parseFloat(diagramStyle.paddingRight) || 0;
+        fullscreenBtn.style.top = `${marginTop + paddingTop + 4}px`;
+        fullscreenBtn.style.right = `${marginRight + paddingRight + 4}px`;
+
+        fullscreenBtn.addEventListener('click', () => {
+            previousScrollOffset = [window.scroll, window.scrollY];
+            const clone = mermaidDiv.cloneNode(true);
+            modalContent.innerHTML = '';
+            modalContent.appendChild(clone);
+
+            const svg = clone.querySelector('svg');
+            if (svg) {
+                svg.removeAttribute('width');
+                svg.removeAttribute('height');
+                svg.style.width = '100%';
+                svg.style.height = 'auto';
+                svg.style.maxWidth = '100%';
+                svg.style.sdisplay = 'block';
+
+                if ("False" === "True") {
+                    setTimeout(() => {
+                        const g = svg.querySelector('g');
+                        if (g) {
+                            var svgD3 = d3.select(svg);
+                            svgD3.html("<g class='wrapper'>" + svgD3.html() + "</g>");
+                            var inner = svgD3.select("g");
+                            var zoom = d3.zoom().on("zoom", function(event) {
+                                inner.attr("transform", event.transform);
+                            });
+                            svgD3.call(zoom);
+                        }
+                    }, 100);
+                }
+            }
+
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        });
+
+        container.appendChild(fullscreenBtn);
+        allButtons.push(fullscreenBtn);
+    });
+
+    // Update theme classes when theme changes
+    const updateTheme = () => {
+        const dark = isDarkTheme();
+        allButtons.forEach(btn => {
+            if (dark) {
+                btn.classList.add('dark-theme');
+            } else {
+                btn.classList.remove('dark-theme');
+            }
+        });
+        if (dark) {
+            modal.classList.add('dark-theme');
+            modalContent.classList.add('dark-theme');
+            closeBtn.classList.add('dark-theme');
+        } else {
+            modal.classList.remove('dark-theme');
+            modalContent.classList.remove('dark-theme');
+            closeBtn.classList.remove('dark-theme');
+        }
+    };
+
+    // Watch for theme changes
+    const observer = new MutationObserver(updateTheme);
+    observer.observe(document.documentElement, {
+        attributes: true,
+        attributeFilter: ['class', 'style', 'data-theme']
+    });
+    observer.observe(document.body, {
+        attributes: true,
+        attributeFilter: ['class', 'style']
+    });
+};
+
+window.addEventListener("load", load);
+</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'chapter26';</script>
+    <link rel="index" title="索引" href="genindex.html" />
+    <link rel="search" title="搜索" href="search.html" />
+    <link rel="next" title="第二十七章：AI 时代的工程伦理与责任" href="chapter27.html" />
+    <link rel="prev" title="第二十五章：AI 时代的职业发展路径" href="chapter25.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="zh-CN"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">跳转至主要内容</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>回到顶部</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="版本警告"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">AI 时代的软件工程</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="搜索" aria-label="搜索" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">搜索</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">第一部分：回顾与反思 — 软件工程的前世今生</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="chapter01.html">第一章：软件工程的起源与演进</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter02.html">第二章：敏捷革命 — 从计划驱动到价值驱动</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter03.html">第三章：DevOps 与云原生 — 打破开发与运维的壁垒</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter04.html">第四章：软件架构的演进 — 从单体到智能体</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter05.html">第五章：软件质量与工程实践的变迁</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">第二部分：变革之风 — AI 如何重塑软件开发</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="chapter06.html">第六章：AI 编程助手的崛起</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter07.html">第七章：大语言模型基础 — 开发者需要知道的</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter08.html">第八章：AI 驱动的软件开发生命周期</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter09.html">第九章：AI 时代的代码审查与质量保证</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter10.html">第十章：AI 时代的团队协作与项目管理</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">第三部分：氛围编程 — 新范式的崛起</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="chapter11.html">第十一章：什么是氛围编程（Vibe Coding）</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter12.html">第十二章：Cursor — 重新定义代码编辑器</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter13.html">第十三章：Claude Code — 终端中的 AI 软件工程师</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter14.html">第十四章：氛围编程的边界与风险</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter15.html">第十五章：超越氛围编程 — 意图驱动开发</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">第四部分：AI Agent 开发深度解析</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="chapter16.html">第十六章：AI Agent 概论 — 从聊天机器人到自主智能体</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter17.html">第十七章：Agent 架构模式深度解析</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter18.html">第十八章：Agent 开发框架对比与实战</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter19.html">第十九章：Agent 的工具系统设计</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter20.html">第二十章：Agent 的记忆与状态管理</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter21.html">第二十一章：多 Agent 系统与协作模式</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter22.html">第二十二章：Agent 的评估、测试与可观测性</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">第五部分：工程师的自我进化</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="chapter23.html">第二十三章：程序员的认知转变 — 从编码者到架构师</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter24.html">第二十四章：AI 时代的学习方法论</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter25.html">第二十五章：AI 时代的职业发展路径</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">第二十六章：AI 时代的工程文化与团队建设</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter27.html">第二十七章：AI 时代的工程伦理与责任</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">第六部分：展望未来</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="chapter28.html">第二十八章：软件工程的下一个十年</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter29.html">第二十九章：构建你的 AI 工具箱</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter30.html">第三十章：写给每一位软件工程师的信</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">附录：实战项目</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="appendix_a.html">附录 A：实战项目 — AI Coach 虚拟学习教练</a></li>
+<li class="toctree-l1"><a class="reference internal" href="appendix_b.html">附录 B：实战项目 — AI Editor 虚拟书稿编辑</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/walterfan/walter-ai-engineering-book" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="源码库"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/walterfan/walter-ai-engineering-book/edit/main/chapter26.md" target="_blank"
+   class="btn btn-sm btn-source-edit-button dropdown-item"
+   title="Suggest edit"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="btn__text-container">Suggest edit</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/walterfan/walter-ai-engineering-book/issues/new?title=Issue%20on%20page%20%2Fchapter26.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="创建议题"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="下载此页面">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/chapter26.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="下载源文件"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="列印成 PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="全屏模式"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="亮色"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="暗色"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="搜索" aria-label="搜索" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>第二十六章：AI 时代的工程文化与团队建设</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> 目录 </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ai-vs">26.1 AI 原生团队 vs 传统团队</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">26.1.1 什么是 AI 原生团队</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">26.1.2 AI 原生团队的组织结构</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">26.1.3 转型路径</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">26.2 AI 工具标准化与治理</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">26.2.1 工具选择框架</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">26.2.2 工具治理策略</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id7">26.2.3 工具栈推荐</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id8">26.3 AI 使用伦理准则与团队公约</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id9">26.3.1 为什么需要团队公约</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id10">26.3.2 AI 使用团队公约模板</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id11">26.4 代码审查流程的调整</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id12">26.4.1 传统代码审查的挑战</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id13">26.4.2 AI 增强的代码审查流程</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id14">26.4.3 审查重点的转移</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id15">26.5 知识共享：从文档到 AI 知识库</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id16">26.5.1 传统文档的困境</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id17">26.5.2 AI 知识库的构建</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id18">26.5.3 知识共享的新实践</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#onboarding">26.6 新人 Onboarding 的变化</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id19">26.6.1 传统 Onboarding 的痛点</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ai-onboarding">26.6.2 AI 增强的 Onboarding 流程</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id20">26.6.3 AI 导师的角色</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id21">26.7 绩效评估：衡量 AI 辅助下的个人贡献</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id22">26.7.1 传统指标的失效</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id23">26.7.2 新的绩效评估框架</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id24">26.7.3 避免的评估陷阱</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id25">26.8 建设学习型组织与 AI 实验文化</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id26">26.8.1 学习型组织的特征</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id27">26.8.2 AI 实验文化的建设</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id28">26.8.3 心理安全与 AI</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id29">26.9 本章小结</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="ai">
+<span id="chapter26"></span><h1>第二十六章：AI 时代的工程文化与团队建设<a class="headerlink" href="#ai" title="Link to this heading">#</a></h1>
+<pre  class="mermaid">
+        mindmap
+  root((AI时代工程文化))
+    AI原生团队
+      vs传统团队
+      组织结构变化
+    工具治理
+      标准化选型
+      安全合规
+    伦理准则
+      团队公约
+      使用规范
+    代码审查
+      流程调整
+      AI预审+人工
+    知识共享
+      AI知识库
+      自动文档
+    新人Onboarding
+      AI辅助入职
+      加速上手
+    绩效评估
+      新维度
+      AI贡献衡量
+    </pre><blockquote>
+<div><p>“Culture eats strategy for breakfast.” — Peter Drucker</p>
+</div></blockquote>
+<p>技术工具的变革必然带来工程文化的变革。当 AI 成为团队中的&quot;隐形成员&quot;时，团队的协作方式、知识管理、绩效评估乃至价值观都需要重新审视。本章将深入探讨如何在 AI 时代构建高效、健康的工程团队文化。</p>
+<section id="ai-vs">
+<h2>26.1 AI 原生团队 vs 传统团队<a class="headerlink" href="#ai-vs" title="Link to this heading">#</a></h2>
+<section id="id1">
+<h3>26.1.1 什么是 AI 原生团队<a class="headerlink" href="#id1" title="Link to this heading">#</a></h3>
+<p>AI 原生团队不是简单地&quot;使用 AI 工具的团队&quot;，而是从根本上围绕 AI 能力重新设计工作方式的团队：</p>
+<div class="pst-scrollable-table-container"><table class="table" id="id30">
+<caption><span class="caption-text">AI 原生团队 vs 传统团队</span><a class="headerlink" href="#id30" title="Link to this table">#</a></caption>
+<thead>
+<tr class="row-odd"><th class="head"><p>维度</p></th>
+<th class="head"><p>传统团队</p></th>
+<th class="head"><p>AI 原生团队</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>开发流程</p></td>
+<td><p>人工编码为主，AI 辅助为辅</p></td>
+<td><p>AI 生成为主，人工审查和架构为核心</p></td>
+</tr>
+<tr class="row-odd"><td><p>知识管理</p></td>
+<td><p>文档 + Wiki</p></td>
+<td><p>AI 可检索的知识库 + 上下文感知助手</p></td>
+</tr>
+<tr class="row-even"><td><p>代码审查</p></td>
+<td><p>人工逐行审查</p></td>
+<td><p>AI 预审 + 人工重点审查</p></td>
+</tr>
+<tr class="row-odd"><td><p>测试策略</p></td>
+<td><p>人工编写测试用例</p></td>
+<td><p>AI 生成测试 + 人工设计测试策略</p></td>
+</tr>
+<tr class="row-even"><td><p>新人培训</p></td>
+<td><p>导师制 + 文档阅读</p></td>
+<td><p>AI 导师 + 交互式学习 + 人类导师指导</p></td>
+</tr>
+<tr class="row-odd"><td><p>团队规模</p></td>
+<td><p>按功能模块划分大团队</p></td>
+<td><p>小而精的团队，AI 放大个人能力</p></td>
+</tr>
+<tr class="row-even"><td><p>沟通方式</p></td>
+<td><p>会议 + 即时通讯</p></td>
+<td><p>AI 摘要 + 异步协作 + 精准同步</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="id2">
+<h3>26.1.2 AI 原生团队的组织结构<a class="headerlink" href="#id2" title="Link to this heading">#</a></h3>
+<p>AI 原生团队通常采用更扁平、更灵活的组织结构：</p>
+<pre  class="mermaid">
+        graph TD
+    A[技术负责人] --&gt; B[AI 平台组]
+    A --&gt; C[产品特性组 1]
+    A --&gt; D[产品特性组 2]
+    A --&gt; E[质量与安全组]
+    
+    B --&gt; B1[AI 工具链维护]
+    B --&gt; B2[内部 AI 助手开发]
+    B --&gt; B3[AI 最佳实践推广]
+    
+    C --&gt; C1[全栈工程师 x2-3]
+    D --&gt; D1[全栈工程师 x2-3]
+    E --&gt; E1[质量工程师 + 安全工程师]
+    </pre><p>关键特点：</p>
+<ul class="simple">
+<li><p><strong>AI 平台组</strong>：专门负责团队 AI 工具链的维护和优化</p></li>
+<li><p><strong>小型特性组</strong>：2-3 人的小团队，借助 AI 完成过去需要 5-8 人的工作</p></li>
+<li><p><strong>跨职能</strong>：每个人都是全栈，AI 填补技能缺口</p></li>
+</ul>
+</section>
+<section id="id3">
+<h3>26.1.3 转型路径<a class="headerlink" href="#id3" title="Link to this heading">#</a></h3>
+<p>从传统团队到 AI 原生团队的转型不是一蹴而就的：</p>
+<p><strong>阶段一：工具引入（1-2 个月）</strong></p>
+<ul class="simple">
+<li><p>选择并部署 AI 编码助手</p></li>
+<li><p>制定基本的使用指南</p></li>
+<li><p>收集团队反馈</p></li>
+</ul>
+<p><strong>阶段二：流程优化（2-4 个月）</strong></p>
+<ul class="simple">
+<li><p>调整代码审查流程</p></li>
+<li><p>引入 AI 辅助测试</p></li>
+<li><p>建立 AI 使用的最佳实践</p></li>
+</ul>
+<p><strong>阶段三：文化重塑（4-12 个月）</strong></p>
+<ul class="simple">
+<li><p>重新定义角色和职责</p></li>
+<li><p>调整绩效评估标准</p></li>
+<li><p>建立持续学习和实验的文化</p></li>
+</ul>
+<p><strong>阶段四：原生运作（12+ 个月）</strong></p>
+<ul class="simple">
+<li><p>AI 深度融入所有工作流程</p></li>
+<li><p>团队自主创新 AI 应用方式</p></li>
+<li><p>持续优化和迭代</p></li>
+</ul>
+</section>
+</section>
+<section id="id4">
+<h2>26.2 AI 工具标准化与治理<a class="headerlink" href="#id4" title="Link to this heading">#</a></h2>
+<section id="id5">
+<h3>26.2.1 工具选择框架<a class="headerlink" href="#id5" title="Link to this heading">#</a></h3>
+<p>面对众多 AI 工具，团队需要一个系统的选择框架：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">AIToolEvaluationFramework</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;AI 工具评估框架&quot;&quot;&quot;</span>
+    
+    <span class="n">criteria</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;功能性&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;代码生成质量&quot;</span><span class="p">:</span> <span class="s2">&quot;weight: 25%&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;上下文理解能力&quot;</span><span class="p">:</span> <span class="s2">&quot;weight: 20%&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;多语言支持&quot;</span><span class="p">:</span> <span class="s2">&quot;weight: 10%&quot;</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;安全性&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;数据隐私保护&quot;</span><span class="p">:</span> <span class="s2">&quot;weight: 20%&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;代码不外泄&quot;</span><span class="p">:</span> <span class="s2">&quot;weight: 15%&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;合规性&quot;</span><span class="p">:</span> <span class="s2">&quot;weight: 10%&quot;</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;可用性&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;IDE 集成&quot;</span><span class="p">:</span> <span class="s2">&quot;weight: 15%&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;响应速度&quot;</span><span class="p">:</span> <span class="s2">&quot;weight: 10%&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;学习曲线&quot;</span><span class="p">:</span> <span class="s2">&quot;weight: 10%&quot;</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;经济性&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;许可成本&quot;</span><span class="p">:</span> <span class="s2">&quot;weight: 10%&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;ROI 预期&quot;</span><span class="p">:</span> <span class="s2">&quot;weight: 15%&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;扩展成本&quot;</span><span class="p">:</span> <span class="s2">&quot;weight: 5%&quot;</span><span class="p">,</span>
+        <span class="p">},</span>
+    <span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="id6">
+<h3>26.2.2 工具治理策略<a class="headerlink" href="#id6" title="Link to this heading">#</a></h3>
+<div class="important admonition">
+<p class="admonition-title">AI 工具治理的核心原则</p>
+<ol class="arabic simple">
+<li><p><strong>统一但不僵化</strong>：团队统一核心工具，但允许个人探索新工具</p></li>
+<li><p><strong>安全优先</strong>：所有 AI 工具必须通过安全审查</p></li>
+<li><p><strong>数据分级</strong>：根据数据敏感度决定可以使用哪些 AI 工具</p></li>
+<li><p><strong>定期评估</strong>：每季度评估工具效果，及时调整</p></li>
+<li><p><strong>成本可控</strong>：建立 AI 工具的预算和使用监控</p></li>
+</ol>
+</div>
+</section>
+<section id="id7">
+<h3>26.2.3 工具栈推荐<a class="headerlink" href="#id7" title="Link to this heading">#</a></h3>
+<p>一个典型的 AI 原生团队工具栈：</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>类别</p></th>
+<th class="head"><p>推荐工具</p></th>
+<th class="head"><p>用途</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>代码编辑器</p></td>
+<td><p>Cursor / VS Code + Copilot</p></td>
+<td><p>日常编码</p></td>
+</tr>
+<tr class="row-odd"><td><p>代码审查</p></td>
+<td><p>CodeRabbit / AI PR Reviewer</p></td>
+<td><p>自动化代码审查</p></td>
+</tr>
+<tr class="row-even"><td><p>测试生成</p></td>
+<td><p>AI 测试生成工具</p></td>
+<td><p>自动生成测试用例</p></td>
+</tr>
+<tr class="row-odd"><td><p>文档</p></td>
+<td><p>AI 文档助手</p></td>
+<td><p>自动生成和更新文档</p></td>
+</tr>
+<tr class="row-even"><td><p>知识库</p></td>
+<td><p>AI 增强的内部知识库</p></td>
+<td><p>团队知识管理</p></td>
+</tr>
+<tr class="row-odd"><td><p>监控</p></td>
+<td><p>AIOps 工具</p></td>
+<td><p>智能告警和根因分析</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</section>
+<section id="id8">
+<h2>26.3 AI 使用伦理准则与团队公约<a class="headerlink" href="#id8" title="Link to this heading">#</a></h2>
+<section id="id9">
+<h3>26.3.1 为什么需要团队公约<a class="headerlink" href="#id9" title="Link to this heading">#</a></h3>
+<p>没有明确的 AI 使用准则，团队可能面临：</p>
+<ul class="simple">
+<li><p>代码质量参差不齐（有人盲目信任 AI，有人完全不用）</p></li>
+<li><p>安全风险（敏感代码被发送到外部 AI 服务）</p></li>
+<li><p>知识产权争议（AI 生成代码的版权归属）</p></li>
+<li><p>技能退化（过度依赖 AI 导致基础能力下降）</p></li>
+</ul>
+</section>
+<section id="id10">
+<h3>26.3.2 AI 使用团队公约模板<a class="headerlink" href="#id10" title="Link to this heading">#</a></h3>
+<div class="highlight-markdown notranslate"><div class="highlight"><pre><span></span><span class="gh"># 团队 AI 使用公约 v1.0</span>
+
+<span class="gu">## 基本原则</span>
+<span class="k">1.</span> AI 是工具，不是替代品。最终责任在人。
+<span class="k">2.</span> 所有 AI 生成的代码必须经过人工审查后才能合并。
+<span class="k">3.</span> 理解你提交的每一行代码，无论是否由 AI 生成。
+
+<span class="gu">## 安全规范</span>
+<span class="k">1.</span> 禁止将以下内容发送给外部 AI 服务：
+<span class="w">   </span><span class="k">-</span><span class="w"> </span>生产环境的密钥、证书和凭据
+<span class="w">   </span><span class="k">-</span><span class="w"> </span>用户个人数据
+<span class="w">   </span><span class="k">-</span><span class="w"> </span>未公开的商业逻辑
+<span class="w">   </span><span class="k">-</span><span class="w"> </span>安全相关的代码（认证、加密）
+<span class="k">2.</span> 使用公司批准的 AI 工具列表中的工具
+<span class="k">3.</span> 定期清理 AI 对话历史中的敏感信息
+
+<span class="gu">## 质量标准</span>
+<span class="k">1.</span> AI 生成的代码必须满足与手写代码相同的质量标准
+<span class="k">2.</span> AI 生成的代码必须有对应的测试覆盖
+<span class="k">3.</span> 复杂的 AI 生成代码需要添加注释说明设计意图
+
+<span class="gu">## 学习与成长</span>
+<span class="k">1.</span> 每周至少有一次&quot;无 AI 编程&quot;练习
+<span class="k">2.</span> 记录并分享 AI 使用的最佳实践和踩坑经验
+<span class="k">3.</span> 新人前三个月需要在导师指导下使用 AI 工具
+
+<span class="gu">## 归属与署名</span>
+<span class="k">1.</span> AI 辅助生成的代码，提交者承担全部责任
+<span class="k">2.</span> 在 PR 描述中标注 AI 辅助的程度
+<span class="k">3.</span> 重大架构决策不能完全依赖 AI 建议
+</pre></div>
+</div>
+</section>
+</section>
+<section id="id11">
+<h2>26.4 代码审查流程的调整<a class="headerlink" href="#id11" title="Link to this heading">#</a></h2>
+<section id="id12">
+<h3>26.4.1 传统代码审查的挑战<a class="headerlink" href="#id12" title="Link to this heading">#</a></h3>
+<p>在 AI 时代，传统的代码审查面临新的挑战：</p>
+<ul class="simple">
+<li><p><strong>代码量激增</strong>：AI 辅助下，代码产出大幅增加，审查压力增大</p></li>
+<li><p><strong>风格一致性</strong>：AI 生成的代码风格可能与团队规范不一致</p></li>
+<li><p><strong>隐藏的问题</strong>：AI 生成的代码可能&quot;看起来正确&quot;但存在微妙的逻辑错误</p></li>
+<li><p><strong>审查疲劳</strong>：大量 AI 生成的样板代码降低了审查者的注意力</p></li>
+</ul>
+</section>
+<section id="id13">
+<h3>26.4.2 AI 增强的代码审查流程<a class="headerlink" href="#id13" title="Link to this heading">#</a></h3>
+<pre  class="mermaid">
+        graph TD
+    A[提交 PR] --&gt; B[AI 自动审查]
+    B --&gt; C{AI 发现问题?}
+    C --&gt;|是| D[自动标注问题]
+    C --&gt;|否| E[标记为 AI 预审通过]
+    D --&gt; F[开发者修复]
+    F --&gt; B
+    E --&gt; G[人工审查]
+    G --&gt; H{关注重点}
+    H --&gt; I[架构合理性]
+    H --&gt; J[业务逻辑正确性]
+    H --&gt; K[安全性]
+    H --&gt; L[可维护性]
+    I &amp; J &amp; K &amp; L --&gt; M{通过?}
+    M --&gt;|是| N[合并]
+    M --&gt;|否| O[反馈修改]
+    O --&gt; A
+    </pre></section>
+<section id="id14">
+<h3>26.4.3 审查重点的转移<a class="headerlink" href="#id14" title="Link to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table" id="id31">
+<caption><span class="caption-text">代码审查重点的转移</span><a class="headerlink" href="#id31" title="Link to this table">#</a></caption>
+<thead>
+<tr class="row-odd"><th class="head"><p>传统审查重点</p></th>
+<th class="head"><p>AI 时代审查重点</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>语法和格式</p></td>
+<td><p>AI 自动处理，人工不再关注</p></td>
+</tr>
+<tr class="row-odd"><td><p>命名规范</p></td>
+<td><p>AI 预审，人工抽查</p></td>
+</tr>
+<tr class="row-even"><td><p>算法效率</p></td>
+<td><p>AI 分析复杂度，人工验证关键路径</p></td>
+</tr>
+<tr class="row-odd"><td><p>错误处理</p></td>
+<td><p>AI 检查覆盖度，人工审查边界情况</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>新增：AI 生成代码的合理性</strong></p></td>
+<td><p>检查 AI 是否引入了不必要的复杂性</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>新增：意图一致性</strong></p></td>
+<td><p>验证代码是否真正实现了需求意图</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>新增：安全性深度审查</strong></p></td>
+<td><p>AI 可能生成有安全漏洞的代码模式</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</section>
+<section id="id15">
+<h2>26.5 知识共享：从文档到 AI 知识库<a class="headerlink" href="#id15" title="Link to this heading">#</a></h2>
+<section id="id16">
+<h3>26.5.1 传统文档的困境<a class="headerlink" href="#id16" title="Link to this heading">#</a></h3>
+<p>传统的知识管理方式（Wiki、Confluence、README）面临持久的挑战：</p>
+<ul class="simple">
+<li><p><strong>写了没人看</strong>：文档的发现性差</p></li>
+<li><p><strong>过时不更新</strong>：代码变了文档没变</p></li>
+<li><p><strong>格式不统一</strong>：每个人的文档风格不同</p></li>
+<li><p><strong>搜索困难</strong>：关键信息淹没在大量文档中</p></li>
+</ul>
+</section>
+<section id="id17">
+<h3>26.5.2 AI 知识库的构建<a class="headerlink" href="#id17" title="Link to this heading">#</a></h3>
+<p>AI 时代的知识管理应该是<strong>活的、可交互的、自动更新的</strong>：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">AIKnowledgeBase</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;AI 增强的团队知识库架构&quot;&quot;&quot;</span>
+    
+    <span class="n">layers</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;数据层&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;代码仓库&quot;</span><span class="p">:</span> <span class="s2">&quot;自动索引代码和注释&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;文档&quot;</span><span class="p">:</span> <span class="s2">&quot;Markdown、Confluence、Notion&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;对话记录&quot;</span><span class="p">:</span> <span class="s2">&quot;Slack、Teams 中的技术讨论&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;PR 和 Issue&quot;</span><span class="p">:</span> <span class="s2">&quot;设计决策和问题解决记录&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;会议记录&quot;</span><span class="p">:</span> <span class="s2">&quot;自动转录和摘要&quot;</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;处理层&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;向量化&quot;</span><span class="p">:</span> <span class="s2">&quot;将所有知识转化为向量嵌入&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;关联分析&quot;</span><span class="p">:</span> <span class="s2">&quot;自动发现知识之间的关联&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;过时检测&quot;</span><span class="p">:</span> <span class="s2">&quot;识别与当前代码不一致的文档&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;缺口分析&quot;</span><span class="p">:</span> <span class="s2">&quot;发现缺少文档的代码模块&quot;</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;交互层&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;自然语言查询&quot;</span><span class="p">:</span> <span class="s2">&quot;用自然语言搜索知识库&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;上下文推荐&quot;</span><span class="p">:</span> <span class="s2">&quot;根据当前工作推荐相关知识&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;自动回答&quot;</span><span class="p">:</span> <span class="s2">&quot;回答常见的技术问题&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;知识图谱&quot;</span><span class="p">:</span> <span class="s2">&quot;可视化知识之间的关系&quot;</span><span class="p">,</span>
+        <span class="p">},</span>
+    <span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="id18">
+<h3>26.5.3 知识共享的新实践<a class="headerlink" href="#id18" title="Link to this heading">#</a></h3>
+<ol class="arabic simple">
+<li><p><strong>ADR（Architecture Decision Records）+ AI</strong>：</p>
+<ul class="simple">
+<li><p>每个重要的架构决策都记录为 ADR</p></li>
+<li><p>AI 自动关联相关的 ADR 和代码变更</p></li>
+<li><p>新人可以通过 AI 了解&quot;为什么这样设计&quot;</p></li>
+</ul>
+</li>
+<li><p><strong>代码即文档</strong>：</p>
+<ul class="simple">
+<li><p>利用 AI 从代码自动生成文档</p></li>
+<li><p>代码变更时自动更新相关文档</p></li>
+<li><p>保持代码和文档的一致性</p></li>
+</ul>
+</li>
+<li><p><strong>知识晨会</strong>：</p>
+<ul class="simple">
+<li><p>每周一次 15 分钟的知识分享</p></li>
+<li><p>AI 自动生成上周的技术亮点摘要</p></li>
+<li><p>团队成员分享 AI 使用的新发现</p></li>
+</ul>
+</li>
+</ol>
+</section>
+</section>
+<section id="onboarding">
+<h2>26.6 新人 Onboarding 的变化<a class="headerlink" href="#onboarding" title="Link to this heading">#</a></h2>
+<section id="id19">
+<h3>26.6.1 传统 Onboarding 的痛点<a class="headerlink" href="#id19" title="Link to this heading">#</a></h3>
+<p>传统的新人入职流程通常耗时 1-3 个月，效率低下：</p>
+<ul class="simple">
+<li><p>大量文档阅读，信息过载</p></li>
+<li><p>导师时间有限，问题得不到及时解答</p></li>
+<li><p>环境搭建耗时</p></li>
+<li><p>对代码库的理解缓慢</p></li>
+</ul>
+</section>
+<section id="ai-onboarding">
+<h3>26.6.2 AI 增强的 Onboarding 流程<a class="headerlink" href="#ai-onboarding" title="Link to this heading">#</a></h3>
+<div class="highlight-markdown notranslate"><div class="highlight"><pre><span></span><span class="gu">## AI 增强的新人 Onboarding 计划</span>
+
+<span class="gu">### 第 1 天：环境与工具</span>
+<span class="k">- [ ]</span> AI 辅助的开发环境一键搭建
+<span class="k">- [ ]</span> AI 编码助手配置和基础使用培训
+<span class="k">- [ ]</span> 团队 AI 使用公约学习
+
+<span class="gu">### 第 1 周：代码库探索</span>
+<span class="k">- [ ]</span> 使用 AI 助手探索代码库结构
+<span class="w">  </span><span class="k">-</span><span class="w"> </span>&quot;这个项目的整体架构是什么？&quot;
+<span class="w">  </span><span class="k">-</span><span class="w"> </span>&quot;用户认证流程是如何实现的？&quot;
+<span class="w">  </span><span class="k">-</span><span class="w"> </span>&quot;这个函数为什么要这样设计？&quot;
+<span class="k">- [ ]</span> 完成 3 个 AI 辅助的小型修复任务
+<span class="k">- [ ]</span> 与导师进行第一次 1:1
+
+<span class="gu">### 第 2 周：深入理解</span>
+<span class="k">- [ ]</span> 使用 AI 知识库了解关键架构决策
+<span class="k">- [ ]</span> 完成一个中等复杂度的功能开发
+<span class="k">- [ ]</span> 参与代码审查（先观察，后参与）
+
+<span class="gu">### 第 3-4 周：独立贡献</span>
+<span class="k">- [ ]</span> 独立完成一个完整的功能开发
+<span class="k">- [ ]</span> 开始参与代码审查
+<span class="k">- [ ]</span> 向 AI 知识库贡献新人视角的文档
+
+<span class="gu">### 第 2 个月：融入团队</span>
+<span class="k">- [ ]</span> 参与架构讨论
+<span class="k">- [ ]</span> 分享 Onboarding 经验和改进建议
+<span class="k">- [ ]</span> 开始指导下一位新人（如果有的话）
+</pre></div>
+</div>
+</section>
+<section id="id20">
+<h3>26.6.3 AI 导师的角色<a class="headerlink" href="#id20" title="Link to this heading">#</a></h3>
+<p>AI 导师不能替代人类导师，但可以有效补充：</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>场景</p></th>
+<th class="head"><p>AI 导师</p></th>
+<th class="head"><p>人类导师</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>代码库问题</p></td>
+<td><p>24/7 可用，即时回答</p></td>
+<td><p>提供深层次的设计意图</p></td>
+</tr>
+<tr class="row-odd"><td><p>技术问题</p></td>
+<td><p>快速提供参考答案</p></td>
+<td><p>分享经验和判断力</p></td>
+</tr>
+<tr class="row-even"><td><p>职业发展</p></td>
+<td><p>提供学习资源推荐</p></td>
+<td><p>提供职业建议和人脉</p></td>
+</tr>
+<tr class="row-odd"><td><p>文化融入</p></td>
+<td><p>解释流程和规范</p></td>
+<td><p>传递团队文化和价值观</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</section>
+<section id="id21">
+<h2>26.7 绩效评估：衡量 AI 辅助下的个人贡献<a class="headerlink" href="#id21" title="Link to this heading">#</a></h2>
+<section id="id22">
+<h3>26.7.1 传统指标的失效<a class="headerlink" href="#id22" title="Link to this heading">#</a></h3>
+<p>当 AI 大幅提升代码产出时，传统的绩效指标变得不可靠：</p>
+<ul class="simple">
+<li><p><strong>代码行数</strong>：AI 可以轻松生成大量代码，这个指标完全失效</p></li>
+<li><p><strong>提交次数</strong>：AI 辅助下提交频率可能大幅增加，但不代表更多价值</p></li>
+<li><p><strong>Bug 修复数</strong>：AI 可能同时引入和修复 Bug</p></li>
+<li><p><strong>功能交付速度</strong>：需要区分 AI 贡献和个人贡献</p></li>
+</ul>
+</section>
+<section id="id23">
+<h3>26.7.2 新的绩效评估框架<a class="headerlink" href="#id23" title="Link to this heading">#</a></h3>
+<div class="tip admonition">
+<p class="admonition-title">AI 时代的绩效评估维度</p>
+<p><strong>1. 影响力（Impact）— 权重 40%</strong></p>
+<ul class="simple">
+<li><p>交付的业务价值</p></li>
+<li><p>解决的问题复杂度</p></li>
+<li><p>对团队效率的提升贡献</p></li>
+</ul>
+<p><strong>2. 质量（Quality）— 权重 25%</strong></p>
+<ul class="simple">
+<li><p>代码的可维护性和可靠性</p></li>
+<li><p>架构决策的合理性</p></li>
+<li><p>生产环境的稳定性</p></li>
+</ul>
+<p><strong>3. AI 协作效能（AI Leverage）— 权重 15%</strong></p>
+<ul class="simple">
+<li><p>AI 工具的使用熟练度</p></li>
+<li><p>AI 最佳实践的贡献和分享</p></li>
+<li><p>创新性的 AI 应用方式</p></li>
+</ul>
+<p><strong>4. 团队贡献（Team Contribution）— 权重 20%</strong></p>
+<ul class="simple">
+<li><p>代码审查的质量和及时性</p></li>
+<li><p>知识分享和文档贡献</p></li>
+<li><p>对新人的指导和帮助</p></li>
+</ul>
+</div>
+</section>
+<section id="id24">
+<h3>26.7.3 避免的评估陷阱<a class="headerlink" href="#id24" title="Link to this heading">#</a></h3>
+<div class="admonition warning">
+<p class="admonition-title">警告</p>
+<ol class="arabic simple">
+<li><p><strong>不要惩罚 AI 使用</strong>：使用 AI 是效率的体现，不是&quot;偷懒&quot;</p></li>
+<li><p><strong>不要只看产出量</strong>：质量和影响力比数量更重要</p></li>
+<li><p><strong>不要忽视学习投入</strong>：学习新 AI 工具的时间应该被认可</p></li>
+<li><p><strong>不要比较 AI 使用前后</strong>：环境变了，基准也应该变</p></li>
+<li><p><strong>不要一刀切</strong>：不同角色的 AI 使用程度和方式不同</p></li>
+</ol>
+</div>
+</section>
+</section>
+<section id="id25">
+<h2>26.8 建设学习型组织与 AI 实验文化<a class="headerlink" href="#id25" title="Link to this heading">#</a></h2>
+<section id="id26">
+<h3>26.8.1 学习型组织的特征<a class="headerlink" href="#id26" title="Link to this heading">#</a></h3>
+<p>Peter Senge 定义的学习型组织在 AI 时代有了新的内涵：</p>
+<ol class="arabic simple">
+<li><p><strong>系统思考</strong>：理解 AI 如何影响整个开发生态系统</p></li>
+<li><p><strong>个人精进</strong>：每个人都在持续提升 AI 协作能力</p></li>
+<li><p><strong>心智模型</strong>：挑战关于 AI 的固有假设和偏见</p></li>
+<li><p><strong>共同愿景</strong>：团队对 AI 时代的发展方向有共识</p></li>
+<li><p><strong>团队学习</strong>：通过协作实验和分享加速集体学习</p></li>
+</ol>
+</section>
+<section id="id27">
+<h3>26.8.2 AI 实验文化的建设<a class="headerlink" href="#id27" title="Link to this heading">#</a></h3>
+<div class="highlight-markdown notranslate"><div class="highlight"><pre><span></span><span class="gu">## AI 实验文化建设实践</span>
+
+<span class="gu">### 1. AI 实验时间</span>
+<span class="k">-</span><span class="w"> </span>每周预留 10-20% 的时间用于 AI 实验
+<span class="k">-</span><span class="w"> </span>鼓励尝试新的 AI 工具和工作流
+<span class="k">-</span><span class="w"> </span>失败是学习的一部分，不惩罚实验失败
+
+<span class="gu">### 2. AI Show &amp; Tell</span>
+<span class="k">-</span><span class="w"> </span>每两周一次的 AI 使用分享会
+<span class="k">-</span><span class="w"> </span>分享成功案例和失败教训
+<span class="k">-</span><span class="w"> </span>投票选出&quot;最佳 AI 应用&quot;
+
+<span class="gu">### 3. AI 挑战赛</span>
+<span class="k">-</span><span class="w"> </span>每月一次的 AI 编程挑战
+<span class="k">-</span><span class="w"> </span>用 AI 解决一个实际业务问题
+<span class="k">-</span><span class="w"> </span>评估 AI 辅助的效果和局限
+
+<span class="gu">### 4. AI 读书会</span>
+<span class="k">-</span><span class="w"> </span>每月阅读一篇 AI 相关论文或文章
+<span class="k">-</span><span class="w"> </span>讨论对团队工作的启示
+<span class="k">-</span><span class="w"> </span>形成可操作的改进建议
+
+<span class="gu">### 5. AI 失败墙</span>
+<span class="k">-</span><span class="w"> </span>公开记录 AI 使用中的失败案例
+<span class="k">-</span><span class="w"> </span>分析失败原因和改进方法
+<span class="k">-</span><span class="w"> </span>将失败转化为团队的集体智慧
+</pre></div>
+</div>
+</section>
+<section id="id28">
+<h3>26.8.3 心理安全与 AI<a class="headerlink" href="#id28" title="Link to this heading">#</a></h3>
+<p>在 AI 时代，心理安全尤为重要：</p>
+<ul class="simple">
+<li><p><strong>允许不会</strong>：不是每个人都能立即适应 AI 工具，给予学习时间</p></li>
+<li><p><strong>允许质疑</strong>：鼓励质疑 AI 的输出，而不是盲目接受</p></li>
+<li><p><strong>允许慢</strong>：有时候不用 AI 反而更好，尊重个人的工作方式选择</p></li>
+<li><p><strong>允许失败</strong>：AI 实验可能失败，这是学习过程的一部分</p></li>
+</ul>
+</section>
+</section>
+<section id="id29">
+<h2>26.9 本章小结<a class="headerlink" href="#id29" title="Link to this heading">#</a></h2>
+<p>AI 时代的工程文化与团队建设需要全方位的变革。核心要点：</p>
+<ul class="simple">
+<li><p>AI 原生团队从根本上重新设计了工作方式，而不仅仅是引入工具</p></li>
+<li><p>AI 工具需要标准化和治理，平衡效率与安全</p></li>
+<li><p>团队 AI 使用公约是确保一致性和安全性的基础</p></li>
+<li><p>代码审查流程需要调整，重点从语法转向架构和意图</p></li>
+<li><p>知识管理从静态文档转向 AI 增强的动态知识库</p></li>
+<li><p>绩效评估需要新的框架，关注影响力而非产出量</p></li>
+<li><p>建设学习型组织和 AI 实验文化是长期竞争力的关键</p></li>
+</ul>
+<blockquote class="epigraph">
+<div><p>“最好的工程团队不是拥有最好 AI 工具的团队，而是最善于将 AI 融入团队文化、让每个人都能发挥最大潜力的团队。”</p>
+</div></blockquote>
+<p>下一章我们将探讨 AI 时代的工程伦理与责任，这是每个工程团队都必须面对的重要议题。</p>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="chapter25.html"
+       title="上一页">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">上一页</p>
+        <p class="prev-next-title">第二十五章：AI 时代的职业发展路径</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="chapter27.html"
+       title="下一页">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">下一页</p>
+        <p class="prev-next-title">第二十七章：AI 时代的工程伦理与责任</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> 目录
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ai-vs">26.1 AI 原生团队 vs 传统团队</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">26.1.1 什么是 AI 原生团队</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">26.1.2 AI 原生团队的组织结构</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">26.1.3 转型路径</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">26.2 AI 工具标准化与治理</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">26.2.1 工具选择框架</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">26.2.2 工具治理策略</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id7">26.2.3 工具栈推荐</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id8">26.3 AI 使用伦理准则与团队公约</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id9">26.3.1 为什么需要团队公约</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id10">26.3.2 AI 使用团队公约模板</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id11">26.4 代码审查流程的调整</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id12">26.4.1 传统代码审查的挑战</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id13">26.4.2 AI 增强的代码审查流程</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id14">26.4.3 审查重点的转移</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id15">26.5 知识共享：从文档到 AI 知识库</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id16">26.5.1 传统文档的困境</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id17">26.5.2 AI 知识库的构建</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id18">26.5.3 知识共享的新实践</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#onboarding">26.6 新人 Onboarding 的变化</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id19">26.6.1 传统 Onboarding 的痛点</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ai-onboarding">26.6.2 AI 增强的 Onboarding 流程</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id20">26.6.3 AI 导师的角色</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id21">26.7 绩效评估：衡量 AI 辅助下的个人贡献</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id22">26.7.1 传统指标的失效</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id23">26.7.2 新的绩效评估框架</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id24">26.7.3 避免的评估陷阱</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id25">26.8 建设学习型组织与 AI 实验文化</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id26">26.8.1 学习型组织的特征</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id27">26.8.2 AI 实验文化的建设</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id28">26.8.3 心理安全与 AI</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id29">26.9 本章小结</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+作者： Walter Fan, AI Agent
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026, Walter Fan, AI 辅助创作.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

@@ -1,0 +1,1149 @@
+
+<!DOCTYPE html>
+
+
+<html lang="zh-CN" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>附录 B：实战项目 — AI Editor 虚拟书稿编辑 &#8212; AI 时代的软件工程</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="_static/documentation_options.js?v=546e450b"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script src="_static/translations.js?v=beaddf03"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'appendix_b';</script>
+    <link rel="index" title="索引" href="genindex.html" />
+    <link rel="search" title="搜索" href="search.html" />
+    <link rel="prev" title="附录 A：实战项目 — AI Coach 虚拟学习教练" href="appendix_a.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="zh-CN"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">跳转至主要内容</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>回到顶部</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="版本警告"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">AI 时代的软件工程</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="搜索" aria-label="搜索" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">搜索</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">第一部分：回顾与反思 — 软件工程的前世今生</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="chapter01.html">第一章：软件工程的起源与演进</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter02.html">第二章：敏捷革命 — 从计划驱动到价值驱动</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter03.html">第三章：DevOps 与云原生 — 打破开发与运维的壁垒</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter04.html">第四章：软件架构的演进 — 从单体到智能体</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter05.html">第五章：软件质量与工程实践的变迁</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">第二部分：变革之风 — AI 如何重塑软件开发</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="chapter06.html">第六章：AI 编程助手的崛起</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter07.html">第七章：大语言模型基础 — 开发者需要知道的</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter08.html">第八章：AI 驱动的软件开发生命周期</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter09.html">第九章：AI 时代的代码审查与质量保证</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter10.html">第十章：AI 时代的团队协作与项目管理</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">第三部分：氛围编程 — 新范式的崛起</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="chapter11.html">第十一章：什么是氛围编程（Vibe Coding）</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter12.html">第十二章：Cursor — 重新定义代码编辑器</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter13.html">第十三章：Claude Code — 终端中的 AI 软件工程师</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter14.html">第十四章：氛围编程的边界与风险</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter15.html">第十五章：超越氛围编程 — 意图驱动开发</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">第四部分：AI Agent 开发深度解析</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="chapter16.html">第十六章：AI Agent 概论 — 从聊天机器人到自主智能体</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter17.html">第十七章：Agent 架构模式深度解析</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter18.html">第十八章：Agent 开发框架对比与实战</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter19.html">第十九章：Agent 的工具系统设计</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter20.html">第二十章：Agent 的记忆与状态管理</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter21.html">第二十一章：多 Agent 系统与协作模式</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter22.html">第二十二章：Agent 的评估、测试与可观测性</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">第五部分：工程师的自我进化</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="chapter23.html">第二十三章：程序员的认知转变 — 从编码者到架构师</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter24.html">第二十四章：AI 时代的学习方法论</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter25.html">第二十五章：AI 时代的职业发展路径</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter26.html">第二十六章：AI 时代的工程文化与团队建设</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter27.html">第二十七章：AI 时代的工程伦理与责任</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">第六部分：展望未来</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="chapter28.html">第二十八章：软件工程的下一个十年</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter29.html">第二十九章：构建你的 AI 工具箱</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter30.html">第三十章：写给每一位软件工程师的信</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">附录：实战项目</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="appendix_a.html">附录 A：实战项目 — AI Coach 虚拟学习教练</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">附录 B：实战项目 — AI Editor 虚拟书稿编辑</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/walterfan/walter-ai-engineering-book" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="源码库"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/walterfan/walter-ai-engineering-book/edit/main/appendix_b.md" target="_blank"
+   class="btn btn-sm btn-source-edit-button dropdown-item"
+   title="Suggest edit"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="btn__text-container">Suggest edit</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/walterfan/walter-ai-engineering-book/issues/new?title=Issue%20on%20page%20%2Fappendix_b.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="创建议题"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="下载此页面">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/appendix_b.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="下载源文件"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="列印成 PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="全屏模式"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="亮色"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="暗色"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="搜索" aria-label="搜索" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>附录 B：实战项目 — AI Editor 虚拟书稿编辑</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> 目录 </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#b-1">B.1 项目背景与设计思路</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">为什么做这个项目？</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ai-coach">与 AI Coach 的区别</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#b-2">B.2 技术架构</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">整体架构图</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#agent">三个 Agent 的分工</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#b-3">B.3 核心实现详解</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#b-3-1-prompt">B.3.1 七种编辑操作的 Prompt 设计</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#b-3-2-diff-ai">B.3.2 Diff 可视化：看清 AI 改了什么</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#b-3-3-writeragent-ai">B.3.3 WriterAgent：AI 辅助写作</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#b-3-4-agent">B.3.4 多 Agent 协作模式</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#b-4">B.4 编辑器界面设计</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">双栏布局</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">右侧面板的三种模式</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#b-5">B.5 项目运行指南</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">快速启动</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#docker">Docker 一键部署</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">使用流程</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#b-6">B.6 涉及的书中知识点</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#b-7">B.7 启发与思考</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id7">对读者的启发</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id8">读者可以怎么做</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id9">两个项目的对比与互补</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#b-8">B.8 项目文件清单</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="b-ai-editor">
+<span id="appendix-b"></span><h1>附录 B：实战项目 — AI Editor 虚拟书稿编辑<a class="headerlink" href="#b-ai-editor" title="Link to this heading">#</a></h1>
+<div class="tip admonition">
+<p class="admonition-title">项目概述</p>
+<p>AI Editor 是一个基于多 Agent 的书稿编写、修改和校对系统。它展示了如何用 Prompt Engineering 实现 7 种专业编辑操作，如何设计多 Agent 协作架构，以及如何用 diff 算法可视化 AI 的修改。</p>
+<p>📁 源码位置：<code class="docutils literal notranslate"><span class="pre">examples/ai-editor/</span></code></p>
+</div>
+<section id="b-1">
+<h2>B.1 项目背景与设计思路<a class="headerlink" href="#b-1" title="Link to this heading">#</a></h2>
+<section id="id1">
+<h3>为什么做这个项目？<a class="headerlink" href="#id1" title="Link to this heading">#</a></h3>
+<p>写一本技术书是一个漫长的过程。作者常常面临这些挑战：</p>
+<ol class="arabic simple">
+<li><p><strong>校对繁琐</strong>：几万字的书稿，逐字检查错别字和语法错误，耗时且容易遗漏</p></li>
+<li><p><strong>润色困难</strong>：知道哪里写得不好，但不知道怎么改更好</p></li>
+<li><p><strong>结构混乱</strong>：写着写着就跑题了，段落之间缺乏逻辑连贯性</p></li>
+<li><p><strong>翻译需求</strong>：技术书籍常需要中英双语版本</p></li>
+</ol>
+<p>AI Editor 就是为了解决这些问题而设计的。它不是要替代人类编辑，而是做一个<strong>7×24 小时在线的编辑助手</strong>，随时可以帮你校对、润色、扩写、缩写、重构、翻译和审查。</p>
+</section>
+<section id="ai-coach">
+<h3>与 AI Coach 的区别<a class="headerlink" href="#ai-coach" title="Link to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>维度</p></th>
+<th class="head"><p>AI Coach</p></th>
+<th class="head"><p>AI Editor</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>核心技术</p></td>
+<td><p>RAG + 知识检索</p></td>
+<td><p>Prompt Engineering + Diff</p></td>
+</tr>
+<tr class="row-odd"><td><p>Agent 数量</p></td>
+<td><p>1 个（多模式）</p></td>
+<td><p>3 个（编辑/写作/对话）</p></td>
+</tr>
+<tr class="row-even"><td><p>数据流</p></td>
+<td><p>用户上传知识 → AI 检索回答</p></td>
+<td><p>用户提交书稿 → AI 编辑修改</p></td>
+</tr>
+<tr class="row-odd"><td><p>输出形式</p></td>
+<td><p>对话回复</p></td>
+<td><p>修改后的文本 + Diff 对比</p></td>
+</tr>
+<tr class="row-even"><td><p>适用场景</p></td>
+<td><p>学习辅导</p></td>
+<td><p>内容创作</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>这两个项目互补：AI Coach 帮你<strong>学习知识</strong>，AI Editor 帮你<strong>输出知识</strong>。</p>
+</section>
+</section>
+<section id="b-2">
+<h2>B.2 技术架构<a class="headerlink" href="#b-2" title="Link to this heading">#</a></h2>
+<section id="id2">
+<h3>整体架构图<a class="headerlink" href="#id2" title="Link to this heading">#</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>┌─────────────────────────────────────────────────────┐
+│                    Vue.js 3 前端                     │
+│            Vite + Tailwind CSS + Pinia               │
+│  ┌──────────┐  ┌──────────┐  ┌─────────┐ ┌───────┐ │
+│  │ 章节管理  │  │ AI 编辑器 │  │ AI 写作  │ │ 对话  │ │
+│  │ CRUD     │  │ Diff 对比 │  │ 生成内容 │ │ SSE  │ │
+│  └────┬─────┘  └────┬─────┘  └────┬────┘ └───┬───┘ │
+│       │             │             │           │      │
+│  ┌────▼─────────────▼─────────────▼───────────▼───┐  │
+│  │       Axios + Token 拦截器 + SSE 客户端         │  │
+│  └────────────────────┬───────────────────────────┘  │
+├───────────────────────┼──────────────────────────────┤
+│                  FastAPI 后端                         │
+│  ┌─────────┐  ┌───────▼───────┐  ┌───────────────┐  │
+│  │Auth API │  │ Editor API    │  │  Writer API   │  │
+│  │JWT+RBAC │  │ 7 种编辑操作  │  │  内容生成     │  │
+│  └────┬────┘  └───────┬───────┘  └───────┬───────┘  │
+│       │               │                  │           │
+│  ┌────▼────┐  ┌───────▼───────┐  ┌──────▼────────┐  │
+│  │  User   │  │ EditorAgent   │  │ WriterAgent   │  │
+│  │  Model  │  │ + ChatAgent   │  │               │  │
+│  └────┬────┘  └───────┬───────┘  └───────┬───────┘  │
+│       │               │                  │           │
+│  ┌────▼────┐  ┌───────▼───────┐  ┌──────▼────────┐  │
+│  │ SQLite  │  │ OpenAI GPT-4o │  │ diff-match    │  │
+│  │         │  │               │  │ -patch        │  │
+│  └─────────┘  └───────────────┘  └───────────────┘  │
+└──────────────────────────────────────────────────────┘
+</pre></div>
+</div>
+</section>
+<section id="agent">
+<h3>三个 Agent 的分工<a class="headerlink" href="#agent" title="Link to this heading">#</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>EditorAgent ─── 负责 7 种编辑操作（校对/润色/扩写/缩写/重构/翻译/审查）
+WriterAgent ─── 负责从零生成书稿内容
+ChatAgent   ─── 负责与作者讨论书稿、提供建议
+</pre></div>
+</div>
+<p>这种设计体现了<strong>单一职责原则</strong>：每个 Agent 专注做一件事，做到极致。</p>
+</section>
+</section>
+<section id="b-3">
+<h2>B.3 核心实现详解<a class="headerlink" href="#b-3" title="Link to this heading">#</a></h2>
+<section id="b-3-1-prompt">
+<h3>B.3.1 七种编辑操作的 Prompt 设计<a class="headerlink" href="#b-3-1-prompt" title="Link to this heading">#</a></h3>
+<p>这是本项目最核心的部分。7 种编辑操作，本质上是 7 套精心设计的 Prompt。</p>
+<p><strong>设计方法论：</strong></p>
+<p>每个 Prompt 都遵循相同的结构：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>1. 角色定义（你是谁）
+2. 任务清单（做什么，5 条具体指令）
+3. 约束条件（不要做什么）
+4. 输出格式（怎么输出）
+5. 输入文本（原文）
+</pre></div>
+</div>
+<p><strong>七种操作对比：</strong></p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>操作</p></th>
+<th class="head"><p>温度</p></th>
+<th class="head"><p>核心指令</p></th>
+<th class="head"><p>输出</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>🔍 校对</p></td>
+<td><p>0.3</p></td>
+<td><p>修正错误，不改风格</p></td>
+<td><p>修正后全文</p></td>
+</tr>
+<tr class="row-odd"><td><p>✨ 润色</p></td>
+<td><p>0.7</p></td>
+<td><p>改善表达，保持原意</p></td>
+<td><p>润色后全文</p></td>
+</tr>
+<tr class="row-even"><td><p>📝 扩写</p></td>
+<td><p>0.7</p></td>
+<td><p>补充细节和代码示例</p></td>
+<td><p>扩写后全文</p></td>
+</tr>
+<tr class="row-odd"><td><p>📐 缩写</p></td>
+<td><p>0.7</p></td>
+<td><p>精简 30-50%，保留核心</p></td>
+<td><p>缩写后全文</p></td>
+</tr>
+<tr class="row-even"><td><p>🔄 重构</p></td>
+<td><p>0.7</p></td>
+<td><p>调整结构，添加过渡句</p></td>
+<td><p>重构后全文</p></td>
+</tr>
+<tr class="row-odd"><td><p>🌐 翻译</p></td>
+<td><p>0.3</p></td>
+<td><p>技术术语准确，保持格式</p></td>
+<td><p>翻译后全文</p></td>
+</tr>
+<tr class="row-even"><td><p>📋 审查</p></td>
+<td><p>0.7</p></td>
+<td><p>从 5 个维度审查</p></td>
+<td><p>建议列表</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="note admonition">
+<p class="admonition-title">温度参数的选择</p>
+<ul class="simple">
+<li><p><strong>低温度（0.3）</strong>：校对和翻译需要确定性，不能&quot;创造性地&quot;修改原文</p></li>
+<li><p><strong>高温度（0.7）</strong>：润色、扩写等需要一定的创造性</p></li>
+<li><p><strong>不要用 0</strong>：即使是校对，也需要一点灵活性来处理歧义</p></li>
+</ul>
+</div>
+<p><strong>校对 Prompt 示例：</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">PROOFREAD_PROMPT</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;你是一位专业的中文校对编辑。请校对以下文本：</span>
+
+<span class="s2">任务：</span>
+<span class="s2">1. 修正错别字和错误用词</span>
+<span class="s2">2. 修正语法错误</span>
+<span class="s2">3. 修正标点符号错误</span>
+<span class="s2">4. 保持原文风格和语气不变</span>
+<span class="s2">5. 不要改变原文的意思和结构</span>
+
+<span class="s2">只输出修正后的完整文本，不要添加任何解释。</span>
+
+<span class="s2">原文：</span>
+<span class="si">{text}</span><span class="s2">&quot;&quot;&quot;</span>
+</pre></div>
+</div>
+<p><strong>审查 Prompt 示例（最复杂的一个）：</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">REVIEW_PROMPT</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;你是一位严格的技术书籍审稿人。请审查以下文本：</span>
+
+<span class="s2">审查维度：</span>
+<span class="s2">1. **技术准确性**：概念是否正确？代码示例是否可运行？</span>
+<span class="s2">2. **逻辑连贯性**：段落之间是否有清晰的逻辑关系？</span>
+<span class="s2">3. **可读性**：语言是否清晰？是否有难以理解的表述？</span>
+<span class="s2">4. **完整性**：是否有遗漏的重要内容？</span>
+<span class="s2">5. **一致性**：术语使用是否一致？风格是否统一？</span>
+
+<span class="s2">请用以下格式输出：</span>
+<span class="s2">## 总体评价</span>
+<span class="s2">## 具体问题</span>
+<span class="s2">1. 🔴 [必须修改] ...</span>
+<span class="s2">2. ⚠️ [建议修改] ...</span>
+<span class="s2">3. 💡 [可以改进] ...</span>
+<span class="s2">## 修改建议&quot;&quot;&quot;</span>
+</pre></div>
+</div>
+<div class="tip admonition">
+<p class="admonition-title">Prompt 设计的关键技巧</p>
+<ol class="arabic simple">
+<li><p><strong>明确的否定指令</strong>：&quot;不要改变原文的意思&quot;比&quot;保持原意&quot;更有效</p></li>
+<li><p><strong>结构化输出</strong>：用 emoji + 分级（🔴⚠️💡）让 AI 的输出更有层次</p></li>
+<li><p><strong>五维审查框架</strong>：给 AI 一个清晰的评估框架，避免泛泛而谈</p></li>
+<li><p><strong>“只输出…不要添加”</strong>：防止 AI 在修改后的文本前后加解释</p></li>
+</ol>
+</div>
+</section>
+<section id="b-3-2-diff-ai">
+<h3>B.3.2 Diff 可视化：看清 AI 改了什么<a class="headerlink" href="#b-3-2-diff-ai" title="Link to this heading">#</a></h3>
+<p>编辑操作的一个关键问题是：<strong>AI 到底改了什么？</strong> 如果只给你一个修改后的版本，你很难判断哪些是好的修改、哪些是不必要的。</p>
+<p>我们使用 <code class="docutils literal notranslate"><span class="pre">diff-match-patch</span></code> 库来生成可视化的差异对比：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">diff_match_patch</span><span class="w"> </span><span class="kn">import</span> <span class="n">diff_match_patch</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">EditorAgent</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dmp</span> <span class="o">=</span> <span class="n">diff_match_patch</span><span class="p">()</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="nf">edit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">action</span><span class="p">):</span>
+        <span class="c1"># 1. 调用 LLM 获取编辑结果</span>
+        <span class="n">edited</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">call_llm</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">action</span><span class="p">)</span>
+        
+        <span class="c1"># 2. 生成 diff</span>
+        <span class="n">diffs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dmp</span><span class="o">.</span><span class="n">diff_main</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">edited</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dmp</span><span class="o">.</span><span class="n">diff_cleanupSemantic</span><span class="p">(</span><span class="n">diffs</span><span class="p">)</span>  <span class="c1"># 语义级别清理</span>
+        <span class="n">diff_html</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dmp</span><span class="o">.</span><span class="n">diff_prettyHtml</span><span class="p">(</span><span class="n">diffs</span><span class="p">)</span>
+        
+        <span class="c1"># 3. 统计变化</span>
+        <span class="n">stats</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;original_chars&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">text</span><span class="p">),</span>
+            <span class="s2">&quot;edited_chars&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">edited</span><span class="p">),</span>
+            <span class="s2">&quot;change_ratio&quot;</span><span class="p">:</span> <span class="nb">abs</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">edited</span><span class="p">)</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">text</span><span class="p">))</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">text</span><span class="p">)</span> <span class="o">*</span> <span class="mi">100</span><span class="p">,</span>
+        <span class="p">}</span>
+        
+        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;edited&quot;</span><span class="p">:</span> <span class="n">edited</span><span class="p">,</span> <span class="s2">&quot;diff_html&quot;</span><span class="p">:</span> <span class="n">diff_html</span><span class="p">,</span> <span class="s2">&quot;stats&quot;</span><span class="p">:</span> <span class="n">stats</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>前端用 CSS 渲染 diff：</p>
+<div class="highlight-css notranslate"><div class="highlight"><pre><span></span><span class="p">.</span><span class="nc">diff-view</span><span class="w"> </span><span class="nt">ins</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">background</span><span class="p">:</span><span class="w"> </span><span class="mh">#d4edda</span><span class="p">;</span><span class="w"> </span><span class="k">color</span><span class="p">:</span><span class="w"> </span><span class="mh">#155724</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w">  </span><span class="c">/* 新增：绿色 */</span>
+<span class="p">.</span><span class="nc">diff-view</span><span class="w"> </span><span class="nt">del</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">background</span><span class="p">:</span><span class="w"> </span><span class="mh">#f8d7da</span><span class="p">;</span><span class="w"> </span><span class="k">color</span><span class="p">:</span><span class="w"> </span><span class="mh">#721c24</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w">  </span><span class="c">/* 删除：红色 */</span>
+</pre></div>
+</div>
+<p>这样，用户可以清楚地看到：</p>
+<ul class="simple">
+<li><p>🟢 绿色高亮 = AI 新增的内容</p></li>
+<li><p>🔴 红色删除线 = AI 删除的内容</p></li>
+<li><p>黑色 = 未修改的内容</p></li>
+</ul>
+</section>
+<section id="b-3-3-writeragent-ai">
+<h3>B.3.3 WriterAgent：AI 辅助写作<a class="headerlink" href="#b-3-3-writeragent-ai" title="Link to this heading">#</a></h3>
+<p>WriterAgent 可以根据主题和大纲生成完整的章节内容：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">WriterAgent</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">topic</span><span class="p">,</span> <span class="n">outline</span><span class="p">,</span> <span class="n">style</span><span class="p">,</span> <span class="n">word_count</span><span class="p">,</span> <span class="n">context</span><span class="p">):</span>
+        <span class="n">style_desc</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;technical&quot;</span><span class="p">:</span> <span class="s2">&quot;专业严谨的技术写作风格&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;casual&quot;</span><span class="p">:</span> <span class="s2">&quot;轻松易读的风格，适合技术博客&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;academic&quot;</span><span class="p">:</span> <span class="s2">&quot;学术论文风格，严谨规范&quot;</span><span class="p">,</span>
+        <span class="p">}</span>
+        
+        <span class="n">prompt</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;你是一位资深的技术书籍作者。请撰写以下内容：</span>
+<span class="s2">        </span>
+<span class="s2">        主题：</span><span class="si">{</span><span class="n">topic</span><span class="si">}</span>
+<span class="s2">        风格：</span><span class="si">{</span><span class="n">style_desc</span><span class="p">[</span><span class="n">style</span><span class="p">]</span><span class="si">}</span>
+<span class="s2">        目标字数：约 </span><span class="si">{</span><span class="n">word_count</span><span class="si">}</span><span class="s2"> 字</span>
+<span class="s2">        大纲：</span><span class="si">{</span><span class="n">outline</span><span class="si">}</span>
+<span class="s2">        上下文：</span><span class="si">{</span><span class="n">context</span><span class="si">}</span>
+<span class="s2">        </span>
+<span class="s2">        要求：</span>
+<span class="s2">        1. 使用 Markdown 格式</span>
+<span class="s2">        2. 技术概念要有代码示例</span>
+<span class="s2">        3. 适当使用列表、表格增强可读性</span>
+<span class="s2">        &quot;&quot;&quot;</span>
+</pre></div>
+</div>
+<p><strong>上下文注入</strong>是一个重要的设计：通过传入前后章节的摘要，AI 可以保持内容的连贯性，避免重复或遗漏。</p>
+</section>
+<section id="b-3-4-agent">
+<h3>B.3.4 多 Agent 协作模式<a class="headerlink" href="#b-3-4-agent" title="Link to this heading">#</a></h3>
+<p>三个 Agent 虽然独立工作，但通过共享数据实现协作：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>用户写初稿 → EditorAgent 校对 → EditorAgent 润色 → ChatAgent 讨论修改
+     ↑                                                      │
+     └──────────── 用户采纳修改，继续迭代 ←─────────────────┘
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>WriterAgent 生成初稿 → 保存为章节 → EditorAgent 审查 → 用户修改 → EditorAgent 校对
+</pre></div>
+</div>
+<p>这种模式体现了本书第 21 章讨论的<strong>流水线式多 Agent 协作</strong>：每个 Agent 处理一个环节，输出传递给下一个。</p>
+</section>
+</section>
+<section id="b-4">
+<h2>B.4 编辑器界面设计<a class="headerlink" href="#b-4" title="Link to this heading">#</a></h2>
+<section id="id3">
+<h3>双栏布局<a class="headerlink" href="#id3" title="Link to this heading">#</a></h3>
+<p>编辑器采用经典的双栏布局：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>┌──────────────────┬──────────────────┐
+│   📝 编辑器       │   👁 预览/Diff    │
+│   (Markdown)     │   (渲染结果)      │
+│                  │                  │
+│  用户在这里编辑   │  实时预览         │
+│  支持选中部分文本  │  或查看 AI 修改   │
+│                  │  的 Diff 对比     │
+│                  │                  │
+│  [💾 保存]       │  [✅ 应用修改]    │
+└──────────────────┴──────────────────┘
+</pre></div>
+</div>
+<p><strong>选中编辑</strong>是一个贴心的功能：用户可以选中一段文本，只对选中部分执行编辑操作，而不是处理整篇文章。这在处理长文档时非常实用。</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="c1">// 获取用户选中的文本</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">textarea</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">document</span><span class="p">.</span><span class="nx">querySelector</span><span class="p">(</span><span class="s1">&#39;textarea&#39;</span><span class="p">)</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">selection</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">textarea</span><span class="p">.</span><span class="nx">value</span><span class="p">.</span><span class="nx">substring</span><span class="p">(</span>
+<span class="w">  </span><span class="nx">textarea</span><span class="p">.</span><span class="nx">selectionStart</span><span class="p">,</span><span class="w"> </span>
+<span class="w">  </span><span class="nx">textarea</span><span class="p">.</span><span class="nx">selectionEnd</span>
+<span class="p">)</span>
+<span class="c1">// 如果没有选中，则处理全文</span>
+<span class="kd">const</span><span class="w"> </span><span class="nx">text</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">selection</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nx">chapter</span><span class="p">.</span><span class="nx">content</span>
+</pre></div>
+</div>
+</section>
+<section id="id4">
+<h3>右侧面板的三种模式<a class="headerlink" href="#id4" title="Link to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>模式</p></th>
+<th class="head"><p>说明</p></th>
+<th class="head"><p>何时显示</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>👁 预览</p></td>
+<td><p>Markdown 实时渲染</p></td>
+<td><p>默认</p></td>
+</tr>
+<tr class="row-odd"><td><p>📊 Diff</p></td>
+<td><p>红绿对比显示修改</p></td>
+<td><p>编辑操作后</p></td>
+</tr>
+<tr class="row-even"><td><p>✨ 编辑结果</p></td>
+<td><p>修改后的完整文本 + 统计</p></td>
+<td><p>编辑操作后</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</section>
+<section id="b-5">
+<h2>B.5 项目运行指南<a class="headerlink" href="#b-5" title="Link to this heading">#</a></h2>
+<section id="id5">
+<h3>快速启动<a class="headerlink" href="#id5" title="Link to this heading">#</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># 1. 启动后端</span>
+<span class="nb">cd</span><span class="w"> </span>examples/ai-editor/backend
+cp<span class="w"> </span>.env.example<span class="w"> </span>.env
+<span class="c1"># 编辑 .env，填入 OPENAI_API_KEY</span>
+
+python<span class="w"> </span>-m<span class="w"> </span>venv<span class="w"> </span>venv
+<span class="nb">source</span><span class="w"> </span>venv/bin/activate
+pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>requirements.txt
+python<span class="w"> </span>run.py
+<span class="c1"># → http://localhost:8001 (API 文档: /docs)</span>
+
+<span class="c1"># 2. 启动前端（新终端）</span>
+<span class="nb">cd</span><span class="w"> </span>examples/ai-editor/frontend
+npm<span class="w"> </span>install
+npm<span class="w"> </span>run<span class="w"> </span>dev
+<span class="c1"># → http://localhost:5174</span>
+</pre></div>
+</div>
+</section>
+<section id="docker">
+<h3>Docker 一键部署<a class="headerlink" href="#docker" title="Link to this heading">#</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>examples/ai-editor
+cp<span class="w"> </span>backend/.env.example<span class="w"> </span>backend/.env
+docker<span class="w"> </span>compose<span class="w"> </span>up<span class="w"> </span>-d
+<span class="c1"># → http://localhost:5174</span>
+</pre></div>
+</div>
+</section>
+<section id="id6">
+<h3>使用流程<a class="headerlink" href="#id6" title="Link to this heading">#</a></h3>
+<ol class="arabic simple">
+<li><p><strong>注册登录</strong> → 进入章节管理页面</p></li>
+<li><p><strong>创建章节</strong> → 输入章节号、标题和内容（Markdown）</p></li>
+<li><p><strong>AI 编辑</strong> → 点击编辑器顶部的操作按钮（校对/润色/扩写…）</p></li>
+<li><p><strong>查看 Diff</strong> → 在右侧面板查看 AI 的修改对比</p></li>
+<li><p><strong>应用修改</strong> → 满意则点击&quot;应用修改&quot;，不满意则忽略</p></li>
+<li><p><strong>AI 写作</strong> → 在写作页面输入主题和大纲，AI 生成内容</p></li>
+<li><p><strong>编辑对话</strong> → 与 AI 编辑讨论书稿结构和内容</p></li>
+</ol>
+</section>
+</section>
+<section id="b-6">
+<h2>B.6 涉及的书中知识点<a class="headerlink" href="#b-6" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>章节</p></th>
+<th class="head"><p>知识点</p></th>
+<th class="head"><p>在项目中的体现</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>第 6 章</p></td>
+<td><p>Prompt Engineering</p></td>
+<td><p>7 种编辑操作的 Prompt 设计（角色/任务/约束/格式）</p></td>
+</tr>
+<tr class="row-odd"><td><p>第 6 章</p></td>
+<td><p>温度参数</p></td>
+<td><p>校对(0.3) vs 润色(0.7) 的温度选择</p></td>
+</tr>
+<tr class="row-even"><td><p>第 17 章</p></td>
+<td><p>Agent 架构</p></td>
+<td><p>EditorAgent / WriterAgent / ChatAgent 三个独立 Agent</p></td>
+</tr>
+<tr class="row-odd"><td><p>第 21 章</p></td>
+<td><p>多 Agent 协作</p></td>
+<td><p>流水线式协作：写作→审查→校对→润色</p></td>
+</tr>
+<tr class="row-even"><td><p>第 22 章</p></td>
+<td><p>Agent 评估</p></td>
+<td><p>Diff 可视化作为编辑质量的评估手段</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="b-7">
+<h2>B.7 启发与思考<a class="headerlink" href="#b-7" title="Link to this heading">#</a></h2>
+<section id="id7">
+<h3>对读者的启发<a class="headerlink" href="#id7" title="Link to this heading">#</a></h3>
+<ol class="arabic simple">
+<li><p><strong>Prompt 就是产品</strong>：7 种编辑操作的差异，100% 来自 Prompt 的不同。同一个 GPT-4o，通过不同的 Prompt 可以变成校对员、润色师、翻译官、审稿人。这就是 Prompt Engineering 的威力。</p></li>
+<li><p><strong>温度是一个被低估的参数</strong>：校对用 0.3（确定性高），润色用 0.7（创造性强）。很多开发者忽略了温度调优，但它对输出质量的影响巨大。</p></li>
+<li><p><strong>Diff 是 AI 编辑的必需品</strong>：如果 AI 直接给你一个修改后的版本，你无法判断它改了什么。Diff 可视化让用户有<strong>审查和控制权</strong>，这是人机协作的关键。</p></li>
+<li><p><strong>多 Agent 不一定要复杂</strong>：本项目的三个 Agent 没有用 LangGraph 或 CrewAI，就是简单的 Python 类。关键是<strong>职责清晰</strong>，而不是框架花哨。</p></li>
+<li><p><strong>选中编辑是杀手级功能</strong>：处理长文档时，全文编辑太慢且不精确。让用户选中一段文本单独处理，既快又准。</p></li>
+</ol>
+</section>
+<section id="id8">
+<h3>读者可以怎么做<a class="headerlink" href="#id8" title="Link to this heading">#</a></h3>
+<div class="tip admonition">
+<p class="admonition-title">动手实践建议</p>
+<p><strong>初级挑战：</strong></p>
+<ul class="simple">
+<li><p>添加一个新的编辑操作（如&quot;添加代码注释&quot;或&quot;生成摘要&quot;）</p></li>
+<li><p>在编辑历史中添加&quot;撤销&quot;功能（恢复到上一个版本）</p></li>
+<li><p>支持导出为 Word 文档（提示：使用 <code class="docutils literal notranslate"><span class="pre">python-docx</span></code> 库）</p></li>
+</ul>
+<p><strong>中级挑战：</strong></p>
+<ul class="simple">
+<li><p>实现&quot;批量编辑&quot;：一键对所有章节执行校对</p></li>
+<li><p>添加&quot;风格一致性检查&quot;：确保全书术语统一</p></li>
+<li><p>实现编辑操作的 A/B 测试：同一段文本用不同 Prompt 编辑，让用户选择更好的</p></li>
+</ul>
+<p><strong>高级挑战：</strong></p>
+<ul class="simple">
+<li><p>将 EditorAgent 改造为 LangGraph 工作流：校对→润色→审查 自动串联</p></li>
+<li><p>添加 RAG 支持：上传风格指南，让 AI 按照指南编辑</p></li>
+<li><p>实现多人协作编辑（类似 Google Docs）</p></li>
+<li><p>训练一个专门的编辑模型（Fine-tuning），替代通用 GPT-4o</p></li>
+</ul>
+</div>
+</section>
+<section id="id9">
+<h3>两个项目的对比与互补<a class="headerlink" href="#id9" title="Link to this heading">#</a></h3>
+<div class="important admonition">
+<p class="admonition-title">从两个项目中学到的架构模式</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>模式</p></th>
+<th class="head"><p>AI Coach</p></th>
+<th class="head"><p>AI Editor</p></th>
+<th class="head"><p>适用场景</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>RAG</p></td>
+<td><p>✅ 核心</p></td>
+<td><p>❌ 未使用</p></td>
+<td><p>需要基于特定知识回答</p></td>
+</tr>
+<tr class="row-odd"><td><p>多模式 Agent</p></td>
+<td><p>✅ 1 个 Agent 3 种模式</p></td>
+<td><p>✅ 3 个独立 Agent</p></td>
+<td><p>功能差异大时用多 Agent</p></td>
+</tr>
+<tr class="row-even"><td><p>SSE 流式</p></td>
+<td><p>✅ 对话</p></td>
+<td><p>✅ 对话</p></td>
+<td><p>所有 AI 生成场景</p></td>
+</tr>
+<tr class="row-odd"><td><p>Diff 可视化</p></td>
+<td><p>❌ 不需要</p></td>
+<td><p>✅ 核心</p></td>
+<td><p>需要展示修改的场景</p></td>
+</tr>
+<tr class="row-even"><td><p>数据驱动反馈</p></td>
+<td><p>✅ 学习数据</p></td>
+<td><p>❌ 未使用</p></td>
+<td><p>需要个性化建议</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>选择哪种模式，取决于你的应用场景。没有银弹，只有合适的工具。</p>
+</div>
+</section>
+</section>
+<section id="b-8">
+<h2>B.8 项目文件清单<a class="headerlink" href="#b-8" title="Link to this heading">#</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>ai-editor/                         # 45 个文件
+├── README.md                      # 项目文档
+├── docker-compose.yml             # Docker 编排
+├── backend/                       # Python 后端
+│   ├── Dockerfile
+│   ├── .env.example
+│   ├── requirements.txt
+│   ├── run.py
+│   └── app/
+│       ├── main.py                # FastAPI 入口
+│       ├── core/
+│       │   ├── config.py          # 配置
+│       │   ├── database.py        # SQLAlchemy async
+│       │   └── auth.py            # JWT 认证 + 角色授权
+│       ├── models/
+│       │   ├── schemas.py         # Pydantic（含 7 种 EditAction 枚举）
+│       │   └── db_models.py       # ORM（User, Book, Chapter, EditHistory...）
+│       ├── api/
+│       │   ├── auth.py            # 注册/登录/刷新
+│       │   ├── chapters.py        # 章节 CRUD
+│       │   ├── editor.py          # AI 编辑（7 种操作 + 应用 + 历史）
+│       │   ├── writer.py          # AI 写作
+│       │   ├── chat.py            # 编辑对话（普通 + SSE）
+│       │   └── health.py          # 健康检查
+│       └── agents/
+│           ├── editor_agent.py    # EditorAgent + WriterAgent
+│           └── chat_agent.py      # ChatAgent（流式）
+└── frontend/                      # Vue.js 前端
+    ├── Dockerfile
+    ├── package.json
+    ├── vite.config.js
+    ├── tailwind.config.js
+    └── src/
+        ├── main.js
+        ├── App.vue                # 侧边栏布局
+        ├── router.js              # 路由 + 守卫
+        ├── stores/
+        │   └── auth.js            # Pinia 认证状态
+        ├── views/
+        │   ├── LoginView.vue      # 登录/注册
+        │   ├── ChaptersView.vue   # 章节管理
+        │   ├── EditorView.vue     # AI 编辑器（双栏 + Diff）
+        │   ├── WriterView.vue     # AI 写作助手
+        │   └── ChatView.vue       # 编辑对话（SSE）
+        └── utils/
+            ├── api.js             # Axios + Token + SSE
+            └── markdown.js        # Markdown 渲染
+</pre></div>
+</div>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="appendix_a.html"
+       title="上一页">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">上一页</p>
+        <p class="prev-next-title">附录 A：实战项目 — AI Coach 虚拟学习教练</p>
+      </div>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> 目录
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#b-1">B.1 项目背景与设计思路</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">为什么做这个项目？</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ai-coach">与 AI Coach 的区别</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#b-2">B.2 技术架构</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">整体架构图</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#agent">三个 Agent 的分工</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#b-3">B.3 核心实现详解</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#b-3-1-prompt">B.3.1 七种编辑操作的 Prompt 设计</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#b-3-2-diff-ai">B.3.2 Diff 可视化：看清 AI 改了什么</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#b-3-3-writeragent-ai">B.3.3 WriterAgent：AI 辅助写作</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#b-3-4-agent">B.3.4 多 Agent 协作模式</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#b-4">B.4 编辑器界面设计</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">双栏布局</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">右侧面板的三种模式</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#b-5">B.5 项目运行指南</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">快速启动</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#docker">Docker 一键部署</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">使用流程</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#b-6">B.6 涉及的书中知识点</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#b-7">B.7 启发与思考</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id7">对读者的启发</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id8">读者可以怎么做</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id9">两个项目的对比与互补</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#b-8">B.8 项目文件清单</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+作者： Walter Fan, AI Agent
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026, Walter Fan, AI 辅助创作.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

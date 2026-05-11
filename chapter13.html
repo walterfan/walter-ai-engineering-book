@@ -1,0 +1,2149 @@
+
+<!DOCTYPE html>
+
+
+<html lang="zh-CN" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>第十三章：Claude Code — 终端中的 AI 软件工程师 &#8212; AI 时代的软件工程</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="_static/documentation_options.js?v=546e450b"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script src="_static/translations.js?v=beaddf03"></script>
+    <script type="module" src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs"></script>
+    <script type="module" src="https://cdn.jsdelivr.net/npm/@mermaid-js/layout-elk@0.2.0/dist/mermaid-layout-elk.esm.min.mjs"></script>
+    <script type="module">mermaid.initialize({startOnLoad:true, theme:'default'});</script>
+    <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+    <script type="module">import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";
+
+const defaultStyle = document.createElement('style');
+defaultStyle.textContent = `pre.mermaid {
+    /* Same as .mermaid-container > pre */
+    display: block;
+    width: 100%;
+}
+
+pre.mermaid > svg {
+    /* Same as .mermaid-container > pre > svg */
+    height: 500px;
+    width: 100%;
+    max-width: 100% !important;
+}
+`;
+document.head.appendChild(defaultStyle);
+
+const fullscreenStyle = document.createElement('style');
+fullscreenStyle.textContent = `.mermaid-container {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+
+.mermaid-container > pre {
+    display: block;
+    width: 100%;
+}
+
+.mermaid-container > pre > svg {
+    height: 500px;
+    width: 100%;
+    max-width: 100% !important;
+}
+
+.mermaid-fullscreen-btn {
+    width: 28px;
+    height: 28px;
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    font-size: 14px;
+    line-height: 1;
+    padding: 0;
+    color: #333;
+}
+
+.mermaid-fullscreen-btn:hover {
+    opacity: 100% !important;
+    background: rgba(255, 255, 255, 1);
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+    transform: scale(1.1);
+}
+
+.mermaid-fullscreen-btn.dark-theme {
+    background: rgba(50, 50, 50, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: #e0e0e0;
+}
+
+.mermaid-fullscreen-btn.dark-theme:hover {
+    background: rgba(60, 60, 60, 1);
+    box-shadow: 0 3px 10px rgba(255, 255, 255, 0.2);
+}
+
+.mermaid-fullscreen-modal {
+    display: none;
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 95vw;
+    height: 100vh;
+    background: rgba(255, 255, 255, 0.98);
+    z-index: 9999;
+    padding: 20px;
+    overflow: auto;
+}
+
+.mermaid-fullscreen-modal.dark-theme {
+    background: rgba(0, 0, 0, 0.98);
+}
+
+.mermaid-fullscreen-modal.active {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mermaid-container-fullscreen {
+    position: relative;
+    width: 95vw;
+    height: 90vh;
+    max-width: 95vw;
+    max-height: 90vh;
+    background: white;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    overflow: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mermaid-container-fullscreen.dark-theme {
+    background: #1a1a1a;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
+}
+
+.mermaid-container-fullscreen pre.mermaid {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mermaid-container-fullscreen .mermaid svg {
+    height: 100% !important;
+    width: 100% !important;
+    cursor: grab;
+}
+
+.mermaid-fullscreen-close {
+    position: fixed !important;
+    top: 20px !important;
+    right: 20px !important;
+    width: 40px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    transition: all 0.2s;
+    font-size: 24px;
+    line-height: 1;
+    color: #333;
+}
+
+.mermaid-fullscreen-close:hover {
+    background: white;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+    transform: scale(1.1);
+}
+
+.mermaid-fullscreen-close.dark-theme {
+    background: rgba(50, 50, 50, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #e0e0e0;
+}
+
+.mermaid-fullscreen-close.dark-theme:hover {
+    background: rgba(60, 60, 60, 1);
+    box-shadow: 0 6px 16px rgba(255, 255, 255, 0.2);
+}
+
+.mermaid-fullscreen-modal .mermaid-fullscreen-btn {
+    display: none !important;
+}`;
+document.head.appendChild(fullscreenStyle);
+
+// Detect if page has dark background
+const isDarkTheme = () => {
+    const bgColor = window.getComputedStyle(document.body).backgroundColor;
+    const match = bgColor.match(/rgb\((\d+),\s*(\d+),\s*(\d+)/);
+    if (match) {
+        const r = parseInt(match[1]);
+        const g = parseInt(match[2]);
+        const b = parseInt(match[3]);
+        const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+        return brightness < 128;
+    }
+    return false;
+};
+
+const load = async () => {
+    await mermaid.run();
+
+    const all_mermaids = document.querySelectorAll(".mermaid");
+    const mermaids_processed = document.querySelectorAll(".mermaid[data-processed='true']");
+
+    if ("False" === "True") {
+        const mermaids_to_add_zoom = -1 === -1 ? all_mermaids.length : -1;
+        if(mermaids_to_add_zoom > 0) {
+            var svgs = d3.selectAll("");
+            if(all_mermaids.length !== mermaids_processed.length) {
+                setTimeout(load, 200);
+                return;
+            } else if(svgs.size() !== mermaids_to_add_zoom) {
+                setTimeout(load, 200);
+                return;
+            } else {
+                svgs.each(function() {
+                    var svg = d3.select(this);
+                    svg.html("<g class='wrapper'>" + svg.html() + "</g>");
+                    var inner = svg.select("g");
+                    var zoom = d3.zoom().on("zoom", function(event) {
+                        inner.attr("transform", event.transform);
+                    });
+                    svg.call(zoom);
+                });
+            }
+        }
+    } else if(all_mermaids.length !== mermaids_processed.length) {
+        // Wait for mermaid to process all diagrams
+        setTimeout(load, 200);
+        return;
+    }
+
+    const darkTheme = isDarkTheme();
+
+    // Stop here if not adding fullscreen capability
+    if ("True" !== "True") return;
+
+    const modal = document.createElement('div');
+    modal.className = 'mermaid-fullscreen-modal' + (darkTheme ? ' dark-theme' : '');
+    modal.setAttribute('role', 'dialog');
+    modal.setAttribute('aria-modal', 'true');
+    modal.setAttribute('aria-label', 'Fullscreen diagram viewer');
+    modal.innerHTML = `
+        <button class="mermaid-fullscreen-close${darkTheme ? ' dark-theme' : ''}" aria-label="Close fullscreen">✕</button>
+        <div class="mermaid-container-fullscreen${darkTheme ? ' dark-theme' : ''}"></div>
+    `;
+    document.body.appendChild(modal);
+
+    const modalContent = modal.querySelector('.mermaid-container-fullscreen');
+    const closeBtn = modal.querySelector('.mermaid-fullscreen-close');
+
+    let previousScrollOffset = [window.scrollX, window.scrollY];
+
+    const closeModal = () => {
+        modal.classList.remove('active');
+        modalContent.innerHTML = '';
+        document.body.style.overflow = ''
+        window.scrollTo({left: previousScrollOffset[0], top: previousScrollOffset[1], behavior: 'instant'});
+    };
+
+    closeBtn.addEventListener('click', closeModal);
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) closeModal();
+    });
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && modal.classList.contains('active')) {
+            closeModal();
+        }
+    });
+
+    const allButtons = [];
+
+    document.querySelectorAll('.mermaid').forEach((mermaidDiv) => {
+        if (mermaidDiv.parentNode.classList.contains('mermaid-container') ||
+            mermaidDiv.closest('.mermaid-fullscreen-modal')) {
+            return;
+        }
+
+        const container = document.createElement('div');
+        container.className = 'mermaid-container';
+        mermaidDiv.parentNode.insertBefore(container, mermaidDiv);
+        container.appendChild(mermaidDiv);
+
+        const fullscreenBtn = document.createElement('button');
+        fullscreenBtn.className = 'mermaid-fullscreen-btn' + (darkTheme ? ' dark-theme' : '');
+        fullscreenBtn.setAttribute('aria-label', 'View diagram in fullscreen');
+        fullscreenBtn.textContent = '⛶';
+        fullscreenBtn.style.opacity = '50%';
+
+        // Calculate dynamic position based on diagram's margin and padding
+        const diagramStyle = window.getComputedStyle(mermaidDiv);
+        const marginTop = parseFloat(diagramStyle.marginTop) || 0;
+        const marginRight = parseFloat(diagramStyle.marginRight) || 0;
+        const paddingTop = parseFloat(diagramStyle.paddingTop) || 0;
+        const paddingRight = parseFloat(diagramStyle.paddingRight) || 0;
+        fullscreenBtn.style.top = `${marginTop + paddingTop + 4}px`;
+        fullscreenBtn.style.right = `${marginRight + paddingRight + 4}px`;
+
+        fullscreenBtn.addEventListener('click', () => {
+            previousScrollOffset = [window.scroll, window.scrollY];
+            const clone = mermaidDiv.cloneNode(true);
+            modalContent.innerHTML = '';
+            modalContent.appendChild(clone);
+
+            const svg = clone.querySelector('svg');
+            if (svg) {
+                svg.removeAttribute('width');
+                svg.removeAttribute('height');
+                svg.style.width = '100%';
+                svg.style.height = 'auto';
+                svg.style.maxWidth = '100%';
+                svg.style.sdisplay = 'block';
+
+                if ("False" === "True") {
+                    setTimeout(() => {
+                        const g = svg.querySelector('g');
+                        if (g) {
+                            var svgD3 = d3.select(svg);
+                            svgD3.html("<g class='wrapper'>" + svgD3.html() + "</g>");
+                            var inner = svgD3.select("g");
+                            var zoom = d3.zoom().on("zoom", function(event) {
+                                inner.attr("transform", event.transform);
+                            });
+                            svgD3.call(zoom);
+                        }
+                    }, 100);
+                }
+            }
+
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        });
+
+        container.appendChild(fullscreenBtn);
+        allButtons.push(fullscreenBtn);
+    });
+
+    // Update theme classes when theme changes
+    const updateTheme = () => {
+        const dark = isDarkTheme();
+        allButtons.forEach(btn => {
+            if (dark) {
+                btn.classList.add('dark-theme');
+            } else {
+                btn.classList.remove('dark-theme');
+            }
+        });
+        if (dark) {
+            modal.classList.add('dark-theme');
+            modalContent.classList.add('dark-theme');
+            closeBtn.classList.add('dark-theme');
+        } else {
+            modal.classList.remove('dark-theme');
+            modalContent.classList.remove('dark-theme');
+            closeBtn.classList.remove('dark-theme');
+        }
+    };
+
+    // Watch for theme changes
+    const observer = new MutationObserver(updateTheme);
+    observer.observe(document.documentElement, {
+        attributes: true,
+        attributeFilter: ['class', 'style', 'data-theme']
+    });
+    observer.observe(document.body, {
+        attributes: true,
+        attributeFilter: ['class', 'style']
+    });
+};
+
+window.addEventListener("load", load);
+</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'chapter13';</script>
+    <link rel="index" title="索引" href="genindex.html" />
+    <link rel="search" title="搜索" href="search.html" />
+    <link rel="next" title="第十四章：氛围编程的边界与风险" href="chapter14.html" />
+    <link rel="prev" title="第十二章：Cursor — 重新定义代码编辑器" href="chapter12.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="zh-CN"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">跳转至主要内容</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>回到顶部</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="版本警告"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">AI 时代的软件工程</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="搜索" aria-label="搜索" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">搜索</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">第一部分：回顾与反思 — 软件工程的前世今生</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="chapter01.html">第一章：软件工程的起源与演进</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter02.html">第二章：敏捷革命 — 从计划驱动到价值驱动</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter03.html">第三章：DevOps 与云原生 — 打破开发与运维的壁垒</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter04.html">第四章：软件架构的演进 — 从单体到智能体</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter05.html">第五章：软件质量与工程实践的变迁</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">第二部分：变革之风 — AI 如何重塑软件开发</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="chapter06.html">第六章：AI 编程助手的崛起</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter07.html">第七章：大语言模型基础 — 开发者需要知道的</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter08.html">第八章：AI 驱动的软件开发生命周期</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter09.html">第九章：AI 时代的代码审查与质量保证</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter10.html">第十章：AI 时代的团队协作与项目管理</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">第三部分：氛围编程 — 新范式的崛起</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="chapter11.html">第十一章：什么是氛围编程（Vibe Coding）</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter12.html">第十二章：Cursor — 重新定义代码编辑器</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">第十三章：Claude Code — 终端中的 AI 软件工程师</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter14.html">第十四章：氛围编程的边界与风险</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter15.html">第十五章：超越氛围编程 — 意图驱动开发</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">第四部分：AI Agent 开发深度解析</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="chapter16.html">第十六章：AI Agent 概论 — 从聊天机器人到自主智能体</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter17.html">第十七章：Agent 架构模式深度解析</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter18.html">第十八章：Agent 开发框架对比与实战</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter19.html">第十九章：Agent 的工具系统设计</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter20.html">第二十章：Agent 的记忆与状态管理</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter21.html">第二十一章：多 Agent 系统与协作模式</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter22.html">第二十二章：Agent 的评估、测试与可观测性</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">第五部分：工程师的自我进化</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="chapter23.html">第二十三章：程序员的认知转变 — 从编码者到架构师</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter24.html">第二十四章：AI 时代的学习方法论</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter25.html">第二十五章：AI 时代的职业发展路径</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter26.html">第二十六章：AI 时代的工程文化与团队建设</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter27.html">第二十七章：AI 时代的工程伦理与责任</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">第六部分：展望未来</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="chapter28.html">第二十八章：软件工程的下一个十年</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter29.html">第二十九章：构建你的 AI 工具箱</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter30.html">第三十章：写给每一位软件工程师的信</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">附录：实战项目</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="appendix_a.html">附录 A：实战项目 — AI Coach 虚拟学习教练</a></li>
+<li class="toctree-l1"><a class="reference internal" href="appendix_b.html">附录 B：实战项目 — AI Editor 虚拟书稿编辑</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/walterfan/walter-ai-engineering-book" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="源码库"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/walterfan/walter-ai-engineering-book/edit/main/chapter13.md" target="_blank"
+   class="btn btn-sm btn-source-edit-button dropdown-item"
+   title="Suggest edit"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="btn__text-container">Suggest edit</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/walterfan/walter-ai-engineering-book/issues/new?title=Issue%20on%20page%20%2Fchapter13.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="创建议题"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="下载此页面">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/chapter13.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="下载源文件"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="列印成 PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="全屏模式"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="亮色"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="暗色"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="搜索" aria-label="搜索" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>第十三章：Claude Code — 终端中的 AI 软件工程师</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> 目录 </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#claude-code">13.1 Claude Code 的诞生与定位</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#anthropic">13.1.1 为什么 Anthropic 要做终端工具</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">13.1.2 Claude Code 的爆发式增长</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">13.2 安装与基本使用</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">13.2.1 安装</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">13.2.2 基本交互</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">13.2.3 四种使用模式</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">13.3 核心能力深度解析</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id7">13.3.1 代码理解：整个项目的心智模型</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id8">13.3.2 自主执行：从理解到行动</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#git">13.3.3 Git 深度集成</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#claude-md">13.4 CLAUDE.md：项目记忆文件</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id9">13.4.1 完整的 CLAUDE.md 示例</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#architecture-decisions">Architecture Decisions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#important-conventions">Important Conventions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#known-issues">Known Issues</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#testing">Testing</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#deployment">Deployment</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id10">13.5 权限与安全模型</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#commands">13.6 自定义 Commands：封装可复用的工作流</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#command">13.6.1 Command 文件结构</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id11">13.6.2 Command 文件格式</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id12">13.6.3 带参数的 Command</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id13">13.6.4 实用 Command 集合</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hooks">13.7 Hooks：自动化的事件触发器</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#hook">13.7.1 Hook 的工作原理</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id14">13.7.2 配置 Hooks</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id15">13.7.3 实用 Hook 示例</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id16">13.7.4 Hook 最佳实践</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id17">13.8 CLAUDE.md 高级编写技巧</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id18">13.8.1 结构化模板</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id19">13.8.2 写好 CLAUDE.md 的关键原则</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id20">13.9 高级特性</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#claude">13.9.1 多 Claude 并行工作</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#github-actions">13.9.2 与 GitHub Actions 集成</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id21">13.9.3 自定义斜杠命令</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#claude-code-vs-cursor">13.10 Claude Code vs Cursor：如何选择</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id22">13.10.1 互补使用的最佳实践</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id23">13.11 实战：用 Claude Code 完成完整开发任务</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#issue-pr">13.11.1 场景：从 Issue 到 PR</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#root-cause">Root Cause</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#solution">Solution</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id24">Testing</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="claude-code-ai">
+<span id="chapter13"></span><h1>第十三章：Claude Code — 终端中的 AI 软件工程师<a class="headerlink" href="#claude-code-ai" title="Link to this heading">#</a></h1>
+<pre  class="mermaid">
+        mindmap
+  root((Claude Code 深度解析))
+    产品定位
+      终端原生 Agent
+      Agentic Coding
+      Anthropic 官方
+    核心能力
+      代码理解与生成
+      自主执行命令
+      多文件编辑
+      Git 操作
+      测试驱动开发
+    工作模式
+      交互式对话
+      一次性命令
+      管道模式
+      Headless 模式
+    配置系统
+      CLAUDE.md
+      权限管理
+      MCP 集成
+      自定义命令
+    高级特性
+      多 Claude 并行
+      子 Agent 模式
+      GitHub 集成
+      CI/CD 集成
+    实战场景
+      新项目开发
+      遗留系统重构
+      Bug 修复
+      代码审查
+    与 Cursor 对比
+      终端 vs IDE
+      适用场景
+      互补使用
+    </pre><blockquote>
+<div><p>“Claude Code 不是一个代码编辑器的插件，它是一个住在你终端里的 AI 软件工程师。”</p>
+</div></blockquote>
+<section id="claude-code">
+<h2>13.1 Claude Code 的诞生与定位<a class="headerlink" href="#claude-code" title="Link to this heading">#</a></h2>
+<section id="anthropic">
+<h3>13.1.1 为什么 Anthropic 要做终端工具<a class="headerlink" href="#anthropic" title="Link to this heading">#</a></h3>
+<p>2025 年 2 月，Anthropic 发布了 Claude Code——一个运行在终端中的 AI 编程 Agent。这个选择看似反直觉：在 GUI 编辑器大行其道的时代，为什么要做一个命令行工具？</p>
+<p>答案在于 Anthropic 对 AI 编程未来的独特理解：</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>Cursor 的哲学：AI 增强编辑器 → 人类主导，AI 辅助
+Claude Code 的哲学：AI 就是开发者 → AI 主导，人类监督
+
+Cursor：给你一个更聪明的编辑器
+Claude Code：给你一个 AI 同事
+</pre></div>
+</div>
+<p>Claude Code 的设计理念：</p>
+<ol class="arabic simple">
+<li><p><strong>Agent-First</strong>：不是代码补全工具，而是能独立完成任务的 Agent</p></li>
+<li><p><strong>终端原生</strong>：终端是最灵活的开发环境，没有 GUI 的限制</p></li>
+<li><p><strong>全栈能力</strong>：读文件、写文件、执行命令、Git 操作、网络请求</p></li>
+<li><p><strong>安全可控</strong>：所有操作透明可见，危险操作需要确认</p></li>
+</ol>
+</section>
+<section id="id1">
+<h3>13.1.2 Claude Code 的爆发式增长<a class="headerlink" href="#id1" title="Link to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table" id="id25">
+<caption><span class="caption-text">Claude Code 关键数据</span><a class="headerlink" href="#id25" title="Link to this table">#</a></caption>
+<colgroup>
+<col style="width: 30.0%" />
+<col style="width: 70.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>指标</p></th>
+<th class="head"><p>数据</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>发布时间</p></td>
+<td><p>2025 年 2 月（研究预览版）</p></td>
+</tr>
+<tr class="row-odd"><td><p>正式发布</p></td>
+<td><p>2025 年 5 月</p></td>
+</tr>
+<tr class="row-even"><td><p>日活跃用户</p></td>
+<td><p>数十万开发者（2025 Q4）</p></td>
+</tr>
+<tr class="row-odd"><td><p>代码生成量</p></td>
+<td><p>Anthropic 内部 &gt;80% 代码由 Claude Code 辅助完成</p></td>
+</tr>
+<tr class="row-even"><td><p>SWE-bench 成绩</p></td>
+<td><p>72.7%（2025 年 10 月，业界最高）</p></td>
+</tr>
+<tr class="row-odd"><td><p>支持平台</p></td>
+<td><p>macOS, Linux, Windows (WSL)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>一个令人震惊的事实：<strong>Anthropic 自己的工程师大量使用 Claude Code 来开发 Claude Code</strong>——这是一个 AI 工具用自己来改进自己的递归过程。</p>
+</section>
+</section>
+<section id="id2">
+<h2>13.2 安装与基本使用<a class="headerlink" href="#id2" title="Link to this heading">#</a></h2>
+<section id="id3">
+<h3>13.2.1 安装<a class="headerlink" href="#id3" title="Link to this heading">#</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># 使用 npm 全局安装</span>
+npm<span class="w"> </span>install<span class="w"> </span>-g<span class="w"> </span>@anthropic-ai/claude-code
+
+<span class="c1"># 验证安装</span>
+claude<span class="w"> </span>--version
+
+<span class="c1"># 首次运行，需要登录 Anthropic 账户</span>
+claude
+</pre></div>
+</div>
+</section>
+<section id="id4">
+<h3>13.2.2 基本交互<a class="headerlink" href="#id4" title="Link to this heading">#</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># 启动交互式会话</span>
+$<span class="w"> </span>claude
+
+╭─────────────────────────────────────────╮
+│<span class="w"> </span>Claude<span class="w"> </span>Code<span class="w"> </span>v1.x<span class="w">                        </span>│
+│<span class="w"> </span>Model:<span class="w"> </span>claude-sonnet-4-20250514<span class="w">         </span>│
+│<span class="w"> </span>Working<span class="w"> </span>directory:<span class="w"> </span>/Users/you/project<span class="w">   </span>│
+╰─────────────────────────────────────────╯
+
+&gt;<span class="w"> </span>这个项目是做什么的？
+
+Claude:<span class="w"> </span>让我看看项目结构...
+
+<span class="o">[</span>Read<span class="o">]</span><span class="w"> </span>package.json
+<span class="o">[</span>Read<span class="o">]</span><span class="w"> </span>README.md
+<span class="o">[</span>Read<span class="o">]</span><span class="w"> </span>src/index.ts
+
+这是一个<span class="w"> </span>TypeScript<span class="w"> </span>编写的<span class="w"> </span>REST<span class="w"> </span>API<span class="w"> </span>服务，使用<span class="w"> </span>Express.js<span class="w"> </span>框架，
+主要功能包括：
+<span class="m">1</span>.<span class="w"> </span>用户认证（JWT）
+<span class="m">2</span>.<span class="w"> </span>博客文章<span class="w"> </span>CRUD
+<span class="m">3</span>.<span class="w"> </span>评论系统
+<span class="m">4</span>.<span class="w"> </span>文件上传（S3）
+
+技术栈：TypeScript<span class="w"> </span>+<span class="w"> </span>Express<span class="w"> </span>+<span class="w"> </span>Prisma<span class="w"> </span>+<span class="w"> </span>PostgreSQL<span class="w"> </span>+<span class="w"> </span>Redis
+</pre></div>
+</div>
+</section>
+<section id="id5">
+<h3>13.2.3 四种使用模式<a class="headerlink" href="#id5" title="Link to this heading">#</a></h3>
+<p><strong>1. 交互式模式（最常用）</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>claude
+&gt;<span class="w"> </span>帮我修复<span class="w"> </span>issue<span class="w"> </span><span class="c1">#42 中报告的分页 bug</span>
+</pre></div>
+</div>
+<p><strong>2. 一次性命令模式</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># 直接传入 prompt，执行完退出</span>
+$<span class="w"> </span>claude<span class="w"> </span>-p<span class="w"> </span><span class="s2">&quot;解释 src/auth/jwt.ts 中的令牌刷新逻辑&quot;</span>
+</pre></div>
+</div>
+<p><strong>3. 管道模式</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># 将其他命令的输出传给 Claude 分析</span>
+$<span class="w"> </span>cat<span class="w"> </span>error.log<span class="w"> </span><span class="p">|</span><span class="w"> </span>claude<span class="w"> </span>-p<span class="w"> </span><span class="s2">&quot;分析这些错误日志，找出根因&quot;</span>
+
+$<span class="w"> </span>git<span class="w"> </span>diff<span class="w"> </span>HEAD~5<span class="w"> </span><span class="p">|</span><span class="w"> </span>claude<span class="w"> </span>-p<span class="w"> </span><span class="s2">&quot;审查这些代码变更，找出潜在问题&quot;</span>
+
+$<span class="w"> </span>pytest<span class="w"> </span>--tb<span class="o">=</span>long<span class="w"> </span><span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>claude<span class="w"> </span>-p<span class="w"> </span><span class="s2">&quot;分析测试失败原因并修复&quot;</span>
+</pre></div>
+</div>
+<p><strong>4. Headless 模式（CI/CD 集成）</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># 在 CI 中使用，无需人工交互</span>
+$<span class="w"> </span>claude<span class="w"> </span>-p<span class="w"> </span><span class="s2">&quot;运行所有测试，如果有失败的，修复它们&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--allowedTools<span class="w"> </span><span class="s2">&quot;Read,Write,Bash&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--max-turns<span class="w"> </span><span class="m">20</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="id6">
+<h2>13.3 核心能力深度解析<a class="headerlink" href="#id6" title="Link to this heading">#</a></h2>
+<section id="id7">
+<h3>13.3.1 代码理解：整个项目的心智模型<a class="headerlink" href="#id7" title="Link to this heading">#</a></h3>
+<p>Claude Code 最强大的能力之一是<strong>深度理解整个代码库</strong>。它不只是搜索关键词，而是构建项目的&quot;心智模型&quot;。</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>&gt;<span class="w"> </span>画出这个项目的架构图，包括服务间的依赖关系
+
+Claude:
+<span class="o">[</span>Read<span class="o">]</span><span class="w"> </span>src/<span class="w"> </span><span class="o">(</span>递归读取<span class="w"> </span><span class="m">47</span><span class="w"> </span>个文件<span class="o">)</span>
+<span class="o">[</span>Read<span class="o">]</span><span class="w"> </span>docker-compose.yml
+<span class="o">[</span>Read<span class="o">]</span><span class="w"> </span>prisma/schema.prisma
+
+项目架构：
+
+┌─────────────┐<span class="w">     </span>┌─────────────┐<span class="w">     </span>┌─────────────┐
+│<span class="w">   </span>Nginx<span class="w">     </span>│────→│<span class="w">   </span>Express<span class="w">   </span>│────→│<span class="w">  </span>PostgreSQL<span class="w">  </span>│
+│<span class="w">  </span><span class="o">(</span>反向代理<span class="o">)</span><span class="w">  </span>│<span class="w">     </span>│<span class="w">   </span>API<span class="w"> </span>Server<span class="w"> </span>│<span class="w">     </span>│<span class="w">  </span><span class="o">(</span>Prisma<span class="w"> </span>ORM<span class="o">)</span>│
+└─────────────┘<span class="w">     </span>└──────┬──────┘<span class="w">     </span>└─────────────┘
+<span class="w">                           </span>│
+<span class="w">                    </span>┌──────┴──────┐
+<span class="w">                    </span>│<span class="w">             </span>│
+<span class="w">              </span>┌─────┴─────┐<span class="w"> </span>┌────┴────┐
+<span class="w">              </span>│<span class="w">   </span>Redis<span class="w">    </span>│<span class="w"> </span>│<span class="w">   </span>S3<span class="w">    </span>│
+<span class="w">              </span>│<span class="w">  </span><span class="o">(</span>缓存/会话<span class="o">)</span>│<span class="w"> </span>│<span class="w"> </span><span class="o">(</span>文件存储<span class="o">)</span>│
+<span class="w">              </span>└───────────┘<span class="w"> </span>└─────────┘
+
+关键依赖链：
+-<span class="w"> </span>routes/<span class="w"> </span>→<span class="w"> </span>services/<span class="w"> </span>→<span class="w"> </span>repositories/<span class="w"> </span>→<span class="w"> </span>prisma<span class="w"> </span>client
+-<span class="w"> </span>middleware/auth.ts<span class="w"> </span>→<span class="w"> </span>services/jwt.ts<span class="w"> </span>→<span class="w"> </span>Redis<span class="w"> </span><span class="o">(</span>session<span class="w"> </span>store<span class="o">)</span>
+-<span class="w"> </span>services/upload.ts<span class="w"> </span>→<span class="w"> </span>AWS<span class="w"> </span>S3<span class="w"> </span>SDK
+</pre></div>
+</div>
+</section>
+<section id="id8">
+<h3>13.3.2 自主执行：从理解到行动<a class="headerlink" href="#id8" title="Link to this heading">#</a></h3>
+<p>Claude Code 不只是建议你做什么，它<strong>直接帮你做</strong>：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>&gt;<span class="w"> </span>项目的<span class="w"> </span>Node.js<span class="w"> </span>版本太旧了，请升级到<span class="w"> </span>Node<span class="w"> </span><span class="m">20</span>，
+<span class="w">  </span>并修复所有兼容性问题
+
+Claude:
+<span class="o">[</span>Read<span class="o">]</span><span class="w"> </span>package.json<span class="w"> </span>—<span class="w"> </span>当前<span class="w"> </span>Node<span class="w"> </span><span class="m">16</span>
+<span class="o">[</span>Read<span class="o">]</span><span class="w"> </span>.nvmrc<span class="w"> </span>—<span class="w"> </span>指定<span class="w"> </span>v16.20.0
+<span class="o">[</span>Read<span class="o">]</span><span class="w"> </span>Dockerfile<span class="w"> </span>—<span class="w"> </span>FROM<span class="w"> </span>node:16-alpine
+<span class="o">[</span>Read<span class="o">]</span><span class="w"> </span>.github/workflows/ci.yml<span class="w"> </span>—<span class="w"> </span>node-version:<span class="w"> </span><span class="m">16</span>
+
+我需要做以下修改：
+
+<span class="m">1</span>.<span class="w"> </span>更新<span class="w"> </span>.nvmrc
+<span class="o">[</span>Write<span class="o">]</span><span class="w"> </span>.nvmrc<span class="w"> </span>→<span class="w"> </span>v20.11.0
+
+<span class="m">2</span>.<span class="w"> </span>更新<span class="w"> </span>package.json<span class="w"> </span>engines
+<span class="o">[</span>Edit<span class="o">]</span><span class="w"> </span>package.json<span class="w"> </span>—<span class="w"> </span><span class="s2">&quot;node&quot;</span>:<span class="w"> </span><span class="s2">&quot;&gt;=20.0.0&quot;</span>
+
+<span class="m">3</span>.<span class="w"> </span>更新<span class="w"> </span>Dockerfile
+<span class="o">[</span>Edit<span class="o">]</span><span class="w"> </span>Dockerfile<span class="w"> </span>—<span class="w"> </span>FROM<span class="w"> </span>node:20-alpine
+
+<span class="m">4</span>.<span class="w"> </span>更新<span class="w"> </span>CI<span class="w"> </span>配置
+<span class="o">[</span>Edit<span class="o">]</span><span class="w"> </span>.github/workflows/ci.yml<span class="w"> </span>—<span class="w"> </span>node-version:<span class="w"> </span><span class="m">20</span>
+
+<span class="m">5</span>.<span class="w"> </span>检查依赖兼容性
+<span class="o">[</span>Run<span class="o">]</span><span class="w"> </span>npm<span class="w"> </span>install
+⚠️<span class="w"> </span>发现<span class="w"> </span><span class="m">3</span><span class="w"> </span>个依赖需要更新：
+<span class="w">  </span>-<span class="w"> </span>node-sass<span class="w"> </span>→<span class="w"> </span>已废弃，替换为<span class="w"> </span>sass
+<span class="w">  </span>-<span class="w"> </span>uuid@3<span class="w"> </span>→<span class="w"> </span>升级到<span class="w"> </span>uuid@9
+<span class="w">  </span>-<span class="w"> </span>bcrypt@5.0<span class="w"> </span>→<span class="w"> </span>升级到<span class="w"> </span>bcrypt@5.1
+
+<span class="o">[</span>Edit<span class="o">]</span><span class="w"> </span>package.json<span class="w"> </span>—<span class="w"> </span>更新依赖版本
+<span class="o">[</span>Run<span class="o">]</span><span class="w"> </span>npm<span class="w"> </span>install
+<span class="o">[</span>Run<span class="o">]</span><span class="w"> </span>npm<span class="w"> </span>run<span class="w"> </span>build
+✅<span class="w"> </span>构建成功
+
+<span class="m">6</span>.<span class="w"> </span>运行测试
+<span class="o">[</span>Run<span class="o">]</span><span class="w"> </span>npm<span class="w"> </span><span class="nb">test</span>
+⚠️<span class="w"> </span><span class="m">2</span><span class="w"> </span>个测试失败：
+<span class="w">  </span>-<span class="w"> </span>test/crypto.test.ts<span class="w"> </span>—<span class="w"> </span>crypto.createCipher<span class="w"> </span>已废弃
+<span class="w">  </span>→<span class="w"> </span>修改为<span class="w"> </span>crypto.createCipheriv
+<span class="w">  </span>
+<span class="o">[</span>Edit<span class="o">]</span><span class="w"> </span>src/utils/crypto.ts
+<span class="o">[</span>Edit<span class="o">]</span><span class="w"> </span>test/crypto.test.ts
+<span class="o">[</span>Run<span class="o">]</span><span class="w"> </span>npm<span class="w"> </span><span class="nb">test</span>
+✅<span class="w"> </span>所有<span class="w"> </span><span class="m">127</span><span class="w"> </span>个测试通过
+
+升级完成！主要变更：
+-<span class="w"> </span>Node.js<span class="w"> </span><span class="m">16</span><span class="w"> </span>→<span class="w"> </span><span class="m">20</span>
+-<span class="w"> </span>替换了<span class="w"> </span>node-sass<span class="w"> </span>为<span class="w"> </span>sass
+-<span class="w"> </span>升级了<span class="w"> </span>uuid<span class="w"> </span>和<span class="w"> </span>bcrypt
+-<span class="w"> </span>修复了<span class="w"> </span>crypto<span class="w"> </span>API<span class="w"> </span>废弃问题
+</pre></div>
+</div>
+</section>
+<section id="git">
+<h3>13.3.3 Git 深度集成<a class="headerlink" href="#git" title="Link to this heading">#</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>&gt;<span class="w"> </span>帮我创建一个<span class="w"> </span>PR，修复<span class="w"> </span>issue<span class="w"> </span><span class="c1">#87 中报告的内存泄漏问题</span>
+
+Claude:
+<span class="o">[</span>Read<span class="o">]</span><span class="w"> </span>GitHub<span class="w"> </span>Issue<span class="w"> </span><span class="c1">#87 — &quot;WebSocket 连接不断增长导致内存泄漏&quot;</span>
+
+让我分析<span class="w"> </span>WebSocket<span class="w"> </span>相关代码...
+<span class="o">[</span>Read<span class="o">]</span><span class="w"> </span>src/websocket/manager.ts
+<span class="o">[</span>Read<span class="o">]</span><span class="w"> </span>src/websocket/handlers.ts
+
+找到问题了！在<span class="w"> </span><span class="sb">`</span>manager.ts:45<span class="sb">`</span><span class="w"> </span>中，当客户端断开连接时，
+事件监听器没有被正确清理。
+
+<span class="o">[</span>Run<span class="o">]</span><span class="w"> </span>git<span class="w"> </span>checkout<span class="w"> </span>-b<span class="w"> </span>fix/websocket-memory-leak
+
+<span class="o">[</span>Edit<span class="o">]</span><span class="w"> </span>src/websocket/manager.ts
+<span class="w">  </span>-<span class="w"> </span>添加<span class="w"> </span>disconnect<span class="w"> </span>事件处理
+<span class="w">  </span>-<span class="w"> </span>在断开时清理所有监听器
+<span class="w">  </span>-<span class="w"> </span>添加连接池大小限制
+
+<span class="o">[</span>Edit<span class="o">]</span><span class="w"> </span>src/websocket/handlers.ts
+<span class="w">  </span>-<span class="w"> </span>添加心跳检测，清理僵尸连接
+
+<span class="o">[</span>Write<span class="o">]</span><span class="w"> </span>tests/websocket/memory-leak.test.ts
+<span class="w">  </span>-<span class="w"> </span>添加内存泄漏回归测试
+
+<span class="o">[</span>Run<span class="o">]</span><span class="w"> </span>npm<span class="w"> </span><span class="nb">test</span>
+✅<span class="w"> </span>所有测试通过
+
+<span class="o">[</span>Run<span class="o">]</span><span class="w"> </span>git<span class="w"> </span>add<span class="w"> </span>-A
+<span class="o">[</span>Run<span class="o">]</span><span class="w"> </span>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;fix(websocket): clean up listeners on disconnect to prevent memory leak</span>
+
+<span class="s2">- Add proper cleanup in WebSocket manager disconnect handler</span>
+<span class="s2">- Add heartbeat mechanism to detect and remove zombie connections</span>
+<span class="s2">- Add connection pool size limit (default: 10000)</span>
+<span class="s2">- Add regression test for memory leak scenario</span>
+
+<span class="s2">Fixes #87&quot;</span>
+
+<span class="o">[</span>Run<span class="o">]</span><span class="w"> </span>git<span class="w"> </span>push<span class="w"> </span>origin<span class="w"> </span>fix/websocket-memory-leak
+
+要我创建<span class="w"> </span>PR<span class="w"> </span>吗？
+
+&gt;<span class="w"> </span>是的
+
+<span class="o">[</span>Run<span class="o">]</span><span class="w"> </span>gh<span class="w"> </span>pr<span class="w"> </span>create<span class="w"> </span>--title<span class="w"> </span><span class="s2">&quot;fix(websocket): prevent memory leak on disconnect&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--body<span class="w"> </span><span class="s2">&quot;## Problem\nWebSocket connections were not properly cleaned up...\n\n## Solution\n...&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--assignee<span class="w"> </span>@me
+
+PR<span class="w"> </span><span class="c1">#92 已创建：https://github.com/org/repo/pull/92</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="claude-md">
+<h2>13.4 CLAUDE.md：项目记忆文件<a class="headerlink" href="#claude-md" title="Link to this heading">#</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">CLAUDE.md</span></code> 是 Claude Code 的项目配置文件，类似于 Cursor 的 <code class="docutils literal notranslate"><span class="pre">.cursorrules</span></code>，但更强调<strong>项目知识和记忆</strong>。</p>
+<section id="id9">
+<h3>13.4.1 完整的 CLAUDE.md 示例<a class="headerlink" href="#id9" title="Link to this heading">#</a></h3>
+<div class="highlight-markdown notranslate"><div class="highlight"><pre><span></span><span class="gh"># CLAUDE.md</span>
+
+<span class="gu">## Project Overview</span>
+This is the backend API for &quot;TaskFlow&quot; — a project management SaaS.
+Production URL: https://api.taskflow.io
+Staging URL: https://api-staging.taskflow.io
+
+<span class="gu">## Tech Stack</span>
+<span class="k">-</span><span class="w"> </span>Python 3.12, FastAPI, SQLAlchemy 2.0 (async), PostgreSQL 16
+<span class="k">-</span><span class="w"> </span>Redis 7 for caching and rate limiting
+<span class="k">-</span><span class="w"> </span>Celery + RabbitMQ for background tasks
+<span class="k">-</span><span class="w"> </span>MinIO for file storage (S3-compatible)
+
+<span class="gu">## Development Setup</span>
+```bash
+<span class="gh"># Start dependencies</span>
+docker-compose up -d postgres redis rabbitmq minio
+
+<span class="gh"># Install Python dependencies</span>
+poetry install
+
+<span class="gh"># Run migrations</span>
+alembic upgrade head
+
+<span class="gh"># Start dev server</span>
+uvicorn app.main:app --reload --port 8000
+
+<span class="gh"># Run tests</span>
+pytest -x --tb=short
+</pre></div>
+</div>
+</section>
+</section>
+<section id="architecture-decisions">
+<h2>Architecture Decisions<a class="headerlink" href="#architecture-decisions" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p>We use the Repository pattern: routes → services → repositories</p></li>
+<li><p>All database operations are async</p></li>
+<li><p>We use Pydantic v2 discriminated unions for polymorphic responses</p></li>
+<li><p>Background tasks (email, notifications) go through Celery, not FastAPI BackgroundTasks</p></li>
+<li><p>We use structlog for structured logging</p></li>
+</ul>
+</section>
+<section id="important-conventions">
+<h2>Important Conventions<a class="headerlink" href="#important-conventions" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p>All API responses follow: <code class="docutils literal notranslate"><span class="pre">{&quot;data&quot;:</span> <span class="pre">...,</span> <span class="pre">&quot;meta&quot;:</span> <span class="pre">{&quot;page&quot;:</span> <span class="pre">...,</span> <span class="pre">&quot;total&quot;:</span> <span class="pre">...}}</span></code></p></li>
+<li><p>Error responses follow: <code class="docutils literal notranslate"><span class="pre">{&quot;error&quot;:</span> <span class="pre">{&quot;code&quot;:</span> <span class="pre">&quot;...&quot;,</span> <span class="pre">&quot;message&quot;:</span> <span class="pre">&quot;...&quot;,</span> <span class="pre">&quot;details&quot;:</span> <span class="pre">{...}}}</span></code></p></li>
+<li><p>Database migrations must be reversible (include downgrade)</p></li>
+<li><p>All new endpoints need OpenAPI docs and integration tests</p></li>
+</ul>
+</section>
+<section id="known-issues">
+<h2>Known Issues<a class="headerlink" href="#known-issues" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p>The search endpoint is slow for &gt;10k results (needs Elasticsearch)</p></li>
+<li><p>File upload has a 50MB limit (MinIO config, not code)</p></li>
+<li><p>OAuth refresh token rotation is not yet implemented</p></li>
+</ul>
+</section>
+<section id="testing">
+<h2>Testing<a class="headerlink" href="#testing" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p>Use <code class="docutils literal notranslate"><span class="pre">pytest-asyncio</span></code> with <code class="docutils literal notranslate"><span class="pre">asyncio_mode</span> <span class="pre">=</span> <span class="pre">&quot;auto&quot;</span></code></p></li>
+<li><p>Test database is created/destroyed per test session</p></li>
+<li><p>Use <code class="docutils literal notranslate"><span class="pre">factory_boy</span></code> for test data generation</p></li>
+<li><p>Mocking: use <code class="docutils literal notranslate"><span class="pre">unittest.mock.AsyncMock</span></code> for async functions</p></li>
+</ul>
+</section>
+<section id="deployment">
+<h2>Deployment<a class="headerlink" href="#deployment" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p>CI/CD: GitHub Actions → Docker build → AWS ECS</p></li>
+<li><p>Database migrations run automatically in CI before deployment</p></li>
+<li><p>Feature flags managed via LaunchDarkly</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>
+### 13.4.2 CLAUDE.md 的层级系统
+
+Claude Code 支持多层级的 CLAUDE.md：
+
+</pre></div>
+</div>
+<p>~/.claude/CLAUDE.md          ← 全局配置（个人偏好）
+~/projects/CLAUDE.md         ← 组织级配置
+~/projects/myapp/CLAUDE.md   ← 项目级配置（最常用）
+~/projects/myapp/src/CLAUDE.md ← 目录级配置（特定模块）</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>
+全局 CLAUDE.md 示例：
+
+```markdown
+# ~/.claude/CLAUDE.md
+
+## Personal Preferences
+- I prefer Python with type hints everywhere
+- I like concise code with clear variable names
+- Always use f-strings, not .format() or %
+- I prefer pytest over unittest
+- Use pathlib instead of os.path
+- Commit messages in English, code comments in Chinese when needed
+</pre></div>
+</div>
+</section>
+<section id="id10">
+<h2>13.5 权限与安全模型<a class="headerlink" href="#id10" title="Link to this heading">#</a></h2>
+<p>Claude Code 的权限系统是其安全设计的核心：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># 权限分级</span>
+┌─────────────────────────────────────────┐
+│<span class="w"> </span>无需确认（自动执行）<span class="w">                      </span>│
+│<span class="w"> </span>-<span class="w"> </span>读取文件<span class="w">                               </span>│
+│<span class="w"> </span>-<span class="w"> </span>列出目录<span class="w">                               </span>│
+│<span class="w"> </span>-<span class="w"> </span>搜索代码（grep/ripgrep）<span class="w">               </span>│
+│<span class="w"> </span>-<span class="w"> </span>查看<span class="w"> </span>Git<span class="w"> </span>状态/日志<span class="w">                     </span>│
+└─────────────────────────────────────────┘
+┌─────────────────────────────────────────┐
+│<span class="w"> </span>需要确认（显示操作，等待<span class="w"> </span>y/n）<span class="w">            </span>│
+│<span class="w"> </span>-<span class="w"> </span>写入/修改文件<span class="w">                          </span>│
+│<span class="w"> </span>-<span class="w"> </span>执行<span class="w"> </span>Shell<span class="w"> </span>命令<span class="w">                        </span>│
+│<span class="w"> </span>-<span class="w"> </span>Git<span class="w"> </span>commit/push<span class="w">                        </span>│
+│<span class="w"> </span>-<span class="w"> </span>安装依赖<span class="w">                               </span>│
+│<span class="w"> </span>-<span class="w"> </span>网络请求<span class="w">                               </span>│
+└─────────────────────────────────────────┘
+┌─────────────────────────────────────────┐
+│<span class="w"> </span>始终阻止<span class="w">                                 </span>│
+│<span class="w"> </span>-<span class="w"> </span>rm<span class="w"> </span>-rf<span class="w"> </span>/<span class="w">                               </span>│
+│<span class="w"> </span>-<span class="w"> </span>修改系统文件<span class="w">                            </span>│
+│<span class="w"> </span>-<span class="w"> </span>访问<span class="w"> </span>~/.ssh<span class="w"> </span>等敏感目录<span class="w">                  </span>│
+└─────────────────────────────────────────┘
+</pre></div>
+</div>
+<p>你可以通过 <code class="docutils literal notranslate"><span class="pre">/allowed-tools</span></code> 命令自定义权限：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>&gt;<span class="w"> </span>/allowed-tools
+
+当前允许的工具：
+✅<span class="w"> </span>Read<span class="w"> </span>—<span class="w"> </span>读取文件（自动）
+✅<span class="w"> </span>List<span class="w"> </span>—<span class="w"> </span>列出目录（自动）
+✅<span class="w"> </span>Grep<span class="w"> </span>—<span class="w"> </span>搜索代码（自动）
+⚠️<span class="w"> </span>Write<span class="w"> </span>—<span class="w"> </span>写入文件（需确认）
+⚠️<span class="w"> </span>Bash<span class="w"> </span>—<span class="w"> </span>执行命令（需确认）
+⚠️<span class="w"> </span>WebSearch<span class="w"> </span>—<span class="w"> </span>网络搜索（需确认）
+
+<span class="c1"># 信任当前项目的写入操作</span>
+&gt;<span class="w"> </span>/allowed-tools<span class="w"> </span>Write<span class="o">(</span>~/projects/myapp/**<span class="o">)</span>
+
+<span class="c1"># 信任特定命令</span>
+&gt;<span class="w"> </span>/allowed-tools<span class="w"> </span>Bash<span class="o">(</span>npm<span class="w"> </span>test,<span class="w"> </span>npm<span class="w"> </span>run<span class="w"> </span>build,<span class="w"> </span>pytest<span class="o">)</span>
+</pre></div>
+</div>
+</section>
+<section id="commands">
+<h2>13.6 自定义 Commands：封装可复用的工作流<a class="headerlink" href="#commands" title="Link to this heading">#</a></h2>
+<p>Claude Code 支持自定义斜杠命令，将常用的工作流封装为一键触发的命令。</p>
+<section id="command">
+<h3>13.6.1 Command 文件结构<a class="headerlink" href="#command" title="Link to this heading">#</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>项目根目录/
+├── .claude/
+│   └── commands/
+│       ├── review.md        ← /project:review
+│       ├── fix-issue.md     ← /project:fix-issue
+│       ├── add-tests.md     ← /project:add-tests
+│       ├── refactor.md      ← /project:refactor
+│       └── deploy-check.md  ← /project:deploy-check
+└── ~/.claude/
+    └── commands/
+        ├── daily-standup.md ← /user:daily-standup（个人命令）
+        └── learn.md         ← /user:learn
+</pre></div>
+</div>
+<p>命令分两级：</p>
+<ul class="simple">
+<li><p><strong>项目级</strong>（<code class="docutils literal notranslate"><span class="pre">.claude/commands/</span></code>）：团队共享，纳入版本控制</p></li>
+<li><p><strong>用户级</strong>（<code class="docutils literal notranslate"><span class="pre">~/.claude/commands/</span></code>）：个人使用，不入版本控制</p></li>
+</ul>
+</section>
+<section id="id11">
+<h3>13.6.2 Command 文件格式<a class="headerlink" href="#id11" title="Link to this heading">#</a></h3>
+<div class="highlight-markdown notranslate"><div class="highlight"><pre><span></span><span class="gu">&lt;!-- .claude/commands/review.md --&gt;</span>
+<span class="gu">---</span>
+<span class="gu">description: &quot;审查当前分支的所有代码变更&quot;</span>
+<span class="gu">---</span>
+
+请审查当前分支相对于 main 的所有代码变更：
+
+<span class="k">1.</span> 运行 <span class="sb">`git diff main...HEAD`</span> 查看所有变更
+<span class="k">2.</span> 逐文件分析：
+<span class="w">   </span><span class="k">-</span><span class="w"> </span>🔴 安全隐患（SQL 注入、硬编码密钥、XSS）
+<span class="w">   </span><span class="k">-</span><span class="w"> </span>⚠️ 代码质量（命名、复杂度、重复代码）
+<span class="w">   </span><span class="k">-</span><span class="w"> </span>💡 性能问题（N+1 查询、不必要的循环）
+<span class="w">   </span><span class="k">-</span><span class="w"> </span>📝 测试覆盖（新代码是否有测试）
+<span class="k">3.</span> 给出总体评价（1-5 分）和改进建议
+<span class="k">4.</span> 如果发现必须修复的问题，列出具体的修复步骤
+</pre></div>
+</div>
+</section>
+<section id="id12">
+<h3>13.6.3 带参数的 Command<a class="headerlink" href="#id12" title="Link to this heading">#</a></h3>
+<p>使用 <code class="docutils literal notranslate"><span class="pre">$ARGUMENTS</span></code> 接收用户输入：</p>
+<div class="highlight-markdown notranslate"><div class="highlight"><pre><span></span><span class="gu">&lt;!-- .claude/commands/fix-issue.md --&gt;</span>
+<span class="gu">---</span>
+<span class="gu">description: &quot;从 GitHub Issue 自动修复 Bug&quot;</span>
+<span class="gu">---</span>
+
+请完成以下任务：
+
+<span class="k">1.</span> 运行 <span class="sb">`gh issue view $ARGUMENTS`</span> 查看 Issue 详情
+<span class="k">2.</span> 分析问题根因
+<span class="k">3.</span> 创建修复分支：`fix/issue-$ARGUMENTS`
+<span class="k">4.</span> 编写修复代码
+<span class="k">5.</span> 编写回归测试
+<span class="k">6.</span> 运行全部测试确保没有回归
+<span class="k">7.</span> 提交代码（commit message 引用 Issue 编号）
+<span class="k">8.</span> 创建 PR
+
+每一步都要告诉我你在做什么和为什么这样做。
+</pre></div>
+</div>
+<p>使用方式：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>&gt;<span class="w"> </span>/project:fix-issue<span class="w"> </span><span class="m">156</span>
+</pre></div>
+</div>
+</section>
+<section id="id13">
+<h3>13.6.4 实用 Command 集合<a class="headerlink" href="#id13" title="Link to this heading">#</a></h3>
+<p><strong>添加测试（add-tests.md）</strong>：</p>
+<div class="highlight-markdown notranslate"><div class="highlight"><pre><span></span>---
+<span class="gu">description: &quot;为指定文件或最近修改的代码添加测试&quot;</span>
+<span class="gu">---</span>
+
+请为 $ARGUMENTS 添加完整的测试：
+
+<span class="k">1.</span> 分析代码，识别所有需要测试的路径
+<span class="k">2.</span> 编写测试用例：
+<span class="w">   </span><span class="k">-</span><span class="w"> </span>正常流程（Happy Path）
+<span class="w">   </span><span class="k">-</span><span class="w"> </span>边界条件（空值、极值、特殊字符）
+<span class="w">   </span><span class="k">-</span><span class="w"> </span>异常流程（无效输入、网络错误、权限不足）
+<span class="k">3.</span> 使用项目现有的测试框架和 fixtures
+<span class="k">4.</span> 运行测试确保全部通过
+<span class="k">5.</span> 检查覆盖率，确保新代码 ≥ 80%
+
+测试命名规范：test_{函数名}_{场景}_{预期结果}
+</pre></div>
+</div>
+<p><strong>部署前检查（deploy-check.md）</strong>：</p>
+<div class="highlight-markdown notranslate"><div class="highlight"><pre><span></span>---
+<span class="gu">description: &quot;部署前的全面检查&quot;</span>
+<span class="gu">---</span>
+
+请执行部署前检查清单：
+
+<span class="k">1.</span> <span class="gs">**代码质量**</span>
+<span class="w">   </span><span class="k">-</span><span class="w"> </span>运行 linter（ruff/eslint）
+<span class="w">   </span><span class="k">-</span><span class="w"> </span>检查类型错误（mypy/tsc）
+<span class="w">   </span><span class="k">-</span><span class="w"> </span>检查是否有 TODO/FIXME/HACK 注释
+
+<span class="k">2.</span> <span class="gs">**测试**</span>
+<span class="w">   </span><span class="k">-</span><span class="w"> </span>运行全部测试
+<span class="w">   </span><span class="k">-</span><span class="w"> </span>检查测试覆盖率
+<span class="w">   </span><span class="k">-</span><span class="w"> </span>检查是否有跳过的测试
+
+<span class="k">3.</span> <span class="gs">**安全**</span>
+<span class="w">   </span><span class="k">-</span><span class="w"> </span>检查依赖漏洞（pip-audit/npm audit）
+<span class="w">   </span><span class="k">-</span><span class="w"> </span>搜索硬编码的密钥或密码
+<span class="w">   </span><span class="k">-</span><span class="w"> </span>检查 .env.example 是否与 .env 同步
+
+<span class="k">4.</span> <span class="gs">**数据库**</span>
+<span class="w">   </span><span class="k">-</span><span class="w"> </span>检查是否有未执行的迁移
+<span class="w">   </span><span class="k">-</span><span class="w"> </span>检查迁移是否可回滚
+
+<span class="k">5.</span> <span class="gs">**配置**</span>
+<span class="w">   </span><span class="k">-</span><span class="w"> </span>检查环境变量是否完整
+<span class="w">   </span><span class="k">-</span><span class="w"> </span>检查 Docker 配置是否最新
+
+输出格式：每项用 ✅/⚠️/🔴 标记状态，最后给出&quot;可以部署&quot;或&quot;需要修复&quot;的结论。
+</pre></div>
+</div>
+<p><strong>每日站会（个人命令，daily-standup.md）</strong>：</p>
+<div class="highlight-markdown notranslate"><div class="highlight"><pre><span></span>---
+<span class="gu">description: &quot;生成每日站会报告&quot;</span>
+<span class="gu">---</span>
+
+请基于 Git 历史生成我的每日站会报告：
+
+<span class="k">1.</span> 运行 <span class="sb">`git log --author=&quot;$(git config user.name)&quot; --since=&quot;yesterday&quot; --oneline`</span>
+<span class="k">2.</span> 总结昨天完成的工作
+<span class="k">3.</span> 查看当前分支和未提交的变更，推断今天的计划
+<span class="k">4.</span> 检查是否有分配给我的 Issue：`gh issue list --assignee <span class="ni">@me</span>`
+
+输出格式：
+<span class="gs">**昨天完成**</span>：
+<span class="k">-</span><span class="w"> </span>...
+
+<span class="gs">**今天计划**</span>：
+<span class="k">-</span><span class="w"> </span>...
+
+<span class="gs">**阻塞问题**</span>：
+<span class="k">-</span><span class="w"> </span>（如果有的话）
+</pre></div>
+</div>
+</section>
+</section>
+<section id="hooks">
+<h2>13.7 Hooks：自动化的事件触发器<a class="headerlink" href="#hooks" title="Link to this heading">#</a></h2>
+<p>Hooks 是 Claude Code 2025 年推出的强大特性，允许在特定事件发生时<strong>自动执行脚本</strong>，实现工作流自动化。</p>
+<section id="hook">
+<h3>13.7.1 Hook 的工作原理<a class="headerlink" href="#hook" title="Link to this heading">#</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>Claude Code 事件 → 匹配 Hook 规则 → 执行脚本 → 结果反馈给 Claude
+
+支持的事件：
+├── PreToolUse    — 工具调用前（可拦截/修改）
+├── PostToolUse   — 工具调用后（可检查结果）
+├── Notification  — Claude 发送通知时
+└── Stop          — Claude 完成任务时
+</pre></div>
+</div>
+</section>
+<section id="id14">
+<h3>13.7.2 配置 Hooks<a class="headerlink" href="#id14" title="Link to this heading">#</a></h3>
+<p>在 <code class="docutils literal notranslate"><span class="pre">.claude/settings.json</span></code> 中配置：</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;hooks&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;PreToolUse&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">      </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;matcher&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Write&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;hooks&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">          </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;command&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;command&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;python .claude/hooks/pre-write-check.py \&quot;$FILE_PATH\&quot;&quot;</span>
+<span class="w">          </span><span class="p">}</span>
+<span class="w">        </span><span class="p">]</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">    </span><span class="p">],</span>
+<span class="w">    </span><span class="nt">&quot;PostToolUse&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">      </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;matcher&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Write&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;hooks&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">          </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;command&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;command&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;python .claude/hooks/post-write-lint.py \&quot;$FILE_PATH\&quot;&quot;</span>
+<span class="w">          </span><span class="p">}</span>
+<span class="w">        </span><span class="p">]</span>
+<span class="w">      </span><span class="p">},</span>
+<span class="w">      </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;matcher&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Bash&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;hooks&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">          </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;command&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;command&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;python .claude/hooks/log-commands.py \&quot;$COMMAND\&quot;&quot;</span>
+<span class="w">          </span><span class="p">}</span>
+<span class="w">        </span><span class="p">]</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">    </span><span class="p">],</span>
+<span class="w">    </span><span class="nt">&quot;Stop&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">      </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;hooks&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">          </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;command&quot;</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">&quot;command&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;python .claude/hooks/on-complete.py&quot;</span>
+<span class="w">          </span><span class="p">}</span>
+<span class="w">        </span><span class="p">]</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">    </span><span class="p">]</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="id15">
+<h3>13.7.3 实用 Hook 示例<a class="headerlink" href="#id15" title="Link to this heading">#</a></h3>
+<p><strong>写入前自动检查（防止写入敏感文件）</strong>：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env python3</span>
+<span class="c1"># .claude/hooks/pre-write-check.py</span>
+<span class="sd">&quot;&quot;&quot;在 Claude 写入文件前检查是否安全&quot;&quot;&quot;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+
+<span class="n">PROTECTED_FILES</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;.env&quot;</span><span class="p">,</span> <span class="s2">&quot;.env.production&quot;</span><span class="p">,</span> <span class="s2">&quot;secrets.yaml&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;id_rsa&quot;</span><span class="p">,</span> <span class="s2">&quot;id_ed25519&quot;</span><span class="p">,</span> <span class="s2">&quot;.ssh/config&quot;</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="n">PROTECTED_PATTERNS</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;migrations/&quot;</span><span class="p">,</span>  <span class="c1"># 数据库迁移需要人工审查</span>
+    <span class="s2">&quot;deploy/&quot;</span><span class="p">,</span>      <span class="c1"># 部署配置需要人工审查</span>
+<span class="p">]</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">check_file</span><span class="p">(</span><span class="n">file_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+    <span class="c1"># 检查是否是受保护文件</span>
+    <span class="k">for</span> <span class="n">protected</span> <span class="ow">in</span> <span class="n">PROTECTED_FILES</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">file_path</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="n">protected</span><span class="p">):</span>
+            <span class="k">return</span> <span class="p">{</span>
+                <span class="s2">&quot;decision&quot;</span><span class="p">:</span> <span class="s2">&quot;block&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;reason&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;🔴 受保护文件：</span><span class="si">{</span><span class="n">protected</span><span class="si">}</span><span class="s2">，需要人工修改&quot;</span>
+            <span class="p">}</span>
+    
+    <span class="c1"># 检查是否匹配受保护路径</span>
+    <span class="k">for</span> <span class="n">pattern</span> <span class="ow">in</span> <span class="n">PROTECTED_PATTERNS</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">pattern</span> <span class="ow">in</span> <span class="n">file_path</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">{</span>
+                <span class="s2">&quot;decision&quot;</span><span class="p">:</span> <span class="s2">&quot;block&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;reason&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;⚠️ 受保护目录：</span><span class="si">{</span><span class="n">pattern</span><span class="si">}</span><span class="s2">，需要人工审查&quot;</span>
+            <span class="p">}</span>
+    
+    <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;decision&quot;</span><span class="p">:</span> <span class="s2">&quot;allow&quot;</span><span class="p">}</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">file_path</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">check_file</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">result</span><span class="p">))</span>
+</pre></div>
+</div>
+<p><strong>写入后自动 lint</strong>：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env python3</span>
+<span class="c1"># .claude/hooks/post-write-lint.py</span>
+<span class="sd">&quot;&quot;&quot;在 Claude 写入 Python 文件后自动运行 linter&quot;&quot;&quot;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">subprocess</span>
+
+<span class="n">file_path</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span>
+
+<span class="k">if</span> <span class="n">file_path</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;.py&#39;</span><span class="p">):</span>
+    <span class="c1"># 运行 ruff 自动修复</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
+        <span class="p">[</span><span class="s2">&quot;ruff&quot;</span><span class="p">,</span> <span class="s2">&quot;check&quot;</span><span class="p">,</span> <span class="s2">&quot;--fix&quot;</span><span class="p">,</span> <span class="n">file_path</span><span class="p">],</span>
+        <span class="n">capture_output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="kc">True</span>
+    <span class="p">)</span>
+    <span class="k">if</span> <span class="n">result</span><span class="o">.</span><span class="n">returncode</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;⚠️ Lint 问题：</span><span class="se">\n</span><span class="si">{</span><span class="n">result</span><span class="o">.</span><span class="n">stdout</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    
+    <span class="c1"># 运行 ruff format</span>
+    <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">([</span><span class="s2">&quot;ruff&quot;</span><span class="p">,</span> <span class="s2">&quot;format&quot;</span><span class="p">,</span> <span class="n">file_path</span><span class="p">],</span> <span class="n">capture_output</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="k">elif</span> <span class="n">file_path</span><span class="o">.</span><span class="n">endswith</span><span class="p">((</span><span class="s1">&#39;.ts&#39;</span><span class="p">,</span> <span class="s1">&#39;.tsx&#39;</span><span class="p">,</span> <span class="s1">&#39;.js&#39;</span><span class="p">,</span> <span class="s1">&#39;.jsx&#39;</span><span class="p">)):</span>
+    <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">([</span><span class="s2">&quot;npx&quot;</span><span class="p">,</span> <span class="s2">&quot;prettier&quot;</span><span class="p">,</span> <span class="s2">&quot;--write&quot;</span><span class="p">,</span> <span class="n">file_path</span><span class="p">],</span> <span class="n">capture_output</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>任务完成时自动通知</strong>：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env python3</span>
+<span class="c1"># .claude/hooks/on-complete.py</span>
+<span class="sd">&quot;&quot;&quot;Claude 完成任务时发送通知&quot;&quot;&quot;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">subprocess</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+
+<span class="c1"># macOS 通知</span>
+<span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">([</span>
+    <span class="s2">&quot;osascript&quot;</span><span class="p">,</span> <span class="s2">&quot;-e&quot;</span><span class="p">,</span>
+    <span class="s1">&#39;display notification &quot;Claude Code 任务已完成&quot; with title &quot;Claude Code&quot;&#39;</span>
+<span class="p">])</span>
+
+<span class="c1"># 或者发送到 Slack</span>
+<span class="c1"># import requests</span>
+<span class="c1"># requests.post(SLACK_WEBHOOK, json={&quot;text&quot;: &quot;Claude Code 任务已完成 ✅&quot;})</span>
+</pre></div>
+</div>
+</section>
+<section id="id16">
+<h3>13.7.4 Hook 最佳实践<a class="headerlink" href="#id16" title="Link to this heading">#</a></h3>
+<div class="tip admonition">
+<p class="admonition-title">Hook 设计原则</p>
+<ol class="arabic simple">
+<li><p><strong>快速执行</strong>：Hook 脚本应在几秒内完成，不要阻塞 Claude 的工作流</p></li>
+<li><p><strong>幂等性</strong>：同一个 Hook 多次执行应该产生相同结果</p></li>
+<li><p><strong>优雅失败</strong>：Hook 失败不应该中断 Claude 的工作</p></li>
+<li><p><strong>日志记录</strong>：记录 Hook 的执行情况，方便调试</p></li>
+<li><p><strong>版本控制</strong>：将 Hook 脚本纳入 <code class="docutils literal notranslate"><span class="pre">.claude/hooks/</span></code> 目录，团队共享</p></li>
+</ol>
+</div>
+</section>
+</section>
+<section id="id17">
+<h2>13.8 CLAUDE.md 高级编写技巧<a class="headerlink" href="#id17" title="Link to this heading">#</a></h2>
+<p>CLAUDE.md 的质量直接决定了 Claude Code 的工作效果。以下是经过实践验证的高级技巧。</p>
+<section id="id18">
+<h3>13.8.1 结构化模板<a class="headerlink" href="#id18" title="Link to this heading">#</a></h3>
+<div class="highlight-markdown notranslate"><div class="highlight"><pre><span></span><span class="gh"># CLAUDE.md</span>
+
+<span class="gu">## 项目概述</span>
+[一段话描述项目是什么、做什么、给谁用]
+
+<span class="gu">## 技术栈</span>
+[列出所有技术选型，版本号很重要]
+
+<span class="gu">## 开发环境</span>
+[完整的启动命令，Claude 可以直接执行]
+
+<span class="gu">## 架构决策</span>
+[为什么选择这个架构？有什么约束？]
+[这部分帮助 Claude 理解&quot;为什么&quot;，而不只是&quot;是什么&quot;]
+
+<span class="gu">## 代码规范</span>
+[命名、风格、模式——越具体越好]
+
+<span class="gu">## 常见陷阱</span>
+[项目中容易踩的坑，提前告诉 Claude]
+
+<span class="gu">## 当前状态</span>
+[正在进行的工作、已知问题、技术债务]
+</pre></div>
+</div>
+</section>
+<section id="id19">
+<h3>13.8.2 写好 CLAUDE.md 的关键原则<a class="headerlink" href="#id19" title="Link to this heading">#</a></h3>
+<p><strong>1. 写&quot;为什么&quot;而不只是&quot;是什么&quot;</strong></p>
+<div class="highlight-markdown notranslate"><div class="highlight"><pre><span></span><span class="gh"># ❌ 不好的写法</span>
+<span class="gu">## 架构</span>
+使用微服务架构。
+
+<span class="gh"># ✅ 好的写法</span>
+<span class="gu">## 架构</span>
+使用微服务架构，因为：
+<span class="k">1.</span> 团队有 5 个小组，每组负责独立的业务域
+<span class="k">2.</span> 不同服务有不同的扩展需求（搜索服务需要更多 CPU）
+<span class="k">3.</span> 我们需要独立部署能力（每周发布 20+ 次）
+
+但要注意：服务间通信使用 gRPC 而非 REST，因为内部调用需要低延迟。
+</pre></div>
+</div>
+<p><strong>2. 包含&quot;不要做什么&quot;</strong></p>
+<div class="highlight-markdown notranslate"><div class="highlight"><pre><span></span><span class="gu">## 常见陷阱 — 请特别注意</span>
+<span class="k">-</span><span class="w"> </span>❌ 不要直接修改 <span class="sb">`generated/`</span> 目录下的文件，它们是自动生成的
+<span class="k">-</span><span class="w"> </span>❌ 不要在 service 层直接导入 FastAPI 的类（保持框架无关）
+<span class="k">-</span><span class="w"> </span>❌ 不要用 <span class="sb">`datetime.now()`</span>，统一用 <span class="sb">`datetime.now(UTC)`</span>
+<span class="k">-</span><span class="w"> </span>❌ 不要在测试中使用真实的外部 API，必须 mock
+<span class="k">-</span><span class="w"> </span>❌ 不要手动修改 Alembic 迁移文件的 revision ID
+</pre></div>
+</div>
+<p><strong>3. 给出可执行的命令</strong></p>
+<div class="highlight-markdown notranslate"><div class="highlight"><pre><span></span><span class="gu">## 常用命令</span>
+<span class="sb">```bash</span>
+<span class="c1"># 运行所有测试</span>
+pytest<span class="w"> </span>-x<span class="w"> </span>--tb<span class="o">=</span>short
+
+<span class="c1"># 只运行某个模块的测试</span>
+pytest<span class="w"> </span>tests/services/test_user.py<span class="w"> </span>-v
+
+<span class="c1"># 生成数据库迁移</span>
+alembic<span class="w"> </span>revision<span class="w"> </span>--autogenerate<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;description&quot;</span>
+
+<span class="c1"># 运行迁移</span>
+alembic<span class="w"> </span>upgrade<span class="w"> </span>head
+
+<span class="c1"># 启动开发服务器</span>
+uvicorn<span class="w"> </span>app.main:app<span class="w"> </span>--reload<span class="w"> </span>--port<span class="w"> </span><span class="m">8000</span>
+
+<span class="c1"># 代码格式化</span>
+ruff<span class="w"> </span>check<span class="w"> </span>--fix<span class="w"> </span>.<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>ruff<span class="w"> </span>format<span class="w"> </span>.
+<span class="sb">```</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="id20">
+<h2>13.9 高级特性<a class="headerlink" href="#id20" title="Link to this heading">#</a></h2>
+<section id="claude">
+<h3>13.9.1 多 Claude 并行工作<a class="headerlink" href="#claude" title="Link to this heading">#</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># 终端 1：Claude 在修复 Bug</span>
+$<span class="w"> </span>claude
+&gt;<span class="w"> </span>修复<span class="w"> </span>issue<span class="w"> </span><span class="c1">#42 的分页问题</span>
+
+<span class="c1"># 终端 2：另一个 Claude 在写文档</span>
+$<span class="w"> </span>claude
+&gt;<span class="w"> </span>为所有<span class="w"> </span>API<span class="w"> </span>端点生成<span class="w"> </span>OpenAPI<span class="w"> </span>文档
+
+<span class="c1"># 终端 3：又一个 Claude 在重构</span>
+$<span class="w"> </span>claude
+&gt;<span class="w"> </span>将<span class="w"> </span>utils.py<span class="w"> </span>中的函数按职责拆分到不同模块
+
+<span class="c1"># 三个 Claude 同时工作，互不干扰</span>
+</pre></div>
+</div>
+</section>
+<section id="github-actions">
+<h3>13.9.2 与 GitHub Actions 集成<a class="headerlink" href="#github-actions" title="Link to this heading">#</a></h3>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># .github/workflows/claude-fix.yml</span>
+<span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Claude Auto-Fix</span>
+<span class="nt">on</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">issues</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">types</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">labeled</span><span class="p p-Indicator">]</span>
+
+<span class="nt">jobs</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">auto-fix</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">if</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">github.event.label.name == &#39;claude-fix&#39;</span>
+<span class="w">    </span><span class="nt">runs-on</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ubuntu-latest</span>
+<span class="w">    </span><span class="nt">steps</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">actions/checkout@v4</span>
+<span class="w">      </span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Install Claude Code</span>
+<span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">npm install -g @anthropic-ai/claude-code</span>
+<span class="w">      </span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Run Claude to fix issue</span>
+<span class="w">        </span><span class="nt">env</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">ANTHROPIC_API_KEY</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ secrets.ANTHROPIC_API_KEY }}</span>
+<span class="w">        </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<span class="w">          </span><span class="no">claude -p &quot;Read issue #${{ github.event.issue.number }} and fix it. \</span>
+<span class="w">            </span><span class="no">Create a branch, make the fix, write tests, and create a PR.&quot; \</span>
+<span class="w">            </span><span class="no">--allowedTools &quot;Read,Write,Bash&quot; \</span>
+<span class="w">            </span><span class="no">--max-turns 30</span>
+</pre></div>
+</div>
+</section>
+<section id="id21">
+<h3>13.9.3 自定义斜杠命令<a class="headerlink" href="#id21" title="Link to this heading">#</a></h3>
+<div class="highlight-markdown notranslate"><div class="highlight"><pre><span></span><span class="gh"># .claude/commands/review.md</span>
+---
+<span class="gu">description: &quot;审查当前分支的所有变更&quot;</span>
+<span class="gu">---</span>
+
+请审查当前分支相对于 main 的所有代码变更：
+
+<span class="k">1.</span> 运行 <span class="sb">`git diff main...HEAD`</span> 查看所有变更
+<span class="k">2.</span> 逐文件分析：
+<span class="w">   </span><span class="k">-</span><span class="w"> </span>代码质量问题
+<span class="w">   </span><span class="k">-</span><span class="w"> </span>潜在的 Bug
+<span class="w">   </span><span class="k">-</span><span class="w"> </span>安全隐患
+<span class="w">   </span><span class="k">-</span><span class="w"> </span>性能问题
+<span class="w">   </span><span class="k">-</span><span class="w"> </span>测试覆盖
+<span class="k">3.</span> 给出总体评价和改进建议
+</pre></div>
+</div>
+<p>使用：</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>&gt;<span class="w"> </span>/review
+</pre></div>
+</div>
+</section>
+</section>
+<section id="claude-code-vs-cursor">
+<h2>13.10 Claude Code vs Cursor：如何选择<a class="headerlink" href="#claude-code-vs-cursor" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="table" id="id26">
+<caption><span class="caption-text">Claude Code vs Cursor 深度对比</span><a class="headerlink" href="#id26" title="Link to this table">#</a></caption>
+<colgroup>
+<col style="width: 25.0%" />
+<col style="width: 37.0%" />
+<col style="width: 38.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>维度</p></th>
+<th class="head"><p>Cursor</p></th>
+<th class="head"><p>Claude Code</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>交互方式</strong></p></td>
+<td><p>GUI 编辑器（可视化）</p></td>
+<td><p>终端命令行（文本）</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>核心理念</strong></p></td>
+<td><p>AI 增强的编辑器</p></td>
+<td><p>终端中的 AI 工程师</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>最佳场景</strong></p></td>
+<td><p>日常编码、UI 开发、实时预览</p></td>
+<td><p>重构、Bug 修复、自动化任务</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>上下文理解</strong></p></td>
+<td><p>通过索引 + &#64;引用</p></td>
+<td><p>通过主动读取文件</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>代码编辑</strong></p></td>
+<td><p>可视化 diff，逐行审查</p></td>
+<td><p>直接修改，终端显示变更</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>执行能力</strong></p></td>
+<td><p>Agent 模式可执行命令</p></td>
+<td><p>原生支持所有终端操作</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Git 集成</strong></p></td>
+<td><p>基础 Git 操作</p></td>
+<td><p>深度 Git 操作（创建 PR 等）</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>CI/CD 集成</strong></p></td>
+<td><p>不支持</p></td>
+<td><p>原生支持 Headless 模式</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>多实例</strong></p></td>
+<td><p>一个编辑器窗口</p></td>
+<td><p>多终端并行</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>远程开发</strong></p></td>
+<td><p>需要 Remote SSH</p></td>
+<td><p>天然支持（SSH + claude）</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>学习曲线</strong></p></td>
+<td><p>低（VS Code 用户秒上手）</p></td>
+<td><p>中（需要熟悉终端）</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>价格</strong></p></td>
+<td><p>$20/月（Pro）</p></td>
+<td><p>API 按量计费（约 $20-50/月）</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<section id="id22">
+<h3>13.10.1 互补使用的最佳实践<a class="headerlink" href="#id22" title="Link to this heading">#</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>最佳工作流：Cursor + Claude Code 互补
+
+Cursor 负责：
+├── 日常编码（Tab 补全 + Cmd-K）
+├── UI 开发（实时预览）
+├── 代码浏览和理解（Chat + @codebase）
+└── 小范围修改（Composer）
+
+Claude Code 负责：
+├── 大规模重构（跨多文件的结构性变更）
+├── Bug 修复（从 Issue 到 PR 的完整流程）
+├── 自动化任务（CI/CD、脚本编写）
+├── 代码审查（git diff | claude）
+└── 远程服务器操作（SSH 环境）
+</pre></div>
+</div>
+</section>
+</section>
+<section id="id23">
+<h2>13.11 实战：用 Claude Code 完成完整开发任务<a class="headerlink" href="#id23" title="Link to this heading">#</a></h2>
+<section id="issue-pr">
+<h3>13.11.1 场景：从 Issue 到 PR<a class="headerlink" href="#issue-pr" title="Link to this heading">#</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>claude
+
+&gt;<span class="w"> </span>请查看<span class="w"> </span>GitHub<span class="w"> </span>Issue<span class="w"> </span><span class="c1">#156，理解问题，修复它，写测试，创建 PR</span>
+
+Claude:
+<span class="o">[</span>Run<span class="o">]</span><span class="w"> </span>gh<span class="w"> </span>issue<span class="w"> </span>view<span class="w"> </span><span class="m">156</span>
+
+Issue<span class="w"> </span><span class="c1">#156: &quot;用户搜索 API 在特殊字符输入时返回 500 错误&quot;</span>
+报告者描述：搜索<span class="w"> </span><span class="s2">&quot;O&#39;Brien&quot;</span><span class="w"> </span>时服务器返回<span class="w"> </span>Internal<span class="w"> </span>Server<span class="w"> </span>Error
+
+让我复现这个问题...
+<span class="o">[</span>Read<span class="o">]</span><span class="w"> </span>src/services/user_service.py
+<span class="o">[</span>Read<span class="o">]</span><span class="w"> </span>src/repositories/user_repository.py
+
+找到了！在<span class="w"> </span>user_repository.py:34，搜索查询使用了字符串拼接：
+<span class="sb">```</span>python
+<span class="nv">query</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>f<span class="s2">&quot;SELECT * FROM users WHERE name LIKE &#39;%{search_term}%&#39;&quot;</span>
+</pre></div>
+</div>
+<p>这不仅有 SQL 注入风险，还会在包含单引号的输入时报错。</p>
+<p>修复方案：使用 SQLAlchemy 的参数化查询。</p>
+<p>[Run] git checkout -b fix/user-search-special-chars</p>
+<p>[Edit] src/repositories/user_repository.py</p>
+<ul class="simple">
+<li><p>替换字符串拼接为参数化查询</p></li>
+<li><p>添加输入清理</p></li>
+</ul>
+<p>[Write] tests/test_user_search.py</p>
+<ul class="simple">
+<li><p>测试正常搜索</p></li>
+<li><p>测试特殊字符（单引号、双引号、百分号、反斜杠）</p></li>
+<li><p>测试 SQL 注入防护</p></li>
+<li><p>测试空字符串和超长输入</p></li>
+</ul>
+<p>[Run] pytest tests/test_user_search.py -v
+✅ 6/6 测试通过</p>
+<p>[Run] pytest  # 运行全部测试确保没有回归
+✅ 234/234 测试通过</p>
+<p>[Run] git add -A &amp;&amp; git commit -m &quot;fix(search): use parameterized queries for user search</p>
+<ul class="simple">
+<li><p>Replace string concatenation with SQLAlchemy bindparams</p></li>
+<li><p>Add input sanitization for special characters</p></li>
+<li><p>Add comprehensive test coverage for edge cases</p></li>
+</ul>
+<p>Fixes #156&quot;</p>
+<p>[Run] git push origin fix/user-search-special-chars
+[Run] gh pr create <br />
+–title “fix(search): handle special characters in user search” <br />
+–body &quot;## Problem
+User search API returns 500 when input contains special characters like quotes.</p>
+</section>
+</section>
+<section id="root-cause">
+<h2>Root Cause<a class="headerlink" href="#root-cause" title="Link to this heading">#</a></h2>
+<p>String concatenation in SQL query (SQL injection vulnerability).</p>
+</section>
+<section id="solution">
+<h2>Solution<a class="headerlink" href="#solution" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p>Use SQLAlchemy parameterized queries</p></li>
+<li><p>Add input sanitization</p></li>
+<li><p>Add test coverage for special characters</p></li>
+</ul>
+</section>
+<section id="id24">
+<h2>Testing<a class="headerlink" href="#id24" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p>Added 6 new test cases covering special characters, SQL injection, edge cases</p></li>
+<li><p>All 234 existing tests pass</p></li>
+</ul>
+<p>Fixes #156&quot;</p>
+<p>PR #162 已创建 ✅</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>
+## 13.12 本章小结
+
+Claude Code 代表了 AI 编程工具的另一种哲学——**不是让编辑器更智能，而是让 AI 成为你的编程搭档**。它在终端中运行，拥有完整的系统访问能力，可以独立完成从理解问题到提交代码的全流程。
+
+```{admonition} 关键要点
+:class: tip
+1. **Claude Code 是 Agent，不是编辑器插件**——它能自主读取、修改、执行、测试
+2. **CLAUDE.md** 是项目的&quot;大脑&quot;，好的 CLAUDE.md 能显著提升 AI 的工作质量
+3. **权限系统**确保安全：读取自动执行，写入需确认，危险操作被阻止
+4. **管道模式**是杀手级特性：`git diff | claude` 让 AI 融入现有工作流
+5. **与 Cursor 互补**而非替代：Cursor 做日常编码，Claude Code 做重构和自动化
+6. **CI/CD 集成**让 Claude Code 成为团队的&quot;AI 开发者&quot;
+</pre></div>
+</div>
+<div class="hint admonition">
+<p class="admonition-title">思考题</p>
+<ol class="arabic simple">
+<li><p>你更喜欢 GUI 编辑器还是终端工具？为什么？</p></li>
+<li><p>让 AI 自主执行命令（如 <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">push</span></code>），你觉得安全吗？需要什么样的保障？</p></li>
+<li><p>如果 Claude Code 可以在 CI 中自动修复 Bug，这对团队的工作流程有什么影响？</p></li>
+<li><p>Cursor 和 Claude Code 的互补使用，你会如何设计自己的工作流？</p></li>
+</ol>
+</div>
+<p>在下一章中，我们将探讨氛围编程的边界与风险——当 AI 生成了大量代码，我们如何确保质量、安全和可维护性。</p>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="chapter12.html"
+       title="上一页">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">上一页</p>
+        <p class="prev-next-title">第十二章：Cursor — 重新定义代码编辑器</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="chapter14.html"
+       title="下一页">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">下一页</p>
+        <p class="prev-next-title">第十四章：氛围编程的边界与风险</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> 目录
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#claude-code">13.1 Claude Code 的诞生与定位</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#anthropic">13.1.1 为什么 Anthropic 要做终端工具</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">13.1.2 Claude Code 的爆发式增长</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">13.2 安装与基本使用</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">13.2.1 安装</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">13.2.2 基本交互</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">13.2.3 四种使用模式</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">13.3 核心能力深度解析</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id7">13.3.1 代码理解：整个项目的心智模型</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id8">13.3.2 自主执行：从理解到行动</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#git">13.3.3 Git 深度集成</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#claude-md">13.4 CLAUDE.md：项目记忆文件</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id9">13.4.1 完整的 CLAUDE.md 示例</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#architecture-decisions">Architecture Decisions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#important-conventions">Important Conventions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#known-issues">Known Issues</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#testing">Testing</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#deployment">Deployment</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id10">13.5 权限与安全模型</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#commands">13.6 自定义 Commands：封装可复用的工作流</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#command">13.6.1 Command 文件结构</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id11">13.6.2 Command 文件格式</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id12">13.6.3 带参数的 Command</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id13">13.6.4 实用 Command 集合</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hooks">13.7 Hooks：自动化的事件触发器</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#hook">13.7.1 Hook 的工作原理</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id14">13.7.2 配置 Hooks</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id15">13.7.3 实用 Hook 示例</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id16">13.7.4 Hook 最佳实践</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id17">13.8 CLAUDE.md 高级编写技巧</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id18">13.8.1 结构化模板</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id19">13.8.2 写好 CLAUDE.md 的关键原则</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id20">13.9 高级特性</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#claude">13.9.1 多 Claude 并行工作</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#github-actions">13.9.2 与 GitHub Actions 集成</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id21">13.9.3 自定义斜杠命令</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#claude-code-vs-cursor">13.10 Claude Code vs Cursor：如何选择</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id22">13.10.1 互补使用的最佳实践</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id23">13.11 实战：用 Claude Code 完成完整开发任务</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#issue-pr">13.11.1 场景：从 Issue 到 PR</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#root-cause">Root Cause</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#solution">Solution</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id24">Testing</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+作者： Walter Fan, AI Agent
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026, Walter Fan, AI 辅助创作.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

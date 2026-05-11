@@ -1,0 +1,1380 @@
+
+<!DOCTYPE html>
+
+
+<html lang="zh-CN" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>第十六章：AI Agent 概论 — 从聊天机器人到自主智能体 &#8212; AI 时代的软件工程</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="_static/documentation_options.js?v=546e450b"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script src="_static/translations.js?v=beaddf03"></script>
+    <script type="module" src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs"></script>
+    <script type="module" src="https://cdn.jsdelivr.net/npm/@mermaid-js/layout-elk@0.2.0/dist/mermaid-layout-elk.esm.min.mjs"></script>
+    <script type="module">mermaid.initialize({startOnLoad:true, theme:'default'});</script>
+    <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+    <script type="module">import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";
+
+const defaultStyle = document.createElement('style');
+defaultStyle.textContent = `pre.mermaid {
+    /* Same as .mermaid-container > pre */
+    display: block;
+    width: 100%;
+}
+
+pre.mermaid > svg {
+    /* Same as .mermaid-container > pre > svg */
+    height: 500px;
+    width: 100%;
+    max-width: 100% !important;
+}
+`;
+document.head.appendChild(defaultStyle);
+
+const fullscreenStyle = document.createElement('style');
+fullscreenStyle.textContent = `.mermaid-container {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+
+.mermaid-container > pre {
+    display: block;
+    width: 100%;
+}
+
+.mermaid-container > pre > svg {
+    height: 500px;
+    width: 100%;
+    max-width: 100% !important;
+}
+
+.mermaid-fullscreen-btn {
+    width: 28px;
+    height: 28px;
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    font-size: 14px;
+    line-height: 1;
+    padding: 0;
+    color: #333;
+}
+
+.mermaid-fullscreen-btn:hover {
+    opacity: 100% !important;
+    background: rgba(255, 255, 255, 1);
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+    transform: scale(1.1);
+}
+
+.mermaid-fullscreen-btn.dark-theme {
+    background: rgba(50, 50, 50, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: #e0e0e0;
+}
+
+.mermaid-fullscreen-btn.dark-theme:hover {
+    background: rgba(60, 60, 60, 1);
+    box-shadow: 0 3px 10px rgba(255, 255, 255, 0.2);
+}
+
+.mermaid-fullscreen-modal {
+    display: none;
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 95vw;
+    height: 100vh;
+    background: rgba(255, 255, 255, 0.98);
+    z-index: 9999;
+    padding: 20px;
+    overflow: auto;
+}
+
+.mermaid-fullscreen-modal.dark-theme {
+    background: rgba(0, 0, 0, 0.98);
+}
+
+.mermaid-fullscreen-modal.active {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mermaid-container-fullscreen {
+    position: relative;
+    width: 95vw;
+    height: 90vh;
+    max-width: 95vw;
+    max-height: 90vh;
+    background: white;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    overflow: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mermaid-container-fullscreen.dark-theme {
+    background: #1a1a1a;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
+}
+
+.mermaid-container-fullscreen pre.mermaid {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mermaid-container-fullscreen .mermaid svg {
+    height: 100% !important;
+    width: 100% !important;
+    cursor: grab;
+}
+
+.mermaid-fullscreen-close {
+    position: fixed !important;
+    top: 20px !important;
+    right: 20px !important;
+    width: 40px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    transition: all 0.2s;
+    font-size: 24px;
+    line-height: 1;
+    color: #333;
+}
+
+.mermaid-fullscreen-close:hover {
+    background: white;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+    transform: scale(1.1);
+}
+
+.mermaid-fullscreen-close.dark-theme {
+    background: rgba(50, 50, 50, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #e0e0e0;
+}
+
+.mermaid-fullscreen-close.dark-theme:hover {
+    background: rgba(60, 60, 60, 1);
+    box-shadow: 0 6px 16px rgba(255, 255, 255, 0.2);
+}
+
+.mermaid-fullscreen-modal .mermaid-fullscreen-btn {
+    display: none !important;
+}`;
+document.head.appendChild(fullscreenStyle);
+
+// Detect if page has dark background
+const isDarkTheme = () => {
+    const bgColor = window.getComputedStyle(document.body).backgroundColor;
+    const match = bgColor.match(/rgb\((\d+),\s*(\d+),\s*(\d+)/);
+    if (match) {
+        const r = parseInt(match[1]);
+        const g = parseInt(match[2]);
+        const b = parseInt(match[3]);
+        const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+        return brightness < 128;
+    }
+    return false;
+};
+
+const load = async () => {
+    await mermaid.run();
+
+    const all_mermaids = document.querySelectorAll(".mermaid");
+    const mermaids_processed = document.querySelectorAll(".mermaid[data-processed='true']");
+
+    if ("False" === "True") {
+        const mermaids_to_add_zoom = -1 === -1 ? all_mermaids.length : -1;
+        if(mermaids_to_add_zoom > 0) {
+            var svgs = d3.selectAll("");
+            if(all_mermaids.length !== mermaids_processed.length) {
+                setTimeout(load, 200);
+                return;
+            } else if(svgs.size() !== mermaids_to_add_zoom) {
+                setTimeout(load, 200);
+                return;
+            } else {
+                svgs.each(function() {
+                    var svg = d3.select(this);
+                    svg.html("<g class='wrapper'>" + svg.html() + "</g>");
+                    var inner = svg.select("g");
+                    var zoom = d3.zoom().on("zoom", function(event) {
+                        inner.attr("transform", event.transform);
+                    });
+                    svg.call(zoom);
+                });
+            }
+        }
+    } else if(all_mermaids.length !== mermaids_processed.length) {
+        // Wait for mermaid to process all diagrams
+        setTimeout(load, 200);
+        return;
+    }
+
+    const darkTheme = isDarkTheme();
+
+    // Stop here if not adding fullscreen capability
+    if ("True" !== "True") return;
+
+    const modal = document.createElement('div');
+    modal.className = 'mermaid-fullscreen-modal' + (darkTheme ? ' dark-theme' : '');
+    modal.setAttribute('role', 'dialog');
+    modal.setAttribute('aria-modal', 'true');
+    modal.setAttribute('aria-label', 'Fullscreen diagram viewer');
+    modal.innerHTML = `
+        <button class="mermaid-fullscreen-close${darkTheme ? ' dark-theme' : ''}" aria-label="Close fullscreen">✕</button>
+        <div class="mermaid-container-fullscreen${darkTheme ? ' dark-theme' : ''}"></div>
+    `;
+    document.body.appendChild(modal);
+
+    const modalContent = modal.querySelector('.mermaid-container-fullscreen');
+    const closeBtn = modal.querySelector('.mermaid-fullscreen-close');
+
+    let previousScrollOffset = [window.scrollX, window.scrollY];
+
+    const closeModal = () => {
+        modal.classList.remove('active');
+        modalContent.innerHTML = '';
+        document.body.style.overflow = ''
+        window.scrollTo({left: previousScrollOffset[0], top: previousScrollOffset[1], behavior: 'instant'});
+    };
+
+    closeBtn.addEventListener('click', closeModal);
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) closeModal();
+    });
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && modal.classList.contains('active')) {
+            closeModal();
+        }
+    });
+
+    const allButtons = [];
+
+    document.querySelectorAll('.mermaid').forEach((mermaidDiv) => {
+        if (mermaidDiv.parentNode.classList.contains('mermaid-container') ||
+            mermaidDiv.closest('.mermaid-fullscreen-modal')) {
+            return;
+        }
+
+        const container = document.createElement('div');
+        container.className = 'mermaid-container';
+        mermaidDiv.parentNode.insertBefore(container, mermaidDiv);
+        container.appendChild(mermaidDiv);
+
+        const fullscreenBtn = document.createElement('button');
+        fullscreenBtn.className = 'mermaid-fullscreen-btn' + (darkTheme ? ' dark-theme' : '');
+        fullscreenBtn.setAttribute('aria-label', 'View diagram in fullscreen');
+        fullscreenBtn.textContent = '⛶';
+        fullscreenBtn.style.opacity = '50%';
+
+        // Calculate dynamic position based on diagram's margin and padding
+        const diagramStyle = window.getComputedStyle(mermaidDiv);
+        const marginTop = parseFloat(diagramStyle.marginTop) || 0;
+        const marginRight = parseFloat(diagramStyle.marginRight) || 0;
+        const paddingTop = parseFloat(diagramStyle.paddingTop) || 0;
+        const paddingRight = parseFloat(diagramStyle.paddingRight) || 0;
+        fullscreenBtn.style.top = `${marginTop + paddingTop + 4}px`;
+        fullscreenBtn.style.right = `${marginRight + paddingRight + 4}px`;
+
+        fullscreenBtn.addEventListener('click', () => {
+            previousScrollOffset = [window.scroll, window.scrollY];
+            const clone = mermaidDiv.cloneNode(true);
+            modalContent.innerHTML = '';
+            modalContent.appendChild(clone);
+
+            const svg = clone.querySelector('svg');
+            if (svg) {
+                svg.removeAttribute('width');
+                svg.removeAttribute('height');
+                svg.style.width = '100%';
+                svg.style.height = 'auto';
+                svg.style.maxWidth = '100%';
+                svg.style.sdisplay = 'block';
+
+                if ("False" === "True") {
+                    setTimeout(() => {
+                        const g = svg.querySelector('g');
+                        if (g) {
+                            var svgD3 = d3.select(svg);
+                            svgD3.html("<g class='wrapper'>" + svgD3.html() + "</g>");
+                            var inner = svgD3.select("g");
+                            var zoom = d3.zoom().on("zoom", function(event) {
+                                inner.attr("transform", event.transform);
+                            });
+                            svgD3.call(zoom);
+                        }
+                    }, 100);
+                }
+            }
+
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        });
+
+        container.appendChild(fullscreenBtn);
+        allButtons.push(fullscreenBtn);
+    });
+
+    // Update theme classes when theme changes
+    const updateTheme = () => {
+        const dark = isDarkTheme();
+        allButtons.forEach(btn => {
+            if (dark) {
+                btn.classList.add('dark-theme');
+            } else {
+                btn.classList.remove('dark-theme');
+            }
+        });
+        if (dark) {
+            modal.classList.add('dark-theme');
+            modalContent.classList.add('dark-theme');
+            closeBtn.classList.add('dark-theme');
+        } else {
+            modal.classList.remove('dark-theme');
+            modalContent.classList.remove('dark-theme');
+            closeBtn.classList.remove('dark-theme');
+        }
+    };
+
+    // Watch for theme changes
+    const observer = new MutationObserver(updateTheme);
+    observer.observe(document.documentElement, {
+        attributes: true,
+        attributeFilter: ['class', 'style', 'data-theme']
+    });
+    observer.observe(document.body, {
+        attributes: true,
+        attributeFilter: ['class', 'style']
+    });
+};
+
+window.addEventListener("load", load);
+</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'chapter16';</script>
+    <link rel="index" title="索引" href="genindex.html" />
+    <link rel="search" title="搜索" href="search.html" />
+    <link rel="next" title="第十七章：Agent 架构模式深度解析" href="chapter17.html" />
+    <link rel="prev" title="第十五章：超越氛围编程 — 意图驱动开发" href="chapter15.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="zh-CN"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">跳转至主要内容</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>回到顶部</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="版本警告"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">AI 时代的软件工程</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="搜索" aria-label="搜索" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">搜索</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">第一部分：回顾与反思 — 软件工程的前世今生</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="chapter01.html">第一章：软件工程的起源与演进</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter02.html">第二章：敏捷革命 — 从计划驱动到价值驱动</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter03.html">第三章：DevOps 与云原生 — 打破开发与运维的壁垒</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter04.html">第四章：软件架构的演进 — 从单体到智能体</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter05.html">第五章：软件质量与工程实践的变迁</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">第二部分：变革之风 — AI 如何重塑软件开发</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="chapter06.html">第六章：AI 编程助手的崛起</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter07.html">第七章：大语言模型基础 — 开发者需要知道的</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter08.html">第八章：AI 驱动的软件开发生命周期</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter09.html">第九章：AI 时代的代码审查与质量保证</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter10.html">第十章：AI 时代的团队协作与项目管理</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">第三部分：氛围编程 — 新范式的崛起</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="chapter11.html">第十一章：什么是氛围编程（Vibe Coding）</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter12.html">第十二章：Cursor — 重新定义代码编辑器</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter13.html">第十三章：Claude Code — 终端中的 AI 软件工程师</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter14.html">第十四章：氛围编程的边界与风险</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter15.html">第十五章：超越氛围编程 — 意图驱动开发</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">第四部分：AI Agent 开发深度解析</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">第十六章：AI Agent 概论 — 从聊天机器人到自主智能体</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter17.html">第十七章：Agent 架构模式深度解析</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter18.html">第十八章：Agent 开发框架对比与实战</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter19.html">第十九章：Agent 的工具系统设计</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter20.html">第二十章：Agent 的记忆与状态管理</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter21.html">第二十一章：多 Agent 系统与协作模式</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter22.html">第二十二章：Agent 的评估、测试与可观测性</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">第五部分：工程师的自我进化</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="chapter23.html">第二十三章：程序员的认知转变 — 从编码者到架构师</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter24.html">第二十四章：AI 时代的学习方法论</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter25.html">第二十五章：AI 时代的职业发展路径</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter26.html">第二十六章：AI 时代的工程文化与团队建设</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter27.html">第二十七章：AI 时代的工程伦理与责任</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">第六部分：展望未来</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="chapter28.html">第二十八章：软件工程的下一个十年</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter29.html">第二十九章：构建你的 AI 工具箱</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter30.html">第三十章：写给每一位软件工程师的信</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">附录：实战项目</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="appendix_a.html">附录 A：实战项目 — AI Coach 虚拟学习教练</a></li>
+<li class="toctree-l1"><a class="reference internal" href="appendix_b.html">附录 B：实战项目 — AI Editor 虚拟书稿编辑</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/walterfan/walter-ai-engineering-book" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="源码库"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/walterfan/walter-ai-engineering-book/edit/main/chapter16.md" target="_blank"
+   class="btn btn-sm btn-source-edit-button dropdown-item"
+   title="Suggest edit"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="btn__text-container">Suggest edit</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/walterfan/walter-ai-engineering-book/issues/new?title=Issue%20on%20page%20%2Fchapter16.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="创建议题"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="下载此页面">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/chapter16.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="下载源文件"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="列印成 PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="全屏模式"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="亮色"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="暗色"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="搜索" aria-label="搜索" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>第十六章：AI Agent 概论 — 从聊天机器人到自主智能体</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> 目录 </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">16.1 什么是 AI Agent</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#chatbot-copilot-agent">16.2 从 ChatBot 到 Copilot 到 Agent 的演进</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#chatbot">第一阶段：ChatBot（聊天机器人）</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#copilot">第二阶段：Copilot（副驾驶）</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#agent">第三阶段：Agent（自主智能体）</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">16.3 Agent 的核心能力模型</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#perception">16.3.1 感知（Perception）</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#reasoning">16.3.2 推理（Reasoning）</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#planning">16.3.3 规划（Planning）</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#action">16.3.4 行动（Action）</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#memory">16.3.5 记忆（Memory）</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#agent-vs-agent">16.4 单 Agent vs 多 Agent</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">单 Agent 系统</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">多 Agent 系统</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">16.5 Agent 的典型应用场景</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">16.6 Agent 成熟度评估模型</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id7">16.7 Agent 与传统软件的本质区别</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id8">16.8 本章小结</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="ai-agent">
+<span id="chapter16"></span><h1>第十六章：AI Agent 概论 — 从聊天机器人到自主智能体<a class="headerlink" href="#ai-agent" title="Link to this heading">#</a></h1>
+<pre  class="mermaid">
+        mindmap
+  root((AI Agent概论))
+    定义与分类
+      反应式Agent
+      认知式Agent
+      自主式Agent
+    演进路径
+      ChatBot
+      Copilot
+      Agent
+    核心能力
+      感知
+      推理
+      规划
+      行动
+      记忆
+    单Agent vs 多Agent
+      适用场景
+      复杂度权衡
+    应用场景
+      编程助手
+      数据分析
+      客户服务
+    与传统软件区别
+      非确定性
+      自主决策
+      自然语言接口
+    </pre><section id="id1">
+<h2>16.1 什么是 AI Agent<a class="headerlink" href="#id1" title="Link to this heading">#</a></h2>
+<p>AI Agent（人工智能代理/智能体）是一个能够感知环境、进行推理、制定计划并采取行动以实现特定目标的自主系统。与传统的聊天机器人不同，Agent 不仅仅是对用户输入做出被动响应，而是能够主动地分解任务、调用工具、管理状态，并在多步骤交互中持续推进目标的达成。</p>
+<p>从学术角度看，Stuart Russell 和 Peter Norvig 在《人工智能：一种现代方法》中将 Agent 定义为：</p>
+<blockquote>
+<div><p>一个 Agent 是任何能够通过传感器感知其环境，并通过执行器对该环境采取行动的实体。</p>
+</div></blockquote>
+<p>在大语言模型（LLM）时代，这个定义被赋予了新的内涵：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">enum</span><span class="w"> </span><span class="kn">import</span> <span class="n">Enum</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">AgentCapability</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Agent 核心能力枚举&quot;&quot;&quot;</span>
+    <span class="n">PERCEPTION</span> <span class="o">=</span> <span class="s2">&quot;perception&quot;</span>       <span class="c1"># 感知：理解输入（文本、图像、音频）</span>
+    <span class="n">REASONING</span> <span class="o">=</span> <span class="s2">&quot;reasoning&quot;</span>         <span class="c1"># 推理：逻辑分析与判断</span>
+    <span class="n">PLANNING</span> <span class="o">=</span> <span class="s2">&quot;planning&quot;</span>           <span class="c1"># 规划：分解目标为子任务</span>
+    <span class="n">ACTION</span> <span class="o">=</span> <span class="s2">&quot;action&quot;</span>               <span class="c1"># 行动：调用工具执行操作</span>
+    <span class="n">MEMORY</span> <span class="o">=</span> <span class="s2">&quot;memory&quot;</span>               <span class="c1"># 记忆：存储和检索历史信息</span>
+    <span class="n">REFLECTION</span> <span class="o">=</span> <span class="s2">&quot;reflection&quot;</span>       <span class="c1"># 反思：评估自身行为并改进</span>
+
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">AIAgent</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;AI Agent 的基本抽象&quot;&quot;&quot;</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">goal</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">capabilities</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">AgentCapability</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
+    <span class="n">tools</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Callable</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>
+    <span class="n">memory</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">list</span><span class="p">)</span>
+    <span class="n">max_iterations</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">perceive</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_data</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;感知环境输入，将多模态数据转化为内部表示&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">input_data</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">input_data</span>
+        <span class="c1"># 可扩展为图像识别、语音转文字等</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">input_data</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">reason</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">observation</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;基于观察进行推理，决定下一步行动&quot;&quot;&quot;</span>
+        <span class="c1"># 调用 LLM 进行推理</span>
+        <span class="n">prompt</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        目标: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">goal</span><span class="si">}</span>
+<span class="s2">        当前观察: </span><span class="si">{</span><span class="n">observation</span><span class="si">}</span>
+<span class="s2">        历史记忆: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">memory</span><span class="p">[</span><span class="o">-</span><span class="mi">5</span><span class="p">:]</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="bp">self</span><span class="o">.</span><span class="n">memory</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s1">&#39;无&#39;</span><span class="si">}</span>
+<span class="s2">        可用工具: </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tools</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span><span class="si">}</span>
+
+<span class="s2">        请分析当前情况，决定下一步行动。</span>
+<span class="s2">        输出格式: </span><span class="se">{{</span><span class="s2">&quot;thought&quot;: &quot;思考过程&quot;, &quot;action&quot;: &quot;工具名称&quot;, &quot;action_input&quot;: &quot;输入参数&quot;</span><span class="se">}}</span>
+<span class="s2">        &quot;&quot;&quot;</span>
+        <span class="c1"># 实际实现中调用 LLM API</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;thought&quot;</span><span class="p">:</span> <span class="s2">&quot;...&quot;</span><span class="p">,</span> <span class="s2">&quot;action&quot;</span><span class="p">:</span> <span class="s2">&quot;...&quot;</span><span class="p">,</span> <span class="s2">&quot;action_input&quot;</span><span class="p">:</span> <span class="s2">&quot;...&quot;</span><span class="p">}</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">act</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">action</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">action_input</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;执行行动，调用对应工具&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">action</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tools</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">tools</span><span class="p">[</span><span class="n">action</span><span class="p">](</span><span class="n">action_input</span><span class="p">)</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;未知工具: </span><span class="si">{</span><span class="n">action</span><span class="si">}</span><span class="s2">&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">remember</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">experience</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;将经验存入记忆&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">memory</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">experience</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">task</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Agent 主循环&quot;&quot;&quot;</span>
+        <span class="n">observation</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">perceive</span><span class="p">(</span><span class="n">task</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">max_iterations</span><span class="p">):</span>
+            <span class="n">decision</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">reason</span><span class="p">(</span><span class="n">observation</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">decision</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;action&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;finish&quot;</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">decision</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;action_input&quot;</span><span class="p">,</span> <span class="s2">&quot;任务完成&quot;</span><span class="p">)</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">act</span><span class="p">(</span><span class="n">decision</span><span class="p">[</span><span class="s2">&quot;action&quot;</span><span class="p">],</span> <span class="n">decision</span><span class="p">[</span><span class="s2">&quot;action_input&quot;</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">remember</span><span class="p">({</span>
+                <span class="s2">&quot;step&quot;</span><span class="p">:</span> <span class="n">i</span><span class="p">,</span>
+                <span class="s2">&quot;thought&quot;</span><span class="p">:</span> <span class="n">decision</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;thought&quot;</span><span class="p">),</span>
+                <span class="s2">&quot;action&quot;</span><span class="p">:</span> <span class="n">decision</span><span class="p">[</span><span class="s2">&quot;action&quot;</span><span class="p">],</span>
+                <span class="s2">&quot;result&quot;</span><span class="p">:</span> <span class="n">result</span>
+            <span class="p">})</span>
+            <span class="n">observation</span> <span class="o">=</span> <span class="n">result</span>
+        <span class="k">return</span> <span class="s2">&quot;达到最大迭代次数，任务未完成&quot;</span>
+</pre></div>
+</div>
+</section>
+<section id="chatbot-copilot-agent">
+<h2>16.2 从 ChatBot 到 Copilot 到 Agent 的演进<a class="headerlink" href="#chatbot-copilot-agent" title="Link to this heading">#</a></h2>
+<p>AI 应用的演进经历了三个明显的阶段，每个阶段代表着自主性和能力的显著提升：</p>
+<section id="chatbot">
+<h3>第一阶段：ChatBot（聊天机器人）<a class="headerlink" href="#chatbot" title="Link to this heading">#</a></h3>
+<p>ChatBot 是最基础的对话式 AI，其特点是：</p>
+<ul class="simple">
+<li><p><strong>被动响应</strong>：只在用户提问时才回答</p></li>
+<li><p><strong>无状态</strong>：每次对话独立，缺乏上下文记忆</p></li>
+<li><p><strong>单轮交互</strong>：一问一答，无法处理复杂任务</p></li>
+<li><p><strong>无工具使用</strong>：只能生成文本，不能执行操作</p></li>
+</ul>
+</section>
+<section id="copilot">
+<h3>第二阶段：Copilot（副驾驶）<a class="headerlink" href="#copilot" title="Link to this heading">#</a></h3>
+<p>Copilot 在 ChatBot 基础上增加了上下文感知和辅助能力：</p>
+<ul class="simple">
+<li><p><strong>上下文感知</strong>：理解用户当前的工作环境（如代码编辑器、文档）</p></li>
+<li><p><strong>主动建议</strong>：在适当时机提供建议（如代码补全）</p></li>
+<li><p><strong>有限工具使用</strong>：可以执行预定义的操作</p></li>
+<li><p><strong>人在回路</strong>：所有关键决策仍由人类做出</p></li>
+</ul>
+</section>
+<section id="agent">
+<h3>第三阶段：Agent（自主智能体）<a class="headerlink" href="#agent" title="Link to this heading">#</a></h3>
+<p>Agent 代表了当前 AI 应用的最高形态：</p>
+<ul class="simple">
+<li><p><strong>目标驱动</strong>：接受高层目标，自主分解为子任务</p></li>
+<li><p><strong>自主决策</strong>：独立选择工具和策略</p></li>
+<li><p><strong>多步推理</strong>：能够进行复杂的多步骤推理和规划</p></li>
+<li><p><strong>环境交互</strong>：主动与外部系统交互</p></li>
+<li><p><strong>自我反思</strong>：评估自身行为并进行调整</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># 三个阶段的能力对比</span>
+<span class="n">evolution_comparison</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;维度&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;自主性&quot;</span><span class="p">,</span> <span class="s2">&quot;工具使用&quot;</span><span class="p">,</span> <span class="s2">&quot;记忆&quot;</span><span class="p">,</span> <span class="s2">&quot;规划&quot;</span><span class="p">,</span> <span class="s2">&quot;反思&quot;</span><span class="p">,</span> <span class="s2">&quot;多步推理&quot;</span><span class="p">,</span> <span class="s2">&quot;环境交互&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;ChatBot&quot;</span><span class="p">:</span>  <span class="p">[</span><span class="s2">&quot;低&quot;</span><span class="p">,</span>   <span class="s2">&quot;无&quot;</span><span class="p">,</span>     <span class="s2">&quot;无&quot;</span><span class="p">,</span>   <span class="s2">&quot;无&quot;</span><span class="p">,</span>   <span class="s2">&quot;无&quot;</span><span class="p">,</span>   <span class="s2">&quot;无&quot;</span><span class="p">,</span>     <span class="s2">&quot;无&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;Copilot&quot;</span><span class="p">:</span>  <span class="p">[</span><span class="s2">&quot;中&quot;</span><span class="p">,</span>   <span class="s2">&quot;有限&quot;</span><span class="p">,</span>   <span class="s2">&quot;短期&quot;</span><span class="p">,</span> <span class="s2">&quot;简单&quot;</span><span class="p">,</span> <span class="s2">&quot;无&quot;</span><span class="p">,</span>   <span class="s2">&quot;有限&quot;</span><span class="p">,</span>   <span class="s2">&quot;被动&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;Agent&quot;</span><span class="p">:</span>    <span class="p">[</span><span class="s2">&quot;高&quot;</span><span class="p">,</span>   <span class="s2">&quot;丰富&quot;</span><span class="p">,</span>   <span class="s2">&quot;长期&quot;</span><span class="p">,</span> <span class="s2">&quot;复杂&quot;</span><span class="p">,</span> <span class="s2">&quot;有&quot;</span><span class="p">,</span>   <span class="s2">&quot;深度&quot;</span><span class="p">,</span>   <span class="s2">&quot;主动&quot;</span><span class="p">],</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="id2">
+<h2>16.3 Agent 的核心能力模型<a class="headerlink" href="#id2" title="Link to this heading">#</a></h2>
+<p>一个成熟的 AI Agent 需要具备五大核心能力，它们构成了 Agent 的能力五边形：</p>
+<section id="perception">
+<h3>16.3.1 感知（Perception）<a class="headerlink" href="#perception" title="Link to this heading">#</a></h3>
+<p>感知是 Agent 与外部世界交互的入口。现代 Agent 支持多模态感知：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">PerceptionModule</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;多模态感知模块&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">llm_client</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">llm</span> <span class="o">=</span> <span class="n">llm_client</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">perceive_text</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;文本感知：理解用户意图、提取实体、识别情感&quot;&quot;&quot;</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">llm</span><span class="o">.</span><span class="n">chat</span><span class="o">.</span><span class="n">completions</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+            <span class="n">model</span><span class="o">=</span><span class="s2">&quot;gpt-4o&quot;</span><span class="p">,</span>
+            <span class="n">messages</span><span class="o">=</span><span class="p">[{</span>
+                <span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;system&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="s2">&quot;分析以下文本，提取意图、关键实体和情感倾向。&quot;</span>
+            <span class="p">},</span> <span class="p">{</span>
+                <span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">text</span>
+            <span class="p">}],</span>
+            <span class="n">response_format</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;json_object&quot;</span><span class="p">}</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">choices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">message</span><span class="o">.</span><span class="n">content</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">perceive_image</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">image_url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">question</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;图像感知：理解图像内容&quot;&quot;&quot;</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">llm</span><span class="o">.</span><span class="n">chat</span><span class="o">.</span><span class="n">completions</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+            <span class="n">model</span><span class="o">=</span><span class="s2">&quot;gpt-4o&quot;</span><span class="p">,</span>
+            <span class="n">messages</span><span class="o">=</span><span class="p">[{</span>
+                <span class="s2">&quot;role&quot;</span><span class="p">:</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="p">[</span>
+                    <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;text&quot;</span><span class="p">,</span> <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="n">question</span><span class="p">},</span>
+                    <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;image_url&quot;</span><span class="p">,</span> <span class="s2">&quot;image_url&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;url&quot;</span><span class="p">:</span> <span class="n">image_url</span><span class="p">}}</span>
+                <span class="p">]</span>
+            <span class="p">}]</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">response</span><span class="o">.</span><span class="n">choices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">message</span><span class="o">.</span><span class="n">content</span>
+</pre></div>
+</div>
+</section>
+<section id="reasoning">
+<h3>16.3.2 推理（Reasoning）<a class="headerlink" href="#reasoning" title="Link to this heading">#</a></h3>
+<p>推理是 Agent 的&quot;大脑&quot;，负责分析信息、做出判断：</p>
+<ul class="simple">
+<li><p><strong>演绎推理</strong>：从一般规则推导具体结论</p></li>
+<li><p><strong>归纳推理</strong>：从具体案例总结一般规律</p></li>
+<li><p><strong>类比推理</strong>：将已知领域的知识迁移到新领域</p></li>
+<li><p><strong>因果推理</strong>：理解事件之间的因果关系</p></li>
+</ul>
+</section>
+<section id="planning">
+<h3>16.3.3 规划（Planning）<a class="headerlink" href="#planning" title="Link to this heading">#</a></h3>
+<p>规划能力使 Agent 能够将复杂目标分解为可执行的步骤序列：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">PlanningModule</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;任务规划模块&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">create_plan</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">goal</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">context</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;将高层目标分解为具体步骤&quot;&quot;&quot;</span>
+        <span class="n">prompt</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        目标: </span><span class="si">{</span><span class="n">goal</span><span class="si">}</span>
+<span class="s2">        上下文: </span><span class="si">{</span><span class="n">context</span><span class="si">}</span>
+
+<span class="s2">        请将此目标分解为具体的执行步骤。每个步骤应包含：</span>
+<span class="s2">        1. step_id: 步骤编号</span>
+<span class="s2">        2. description: 步骤描述</span>
+<span class="s2">        3. dependencies: 依赖的前置步骤</span>
+<span class="s2">        4. tool: 需要使用的工具</span>
+<span class="s2">        5. expected_output: 预期输出</span>
+
+<span class="s2">        以 JSON 数组格式输出。</span>
+<span class="s2">        &quot;&quot;&quot;</span>
+        <span class="c1"># 调用 LLM 生成计划</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_call_llm</span><span class="p">(</span><span class="n">prompt</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">replan</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">original_plan</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">feedback</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;根据执行反馈重新规划&quot;&quot;&quot;</span>
+        <span class="n">prompt</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        原始计划: </span><span class="si">{</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">original_plan</span><span class="p">,</span><span class="w"> </span><span class="n">ensure_ascii</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="si">}</span>
+<span class="s2">        执行反馈: </span><span class="si">{</span><span class="n">feedback</span><span class="si">}</span>
+
+<span class="s2">        请根据反馈调整计划。保留已成功的步骤，修改或替换失败的步骤。</span>
+<span class="s2">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_call_llm</span><span class="p">(</span><span class="n">prompt</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="action">
+<h3>16.3.4 行动（Action）<a class="headerlink" href="#action" title="Link to this heading">#</a></h3>
+<p>行动是 Agent 影响外部世界的方式，主要通过工具调用实现。</p>
+</section>
+<section id="memory">
+<h3>16.3.5 记忆（Memory）<a class="headerlink" href="#memory" title="Link to this heading">#</a></h3>
+<p>记忆使 Agent 能够从过去的经验中学习，并在长期交互中保持一致性。</p>
+</section>
+</section>
+<section id="agent-vs-agent">
+<h2>16.4 单 Agent vs 多 Agent<a class="headerlink" href="#agent-vs-agent" title="Link to this heading">#</a></h2>
+<section id="id3">
+<h3>单 Agent 系统<a class="headerlink" href="#id3" title="Link to this heading">#</a></h3>
+<p>单 Agent 系统由一个 Agent 独立完成所有任务，适用于：</p>
+<ul class="simple">
+<li><p>任务相对简单，不需要多种专业技能</p></li>
+<li><p>对响应延迟要求高</p></li>
+<li><p>系统复杂度需要保持较低</p></li>
+</ul>
+</section>
+<section id="id4">
+<h3>多 Agent 系统<a class="headerlink" href="#id4" title="Link to this heading">#</a></h3>
+<p>多 Agent 系统由多个专业化的 Agent 协作完成复杂任务：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">enum</span><span class="w"> </span><span class="kn">import</span> <span class="n">Enum</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Optional</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">AgentRole</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="n">COORDINATOR</span> <span class="o">=</span> <span class="s2">&quot;coordinator&quot;</span>   <span class="c1"># 协调者：分配任务、整合结果</span>
+    <span class="n">RESEARCHER</span> <span class="o">=</span> <span class="s2">&quot;researcher&quot;</span>     <span class="c1"># 研究者：信息收集与分析</span>
+    <span class="n">CODER</span> <span class="o">=</span> <span class="s2">&quot;coder&quot;</span>               <span class="c1"># 编码者：代码编写与调试</span>
+    <span class="n">REVIEWER</span> <span class="o">=</span> <span class="s2">&quot;reviewer&quot;</span>         <span class="c1"># 审查者：质量检查与反馈</span>
+    <span class="n">WRITER</span> <span class="o">=</span> <span class="s2">&quot;writer&quot;</span>             <span class="c1"># 写作者：文档与报告撰写</span>
+
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">AgentMessage</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Agent 间通信消息&quot;&quot;&quot;</span>
+    <span class="n">sender</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">receiver</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">content</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">message_type</span><span class="p">:</span> <span class="nb">str</span>  <span class="c1"># &quot;task&quot;, &quot;result&quot;, &quot;feedback&quot;, &quot;query&quot;</span>
+    <span class="n">priority</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">metadata</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="nb">dict</span><span class="p">)</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">MultiAgentSystem</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;多 Agent 协作系统&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">AIAgent</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">message_queue</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">AgentMessage</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">register_agent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">agent</span><span class="p">:</span> <span class="n">AIAgent</span><span class="p">,</span> <span class="n">role</span><span class="p">:</span> <span class="n">AgentRole</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="p">[</span><span class="n">role</span><span class="o">.</span><span class="n">value</span><span class="p">]</span> <span class="o">=</span> <span class="n">agent</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">dispatch_task</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">task</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;任务分发与协调&quot;&quot;&quot;</span>
+        <span class="c1"># 1. 协调者分析任务</span>
+        <span class="n">coordinator</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;coordinator&quot;</span><span class="p">)</span>
+        <span class="n">plan</span> <span class="o">=</span> <span class="n">coordinator</span><span class="o">.</span><span class="n">reason</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;分析任务并分配给合适的 Agent: </span><span class="si">{</span><span class="n">task</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="c1"># 2. 按计划分发子任务</span>
+        <span class="n">results</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">subtask</span> <span class="ow">in</span> <span class="n">plan</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;subtasks&quot;</span><span class="p">,</span> <span class="p">[]):</span>
+            <span class="n">agent_role</span> <span class="o">=</span> <span class="n">subtask</span><span class="p">[</span><span class="s2">&quot;assigned_to&quot;</span><span class="p">]</span>
+            <span class="n">agent</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">agents</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">agent_role</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">agent</span><span class="p">:</span>
+                <span class="n">result</span> <span class="o">=</span> <span class="n">agent</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">subtask</span><span class="p">[</span><span class="s2">&quot;description&quot;</span><span class="p">])</span>
+                <span class="n">results</span><span class="p">[</span><span class="n">agent_role</span><span class="p">]</span> <span class="o">=</span> <span class="n">result</span>
+
+        <span class="c1"># 3. 整合结果</span>
+        <span class="k">return</span> <span class="n">coordinator</span><span class="o">.</span><span class="n">reason</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;整合以下结果: </span><span class="si">{</span><span class="n">results</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="id5">
+<h2>16.5 Agent 的典型应用场景<a class="headerlink" href="#id5" title="Link to this heading">#</a></h2>
+<p>AI Agent 正在各个领域展现出巨大的应用潜力：</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>应用领域</p></th>
+<th class="head"><p>典型场景</p></th>
+<th class="head"><p>代表产品/项目</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>软件开发</p></td>
+<td><p>代码生成、Bug修复、代码审查</p></td>
+<td><p>Devin, GitHub Copilot Workspace, Cursor</p></td>
+</tr>
+<tr class="row-odd"><td><p>数据分析</p></td>
+<td><p>自动化数据探索、报告生成</p></td>
+<td><p>Code Interpreter, Julius AI</p></td>
+</tr>
+<tr class="row-even"><td><p>客户服务</p></td>
+<td><p>智能客服、工单处理</p></td>
+<td><p>Intercom Fin, Sierra</p></td>
+</tr>
+<tr class="row-odd"><td><p>科学研究</p></td>
+<td><p>文献综述、实验设计</p></td>
+<td><p>ChemCrow, Coscientist</p></td>
+</tr>
+<tr class="row-even"><td><p>办公自动化</p></td>
+<td><p>邮件处理、日程管理、文档撰写</p></td>
+<td><p>Microsoft 365 Copilot</p></td>
+</tr>
+<tr class="row-odd"><td><p>网络安全</p></td>
+<td><p>威胁检测、漏洞分析</p></td>
+<td><p>Microsoft Security Copilot</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="id6">
+<h2>16.6 Agent 成熟度评估模型<a class="headerlink" href="#id6" title="Link to this heading">#</a></h2>
+<p>我们可以用一个五级成熟度模型来评估 Agent 系统：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">AgentMaturityLevel</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Agent 成熟度等级&quot;&quot;&quot;</span>
+    <span class="n">L1_REACTIVE</span> <span class="o">=</span> <span class="s2">&quot;L1: 反应式 - 简单的输入输出映射，无记忆无规划&quot;</span>
+    <span class="n">L2_CONTEXTUAL</span> <span class="o">=</span> <span class="s2">&quot;L2: 上下文感知 - 理解对话上下文，有短期记忆&quot;</span>
+    <span class="n">L3_TOOL_USING</span> <span class="o">=</span> <span class="s2">&quot;L3: 工具使用 - 能调用外部工具完成任务&quot;</span>
+    <span class="n">L4_AUTONOMOUS</span> <span class="o">=</span> <span class="s2">&quot;L4: 自主规划 - 能分解目标、制定计划、自主执行&quot;</span>
+    <span class="n">L5_ADAPTIVE</span> <span class="o">=</span> <span class="s2">&quot;L5: 自适应 - 能从经验中学习、自我改进、处理未知场景&quot;</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">assess_maturity</span><span class="p">(</span><span class="n">agent_capabilities</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AgentMaturityLevel</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;评估 Agent 成熟度&quot;&quot;&quot;</span>
+    <span class="n">score</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">if</span> <span class="n">agent_capabilities</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;context_awareness&quot;</span><span class="p">):</span>
+        <span class="n">score</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="k">if</span> <span class="n">agent_capabilities</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;tool_usage&quot;</span><span class="p">):</span>
+        <span class="n">score</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="k">if</span> <span class="n">agent_capabilities</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;planning&quot;</span><span class="p">):</span>
+        <span class="n">score</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="k">if</span> <span class="n">agent_capabilities</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;self_improvement&quot;</span><span class="p">):</span>
+        <span class="n">score</span> <span class="o">+=</span> <span class="mi">1</span>
+
+    <span class="n">levels</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">AgentMaturityLevel</span><span class="o">.</span><span class="n">L1_REACTIVE</span><span class="p">,</span>
+        <span class="n">AgentMaturityLevel</span><span class="o">.</span><span class="n">L2_CONTEXTUAL</span><span class="p">,</span>
+        <span class="n">AgentMaturityLevel</span><span class="o">.</span><span class="n">L3_TOOL_USING</span><span class="p">,</span>
+        <span class="n">AgentMaturityLevel</span><span class="o">.</span><span class="n">L4_AUTONOMOUS</span><span class="p">,</span>
+        <span class="n">AgentMaturityLevel</span><span class="o">.</span><span class="n">L5_ADAPTIVE</span><span class="p">,</span>
+    <span class="p">]</span>
+    <span class="k">return</span> <span class="n">levels</span><span class="p">[</span><span class="nb">min</span><span class="p">(</span><span class="n">score</span><span class="p">,</span> <span class="mi">4</span><span class="p">)]</span>
+</pre></div>
+</div>
+</section>
+<section id="id7">
+<h2>16.7 Agent 与传统软件的本质区别<a class="headerlink" href="#id7" title="Link to this heading">#</a></h2>
+<p>AI Agent 与传统软件在多个维度上存在根本性差异：</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>维度</p></th>
+<th class="head"><p>传统软件</p></th>
+<th class="head"><p>AI Agent</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>执行逻辑</p></td>
+<td><p>确定性：相同输入产生相同输出</p></td>
+<td><p>非确定性：相同输入可能产生不同输出</p></td>
+</tr>
+<tr class="row-odd"><td><p>控制流</p></td>
+<td><p>预定义的分支和循环</p></td>
+<td><p>动态决策，LLM 驱动的控制流</p></td>
+</tr>
+<tr class="row-even"><td><p>错误处理</p></td>
+<td><p>预定义的异常处理</p></td>
+<td><p>自适应错误恢复，可自我纠正</p></td>
+</tr>
+<tr class="row-odd"><td><p>接口定义</p></td>
+<td><p>严格的 API 契约</p></td>
+<td><p>自然语言接口，灵活但模糊</p></td>
+</tr>
+<tr class="row-even"><td><p>测试方法</p></td>
+<td><p>确定性断言</p></td>
+<td><p>概率性评估，需要多维度评测</p></td>
+</tr>
+<tr class="row-odd"><td><p>扩展方式</p></td>
+<td><p>修改代码、添加模块</p></td>
+<td><p>添加工具、调整提示词</p></td>
+</tr>
+<tr class="row-even"><td><p>资源消耗</p></td>
+<td><p>可预测的 CPU/内存</p></td>
+<td><p>LLM 调用成本高且不可预测</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>这些差异意味着我们需要全新的工程方法论来构建和维护 Agent 系统。传统的软件工程实践——如确定性测试、严格的接口契约、可预测的性能模型——都需要在 Agent 时代进行根本性的重新思考。</p>
+</section>
+<section id="id8">
+<h2>16.8 本章小结<a class="headerlink" href="#id8" title="Link to this heading">#</a></h2>
+<p>本章从宏观视角介绍了 AI Agent 的基本概念和发展脉络。我们了解到：</p>
+<ol class="arabic simple">
+<li><p><strong>Agent 的本质</strong>是一个能够自主感知、推理、规划和行动的智能系统</p></li>
+<li><p><strong>从 ChatBot 到 Agent</strong> 的演进代表了 AI 应用自主性的持续提升</p></li>
+<li><p><strong>五大核心能力</strong>（感知、推理、规划、行动、记忆）构成了 Agent 的能力基础</p></li>
+<li><p><strong>单 Agent 与多 Agent</strong> 各有适用场景，复杂任务往往需要多 Agent 协作</p></li>
+<li><p><strong>Agent 与传统软件</strong>存在本质区别，需要新的工程方法论</p></li>
+</ol>
+<p>在接下来的章节中，我们将深入探讨 Agent 的架构模式、开发框架、工具系统、记忆管理、多 Agent 协作以及评估测试等核心主题。</p>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="chapter15.html"
+       title="上一页">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">上一页</p>
+        <p class="prev-next-title">第十五章：超越氛围编程 — 意图驱动开发</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="chapter17.html"
+       title="下一页">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">下一页</p>
+        <p class="prev-next-title">第十七章：Agent 架构模式深度解析</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> 目录
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">16.1 什么是 AI Agent</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#chatbot-copilot-agent">16.2 从 ChatBot 到 Copilot 到 Agent 的演进</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#chatbot">第一阶段：ChatBot（聊天机器人）</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#copilot">第二阶段：Copilot（副驾驶）</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#agent">第三阶段：Agent（自主智能体）</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">16.3 Agent 的核心能力模型</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#perception">16.3.1 感知（Perception）</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#reasoning">16.3.2 推理（Reasoning）</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#planning">16.3.3 规划（Planning）</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#action">16.3.4 行动（Action）</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#memory">16.3.5 记忆（Memory）</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#agent-vs-agent">16.4 单 Agent vs 多 Agent</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">单 Agent 系统</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">多 Agent 系统</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">16.5 Agent 的典型应用场景</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">16.6 Agent 成熟度评估模型</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id7">16.7 Agent 与传统软件的本质区别</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id8">16.8 本章小结</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+作者： Walter Fan, AI Agent
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026, Walter Fan, AI 辅助创作.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

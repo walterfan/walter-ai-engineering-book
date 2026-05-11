@@ -1,0 +1,1526 @@
+
+<!DOCTYPE html>
+
+
+<html lang="zh-CN" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>第二十五章：AI 时代的职业发展路径 &#8212; AI 时代的软件工程</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="_static/documentation_options.js?v=546e450b"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script src="_static/translations.js?v=beaddf03"></script>
+    <script type="module" src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs"></script>
+    <script type="module" src="https://cdn.jsdelivr.net/npm/@mermaid-js/layout-elk@0.2.0/dist/mermaid-layout-elk.esm.min.mjs"></script>
+    <script type="module">mermaid.initialize({startOnLoad:true, theme:'default'});</script>
+    <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+    <script type="module">import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";
+
+const defaultStyle = document.createElement('style');
+defaultStyle.textContent = `pre.mermaid {
+    /* Same as .mermaid-container > pre */
+    display: block;
+    width: 100%;
+}
+
+pre.mermaid > svg {
+    /* Same as .mermaid-container > pre > svg */
+    height: 500px;
+    width: 100%;
+    max-width: 100% !important;
+}
+`;
+document.head.appendChild(defaultStyle);
+
+const fullscreenStyle = document.createElement('style');
+fullscreenStyle.textContent = `.mermaid-container {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+
+.mermaid-container > pre {
+    display: block;
+    width: 100%;
+}
+
+.mermaid-container > pre > svg {
+    height: 500px;
+    width: 100%;
+    max-width: 100% !important;
+}
+
+.mermaid-fullscreen-btn {
+    width: 28px;
+    height: 28px;
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    font-size: 14px;
+    line-height: 1;
+    padding: 0;
+    color: #333;
+}
+
+.mermaid-fullscreen-btn:hover {
+    opacity: 100% !important;
+    background: rgba(255, 255, 255, 1);
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+    transform: scale(1.1);
+}
+
+.mermaid-fullscreen-btn.dark-theme {
+    background: rgba(50, 50, 50, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: #e0e0e0;
+}
+
+.mermaid-fullscreen-btn.dark-theme:hover {
+    background: rgba(60, 60, 60, 1);
+    box-shadow: 0 3px 10px rgba(255, 255, 255, 0.2);
+}
+
+.mermaid-fullscreen-modal {
+    display: none;
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 95vw;
+    height: 100vh;
+    background: rgba(255, 255, 255, 0.98);
+    z-index: 9999;
+    padding: 20px;
+    overflow: auto;
+}
+
+.mermaid-fullscreen-modal.dark-theme {
+    background: rgba(0, 0, 0, 0.98);
+}
+
+.mermaid-fullscreen-modal.active {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mermaid-container-fullscreen {
+    position: relative;
+    width: 95vw;
+    height: 90vh;
+    max-width: 95vw;
+    max-height: 90vh;
+    background: white;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    overflow: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mermaid-container-fullscreen.dark-theme {
+    background: #1a1a1a;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
+}
+
+.mermaid-container-fullscreen pre.mermaid {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mermaid-container-fullscreen .mermaid svg {
+    height: 100% !important;
+    width: 100% !important;
+    cursor: grab;
+}
+
+.mermaid-fullscreen-close {
+    position: fixed !important;
+    top: 20px !important;
+    right: 20px !important;
+    width: 40px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    transition: all 0.2s;
+    font-size: 24px;
+    line-height: 1;
+    color: #333;
+}
+
+.mermaid-fullscreen-close:hover {
+    background: white;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+    transform: scale(1.1);
+}
+
+.mermaid-fullscreen-close.dark-theme {
+    background: rgba(50, 50, 50, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #e0e0e0;
+}
+
+.mermaid-fullscreen-close.dark-theme:hover {
+    background: rgba(60, 60, 60, 1);
+    box-shadow: 0 6px 16px rgba(255, 255, 255, 0.2);
+}
+
+.mermaid-fullscreen-modal .mermaid-fullscreen-btn {
+    display: none !important;
+}`;
+document.head.appendChild(fullscreenStyle);
+
+// Detect if page has dark background
+const isDarkTheme = () => {
+    const bgColor = window.getComputedStyle(document.body).backgroundColor;
+    const match = bgColor.match(/rgb\((\d+),\s*(\d+),\s*(\d+)/);
+    if (match) {
+        const r = parseInt(match[1]);
+        const g = parseInt(match[2]);
+        const b = parseInt(match[3]);
+        const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+        return brightness < 128;
+    }
+    return false;
+};
+
+const load = async () => {
+    await mermaid.run();
+
+    const all_mermaids = document.querySelectorAll(".mermaid");
+    const mermaids_processed = document.querySelectorAll(".mermaid[data-processed='true']");
+
+    if ("False" === "True") {
+        const mermaids_to_add_zoom = -1 === -1 ? all_mermaids.length : -1;
+        if(mermaids_to_add_zoom > 0) {
+            var svgs = d3.selectAll("");
+            if(all_mermaids.length !== mermaids_processed.length) {
+                setTimeout(load, 200);
+                return;
+            } else if(svgs.size() !== mermaids_to_add_zoom) {
+                setTimeout(load, 200);
+                return;
+            } else {
+                svgs.each(function() {
+                    var svg = d3.select(this);
+                    svg.html("<g class='wrapper'>" + svg.html() + "</g>");
+                    var inner = svg.select("g");
+                    var zoom = d3.zoom().on("zoom", function(event) {
+                        inner.attr("transform", event.transform);
+                    });
+                    svg.call(zoom);
+                });
+            }
+        }
+    } else if(all_mermaids.length !== mermaids_processed.length) {
+        // Wait for mermaid to process all diagrams
+        setTimeout(load, 200);
+        return;
+    }
+
+    const darkTheme = isDarkTheme();
+
+    // Stop here if not adding fullscreen capability
+    if ("True" !== "True") return;
+
+    const modal = document.createElement('div');
+    modal.className = 'mermaid-fullscreen-modal' + (darkTheme ? ' dark-theme' : '');
+    modal.setAttribute('role', 'dialog');
+    modal.setAttribute('aria-modal', 'true');
+    modal.setAttribute('aria-label', 'Fullscreen diagram viewer');
+    modal.innerHTML = `
+        <button class="mermaid-fullscreen-close${darkTheme ? ' dark-theme' : ''}" aria-label="Close fullscreen">✕</button>
+        <div class="mermaid-container-fullscreen${darkTheme ? ' dark-theme' : ''}"></div>
+    `;
+    document.body.appendChild(modal);
+
+    const modalContent = modal.querySelector('.mermaid-container-fullscreen');
+    const closeBtn = modal.querySelector('.mermaid-fullscreen-close');
+
+    let previousScrollOffset = [window.scrollX, window.scrollY];
+
+    const closeModal = () => {
+        modal.classList.remove('active');
+        modalContent.innerHTML = '';
+        document.body.style.overflow = ''
+        window.scrollTo({left: previousScrollOffset[0], top: previousScrollOffset[1], behavior: 'instant'});
+    };
+
+    closeBtn.addEventListener('click', closeModal);
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) closeModal();
+    });
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && modal.classList.contains('active')) {
+            closeModal();
+        }
+    });
+
+    const allButtons = [];
+
+    document.querySelectorAll('.mermaid').forEach((mermaidDiv) => {
+        if (mermaidDiv.parentNode.classList.contains('mermaid-container') ||
+            mermaidDiv.closest('.mermaid-fullscreen-modal')) {
+            return;
+        }
+
+        const container = document.createElement('div');
+        container.className = 'mermaid-container';
+        mermaidDiv.parentNode.insertBefore(container, mermaidDiv);
+        container.appendChild(mermaidDiv);
+
+        const fullscreenBtn = document.createElement('button');
+        fullscreenBtn.className = 'mermaid-fullscreen-btn' + (darkTheme ? ' dark-theme' : '');
+        fullscreenBtn.setAttribute('aria-label', 'View diagram in fullscreen');
+        fullscreenBtn.textContent = '⛶';
+        fullscreenBtn.style.opacity = '50%';
+
+        // Calculate dynamic position based on diagram's margin and padding
+        const diagramStyle = window.getComputedStyle(mermaidDiv);
+        const marginTop = parseFloat(diagramStyle.marginTop) || 0;
+        const marginRight = parseFloat(diagramStyle.marginRight) || 0;
+        const paddingTop = parseFloat(diagramStyle.paddingTop) || 0;
+        const paddingRight = parseFloat(diagramStyle.paddingRight) || 0;
+        fullscreenBtn.style.top = `${marginTop + paddingTop + 4}px`;
+        fullscreenBtn.style.right = `${marginRight + paddingRight + 4}px`;
+
+        fullscreenBtn.addEventListener('click', () => {
+            previousScrollOffset = [window.scroll, window.scrollY];
+            const clone = mermaidDiv.cloneNode(true);
+            modalContent.innerHTML = '';
+            modalContent.appendChild(clone);
+
+            const svg = clone.querySelector('svg');
+            if (svg) {
+                svg.removeAttribute('width');
+                svg.removeAttribute('height');
+                svg.style.width = '100%';
+                svg.style.height = 'auto';
+                svg.style.maxWidth = '100%';
+                svg.style.sdisplay = 'block';
+
+                if ("False" === "True") {
+                    setTimeout(() => {
+                        const g = svg.querySelector('g');
+                        if (g) {
+                            var svgD3 = d3.select(svg);
+                            svgD3.html("<g class='wrapper'>" + svgD3.html() + "</g>");
+                            var inner = svgD3.select("g");
+                            var zoom = d3.zoom().on("zoom", function(event) {
+                                inner.attr("transform", event.transform);
+                            });
+                            svgD3.call(zoom);
+                        }
+                    }, 100);
+                }
+            }
+
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        });
+
+        container.appendChild(fullscreenBtn);
+        allButtons.push(fullscreenBtn);
+    });
+
+    // Update theme classes when theme changes
+    const updateTheme = () => {
+        const dark = isDarkTheme();
+        allButtons.forEach(btn => {
+            if (dark) {
+                btn.classList.add('dark-theme');
+            } else {
+                btn.classList.remove('dark-theme');
+            }
+        });
+        if (dark) {
+            modal.classList.add('dark-theme');
+            modalContent.classList.add('dark-theme');
+            closeBtn.classList.add('dark-theme');
+        } else {
+            modal.classList.remove('dark-theme');
+            modalContent.classList.remove('dark-theme');
+            closeBtn.classList.remove('dark-theme');
+        }
+    };
+
+    // Watch for theme changes
+    const observer = new MutationObserver(updateTheme);
+    observer.observe(document.documentElement, {
+        attributes: true,
+        attributeFilter: ['class', 'style', 'data-theme']
+    });
+    observer.observe(document.body, {
+        attributes: true,
+        attributeFilter: ['class', 'style']
+    });
+};
+
+window.addEventListener("load", load);
+</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'chapter25';</script>
+    <link rel="index" title="索引" href="genindex.html" />
+    <link rel="search" title="搜索" href="search.html" />
+    <link rel="next" title="第二十六章：AI 时代的工程文化与团队建设" href="chapter26.html" />
+    <link rel="prev" title="第二十四章：AI 时代的学习方法论" href="chapter24.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="zh-CN"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">跳转至主要内容</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>回到顶部</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="版本警告"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">AI 时代的软件工程</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="搜索" aria-label="搜索" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">搜索</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">第一部分：回顾与反思 — 软件工程的前世今生</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="chapter01.html">第一章：软件工程的起源与演进</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter02.html">第二章：敏捷革命 — 从计划驱动到价值驱动</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter03.html">第三章：DevOps 与云原生 — 打破开发与运维的壁垒</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter04.html">第四章：软件架构的演进 — 从单体到智能体</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter05.html">第五章：软件质量与工程实践的变迁</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">第二部分：变革之风 — AI 如何重塑软件开发</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="chapter06.html">第六章：AI 编程助手的崛起</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter07.html">第七章：大语言模型基础 — 开发者需要知道的</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter08.html">第八章：AI 驱动的软件开发生命周期</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter09.html">第九章：AI 时代的代码审查与质量保证</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter10.html">第十章：AI 时代的团队协作与项目管理</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">第三部分：氛围编程 — 新范式的崛起</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="chapter11.html">第十一章：什么是氛围编程（Vibe Coding）</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter12.html">第十二章：Cursor — 重新定义代码编辑器</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter13.html">第十三章：Claude Code — 终端中的 AI 软件工程师</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter14.html">第十四章：氛围编程的边界与风险</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter15.html">第十五章：超越氛围编程 — 意图驱动开发</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">第四部分：AI Agent 开发深度解析</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="chapter16.html">第十六章：AI Agent 概论 — 从聊天机器人到自主智能体</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter17.html">第十七章：Agent 架构模式深度解析</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter18.html">第十八章：Agent 开发框架对比与实战</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter19.html">第十九章：Agent 的工具系统设计</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter20.html">第二十章：Agent 的记忆与状态管理</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter21.html">第二十一章：多 Agent 系统与协作模式</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter22.html">第二十二章：Agent 的评估、测试与可观测性</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">第五部分：工程师的自我进化</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="chapter23.html">第二十三章：程序员的认知转变 — 从编码者到架构师</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter24.html">第二十四章：AI 时代的学习方法论</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">第二十五章：AI 时代的职业发展路径</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter26.html">第二十六章：AI 时代的工程文化与团队建设</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter27.html">第二十七章：AI 时代的工程伦理与责任</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">第六部分：展望未来</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="chapter28.html">第二十八章：软件工程的下一个十年</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter29.html">第二十九章：构建你的 AI 工具箱</a></li>
+<li class="toctree-l1"><a class="reference internal" href="chapter30.html">第三十章：写给每一位软件工程师的信</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">附录：实战项目</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="appendix_a.html">附录 A：实战项目 — AI Coach 虚拟学习教练</a></li>
+<li class="toctree-l1"><a class="reference internal" href="appendix_b.html">附录 B：实战项目 — AI Editor 虚拟书稿编辑</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/walterfan/walter-ai-engineering-book" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="源码库"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/walterfan/walter-ai-engineering-book/edit/main/chapter25.md" target="_blank"
+   class="btn btn-sm btn-source-edit-button dropdown-item"
+   title="Suggest edit"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="btn__text-container">Suggest edit</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/walterfan/walter-ai-engineering-book/issues/new?title=Issue%20on%20page%20%2Fchapter25.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="创建议题"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="下载此页面">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/chapter25.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="下载源文件"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="列印成 PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="全屏模式"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="亮色"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="暗色"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="搜索" aria-label="搜索" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>第二十五章：AI 时代的职业发展路径</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> 目录 </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">25.1 岗位的替代与增强</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">25.1.1 被替代风险评估框架</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">25.1.2 具体岗位分析</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">25.1.3 增强而非替代的现实</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">25.2 新兴岗位</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ai-engineer-ai">25.2.1 AI Engineer（AI 工程师）</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#prompt-engineer">25.2.2 Prompt Engineer（提示工程师）</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#agent-developer">25.2.3 Agent Developer（智能体开发者）</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ai-safety-engineer-ai">25.2.4 AI Safety Engineer（AI 安全工程师）</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">25.3 传统岗位的转型路径</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id7">25.3.1 前端工程师的转型</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id8">25.3.2 后端工程师的转型</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id9">25.3.3 测试工程师的转型</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id10">25.3.4 运维工程师的转型</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id11">25.4 技术管理者的新挑战</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id12">25.4.1 管理 AI 增强团队</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id13">25.4.2 技术管理者的新技能</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id14">25.5 自由职业与一人公司</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id15">25.5.1 AI 赋能的一人公司</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id16">25.5.2 自由职业的新机会</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id17">25.5.3 风险与挑战</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id18">25.6 开源贡献的价值</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id19">25.6.1 开源作为职业加速器</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id20">25.6.2 如何开始开源贡献</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id21">25.7 个人品牌建设</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id22">25.7.1 为什么个人品牌很重要</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id23">25.7.2 个人品牌建设策略</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id24">25.8 3-5 年职业规划路线图</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id25">25.8.1 初级工程师（0-3 年经验）</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id26">25.8.2 中级工程师（3-7 年经验）</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id27">25.8.3 高级工程师（7+ 年经验）</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id28">25.9 本章小结</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="ai">
+<span id="chapter25"></span><h1>第二十五章：AI 时代的职业发展路径<a class="headerlink" href="#ai" title="Link to this heading">#</a></h1>
+<pre  class="mermaid">
+        mindmap
+  root((AI时代职业发展))
+    岗位变化
+      被替代岗位
+      被增强岗位
+    新兴岗位
+      AI Engineer
+      Prompt Engineer
+      Agent Developer
+      AI Safety Engineer
+    转型路径
+      前端转型
+      后端转型
+      测试转型
+    管理者挑战
+      评估AI贡献
+      团队重组
+    一人公司
+      AI赋能个体
+      全栈能力
+    职业规划
+      3-5年路线图
+      个人品牌
+      开源贡献
+    </pre><blockquote>
+<div><p>“The best way to predict the future is to create it.” — Peter Drucker</p>
+</div></blockquote>
+<p>AI 正在重塑软件工程的职业版图。一些岗位正在被自动化取代，另一些岗位正在被 AI 增强，同时全新的岗位不断涌现。本章将帮助你在这个快速变化的环境中找到自己的定位，规划可持续的职业发展路径。</p>
+<section id="id1">
+<h2>25.1 岗位的替代与增强<a class="headerlink" href="#id1" title="Link to this heading">#</a></h2>
+<section id="id2">
+<h3>25.1.1 被替代风险评估框架<a class="headerlink" href="#id2" title="Link to this heading">#</a></h3>
+<p>并非所有编程岗位面临同等的 AI 替代风险。我们可以用两个维度来评估：</p>
+<pre  class="mermaid">
+        quadrantChart
+    title 岗位 AI 替代风险矩阵
+    x-axis 低创造性 --&gt; 高创造性
+    y-axis 低复杂度 --&gt; 高复杂度
+    quadrant-1 增强区（AI赋能）
+    quadrant-2 安全区（人类主导）
+    quadrant-3 危险区（高替代风险）
+    quadrant-4 转型区（需要升级）
+    </pre><p><strong>高替代风险的岗位特征</strong>：</p>
+<ul class="simple">
+<li><p>工作内容高度重复和模式化</p></li>
+<li><p>主要涉及已知问题的已知解决方案</p></li>
+<li><p>输出质量容易通过自动化测试验证</p></li>
+<li><p>不需要深度的领域知识或人际交互</p></li>
+</ul>
+<p><strong>低替代风险的岗位特征</strong>：</p>
+<ul class="simple">
+<li><p>需要理解模糊的业务需求</p></li>
+<li><p>涉及复杂的系统级决策</p></li>
+<li><p>需要跨团队协调和沟通</p></li>
+<li><p>要求创新性的问题解决</p></li>
+</ul>
+</section>
+<section id="id3">
+<h3>25.1.2 具体岗位分析<a class="headerlink" href="#id3" title="Link to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table" id="id29">
+<caption><span class="caption-text">岗位替代与增强分析</span><a class="headerlink" href="#id29" title="Link to this table">#</a></caption>
+<thead>
+<tr class="row-odd"><th class="head"><p>岗位</p></th>
+<th class="head"><p>替代风险</p></th>
+<th class="head"><p>增强潜力</p></th>
+<th class="head"><p>趋势</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>初级前端开发</p></td>
+<td><p>高</p></td>
+<td><p>中</p></td>
+<td><p>需要向全栈或专业化方向转型</p></td>
+</tr>
+<tr class="row-odd"><td><p>后端 CRUD 开发</p></td>
+<td><p>高</p></td>
+<td><p>中</p></td>
+<td><p>需要向系统架构方向发展</p></td>
+</tr>
+<tr class="row-even"><td><p>测试工程师（手动）</p></td>
+<td><p>很高</p></td>
+<td><p>低</p></td>
+<td><p>向测试架构师或质量工程师转型</p></td>
+</tr>
+<tr class="row-odd"><td><p>DevOps 工程师</p></td>
+<td><p>中</p></td>
+<td><p>高</p></td>
+<td><p>AI 增强运维，但复杂场景仍需人类</p></td>
+</tr>
+<tr class="row-even"><td><p>系统架构师</p></td>
+<td><p>低</p></td>
+<td><p>很高</p></td>
+<td><p>AI 成为强大的架构探索工具</p></td>
+</tr>
+<tr class="row-odd"><td><p>安全工程师</p></td>
+<td><p>低</p></td>
+<td><p>很高</p></td>
+<td><p>AI 攻防对抗需要更多安全专家</p></td>
+</tr>
+<tr class="row-even"><td><p>数据工程师</p></td>
+<td><p>中</p></td>
+<td><p>高</p></td>
+<td><p>数据管道自动化，但数据治理需要人类</p></td>
+</tr>
+<tr class="row-odd"><td><p>产品经理（技术）</p></td>
+<td><p>低</p></td>
+<td><p>高</p></td>
+<td><p>AI 增强需求分析和原型设计</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="id4">
+<h3>25.1.3 增强而非替代的现实<a class="headerlink" href="#id4" title="Link to this heading">#</a></h3>
+<p>历史经验表明，技术革命通常不是简单地消灭岗位，而是改变岗位的内涵：</p>
+<div class="admonition note">
+<p class="admonition-title">备注</p>
+<p>ATM 机的出现并没有减少银行柜员的数量。相反，ATM 降低了开设银行网点的成本，导致更多网点开设，柜员总数反而增加了——但柜员的工作内容从处理现金转变为提供金融咨询。</p>
+<p>AI 对程序员的影响可能类似：编码的自动化降低了软件开发的成本，导致更多的软件需求被释放，程序员总数可能增加，但工作内容将发生根本变化。</p>
+</div>
+</section>
+</section>
+<section id="id5">
+<h2>25.2 新兴岗位<a class="headerlink" href="#id5" title="Link to this heading">#</a></h2>
+<section id="ai-engineer-ai">
+<h3>25.2.1 AI Engineer（AI 工程师）<a class="headerlink" href="#ai-engineer-ai" title="Link to this heading">#</a></h3>
+<p>AI 工程师是 AI 时代最热门的新兴岗位之一，由 Swyx 在 2023 年首次系统性地定义。</p>
+<p><strong>核心职责</strong>：</p>
+<ul class="simple">
+<li><p>将大语言模型集成到产品中</p></li>
+<li><p>设计和优化 AI 工作流（RAG、Agent、Fine-tuning）</p></li>
+<li><p>构建 AI 原生应用的基础设施</p></li>
+<li><p>评估和选择 AI 模型</p></li>
+</ul>
+<p><strong>技能要求</strong>：</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ai_engineer_skills</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;必备&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s2">&quot;LLM API 使用和优化&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Prompt Engineering&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;RAG 系统设计与实现&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;向量数据库使用&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;AI 应用评估方法&quot;</span><span class="p">,</span>
+    <span class="p">],</span>
+    <span class="s2">&quot;加分&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s2">&quot;模型微调经验&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;分布式系统知识&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;MLOps 实践&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;前端开发能力（构建 AI 产品界面）&quot;</span><span class="p">,</span>
+    <span class="p">],</span>
+    <span class="s2">&quot;软技能&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s2">&quot;快速学习新模型和工具&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;产品思维&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;与非技术团队沟通 AI 能力和限制&quot;</span><span class="p">,</span>
+    <span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><strong>薪资范围</strong>（2025年参考）：</p>
+<ul class="simple">
+<li><p>初级：$120K-$160K</p></li>
+<li><p>中级：$160K-$220K</p></li>
+<li><p>高级：$220K-$350K+</p></li>
+</ul>
+</section>
+<section id="prompt-engineer">
+<h3>25.2.2 Prompt Engineer（提示工程师）<a class="headerlink" href="#prompt-engineer" title="Link to this heading">#</a></h3>
+<p>Prompt Engineer 是一个充满争议的岗位——有人认为它是未来的核心岗位，有人认为它只是过渡性角色。</p>
+<p><strong>现实情况</strong>：</p>
+<ul class="simple">
+<li><p>独立的 Prompt Engineer 岗位正在减少</p></li>
+<li><p>Prompt Engineering 作为一项技能正在被整合到其他岗位中</p></li>
+<li><p>高级 Prompt Engineering（如系统提示设计、多 Agent 编排）仍有专门需求</p></li>
+</ul>
+<p><strong>发展方向</strong>：</p>
+<ul class="simple">
+<li><p>向 AI Engineer 方向发展</p></li>
+<li><p>专注于特定领域的 AI 应用优化</p></li>
+<li><p>转向 AI 产品设计</p></li>
+</ul>
+</section>
+<section id="agent-developer">
+<h3>25.2.3 Agent Developer（智能体开发者）<a class="headerlink" href="#agent-developer" title="Link to this heading">#</a></h3>
+<p>随着 AI Agent 技术的成熟，Agent Developer 成为一个快速增长的岗位：</p>
+<p><strong>核心职责</strong>：</p>
+<ul class="simple">
+<li><p>设计和实现自主 AI Agent</p></li>
+<li><p>构建 Agent 的工具调用和环境交互能力</p></li>
+<li><p>设计多 Agent 协作系统</p></li>
+<li><p>确保 Agent 的安全性和可控性</p></li>
+</ul>
+<p><strong>技能要求</strong>：</p>
+<ul class="simple">
+<li><p>深入理解 LLM 的能力和限制</p></li>
+<li><p>工具使用（Function Calling）设计</p></li>
+<li><p>状态管理和记忆系统</p></li>
+<li><p>安全边界和防护措施设计</p></li>
+<li><p>评估和调试 Agent 行为</p></li>
+</ul>
+</section>
+<section id="ai-safety-engineer-ai">
+<h3>25.2.4 AI Safety Engineer（AI 安全工程师）<a class="headerlink" href="#ai-safety-engineer-ai" title="Link to this heading">#</a></h3>
+<p>随着 AI 系统在关键领域的应用增加，AI 安全工程师的需求急剧增长：</p>
+<p><strong>核心职责</strong>：</p>
+<ul class="simple">
+<li><p>设计 AI 系统的安全防护措施</p></li>
+<li><p>红队测试（对抗性测试）</p></li>
+<li><p>建立 AI 使用的安全准则和审计流程</p></li>
+<li><p>监控 AI 系统的异常行为</p></li>
+<li><p>确保 AI 系统符合法规要求</p></li>
+</ul>
+<p><strong>这个岗位的独特价值</strong>：AI 安全是一个 AI 本身难以完全自动化的领域，因为它需要对抗性思维和对人类价值观的深刻理解。</p>
+</section>
+</section>
+<section id="id6">
+<h2>25.3 传统岗位的转型路径<a class="headerlink" href="#id6" title="Link to this heading">#</a></h2>
+<section id="id7">
+<h3>25.3.1 前端工程师的转型<a class="headerlink" href="#id7" title="Link to this heading">#</a></h3>
+<div class="highlight-markdown notranslate"><div class="highlight"><pre><span></span><span class="gu">## 前端工程师转型路径</span>
+
+<span class="gu">### 路径一：AI 产品界面专家</span>
+<span class="k">-</span><span class="w"> </span>专注于 AI 交互设计（对话式 UI、流式输出展示）
+<span class="k">-</span><span class="w"> </span>学习 AI 产品的用户体验最佳实践
+<span class="k">-</span><span class="w"> </span>掌握实时数据可视化
+
+<span class="gu">### 路径二：全栈 AI 应用开发者</span>
+<span class="k">-</span><span class="w"> </span>扩展后端能力，特别是 AI API 集成
+<span class="k">-</span><span class="w"> </span>学习 RAG 和 Agent 开发
+<span class="k">-</span><span class="w"> </span>构建端到端的 AI 应用
+
+<span class="gu">### 路径三：设计工程师</span>
+<span class="k">-</span><span class="w"> </span>结合设计思维和工程能力
+<span class="k">-</span><span class="w"> </span>利用 AI 工具加速原型设计
+<span class="k">-</span><span class="w"> </span>专注于用户体验和可访问性
+</pre></div>
+</div>
+</section>
+<section id="id8">
+<h3>25.3.2 后端工程师的转型<a class="headerlink" href="#id8" title="Link to this heading">#</a></h3>
+<p>后端工程师有天然的优势转向 AI 工程：</p>
+<ol class="arabic simple">
+<li><p><strong>AI 基础设施方向</strong>：构建支撑 AI 应用的后端系统（向量数据库、模型服务、缓存层）</p></li>
+<li><p><strong>数据工程方向</strong>：构建 AI 训练和推理所需的数据管道</p></li>
+<li><p><strong>平台工程方向</strong>：构建内部 AI 开发平台，赋能其他团队</p></li>
+</ol>
+</section>
+<section id="id9">
+<h3>25.3.3 测试工程师的转型<a class="headerlink" href="#id9" title="Link to this heading">#</a></h3>
+<p>测试工程师面临较大的转型压力，但也有独特的机会：</p>
+<ul class="simple">
+<li><p><strong>AI 测试专家</strong>：专注于测试 AI 系统的正确性、公平性和安全性</p></li>
+<li><p><strong>质量工程师</strong>：从手动测试转向质量体系设计</p></li>
+<li><p><strong>AI 评估专家</strong>：设计和实施 AI 模型和应用的评估框架</p></li>
+</ul>
+</section>
+<section id="id10">
+<h3>25.3.4 运维工程师的转型<a class="headerlink" href="#id10" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><strong>AIOps 专家</strong>：利用 AI 进行智能运维</p></li>
+<li><p><strong>AI 基础设施工程师</strong>：管理 GPU 集群和模型部署</p></li>
+<li><p><strong>可靠性工程师</strong>：确保 AI 系统的可靠性和可观测性</p></li>
+</ul>
+</section>
+</section>
+<section id="id11">
+<h2>25.4 技术管理者的新挑战<a class="headerlink" href="#id11" title="Link to this heading">#</a></h2>
+<section id="id12">
+<h3>25.4.1 管理 AI 增强团队<a class="headerlink" href="#id12" title="Link to this heading">#</a></h3>
+<p>技术管理者面临全新的挑战：</p>
+<div class="important admonition">
+<p class="admonition-title">技术管理者的新课题</p>
+<ol class="arabic simple">
+<li><p><strong>生产力衡量</strong>：当 AI 大幅提升个人产出时，如何公平地评估绩效？</p></li>
+<li><p><strong>团队规模</strong>：AI 是否意味着需要更少的人？还是可以用同样的人做更多的事？</p></li>
+<li><p><strong>技能投资</strong>：应该投资团队学习哪些技能？</p></li>
+<li><p><strong>工具选择</strong>：如何在众多 AI 工具中做出选择？</p></li>
+<li><p><strong>知识管理</strong>：如何确保 AI 辅助下的知识不会流失？</p></li>
+<li><p><strong>文化建设</strong>：如何建设拥抱 AI 但不盲目依赖的团队文化？</p></li>
+</ol>
+</div>
+</section>
+<section id="id13">
+<h3>25.4.2 技术管理者的新技能<a class="headerlink" href="#id13" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><strong>AI 战略思维</strong>：理解 AI 如何影响技术决策和产品方向</p></li>
+<li><p><strong>变革管理</strong>：引导团队适应 AI 时代的工作方式</p></li>
+<li><p><strong>伦理判断</strong>：在 AI 使用中做出负责任的决策</p></li>
+<li><p><strong>跨职能协作</strong>：与产品、设计、法务等团队协作制定 AI 策略</p></li>
+</ul>
+</section>
+</section>
+<section id="id14">
+<h2>25.5 自由职业与一人公司<a class="headerlink" href="#id14" title="Link to this heading">#</a></h2>
+<section id="id15">
+<h3>25.5.1 AI 赋能的一人公司<a class="headerlink" href="#id15" title="Link to this heading">#</a></h3>
+<p>AI 工具让&quot;一人公司&quot;成为现实。一个人借助 AI 可以完成过去需要一个小团队才能完成的工作：</p>
+<div class="pst-scrollable-table-container"><table class="table" id="id30">
+<caption><span class="caption-text">一人公司的 AI 工具栈</span><a class="headerlink" href="#id30" title="Link to this table">#</a></caption>
+<thead>
+<tr class="row-odd"><th class="head"><p>职能</p></th>
+<th class="head"><p>AI 工具</p></th>
+<th class="head"><p>效率提升</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>产品设计</p></td>
+<td><p>AI 原型工具、用户研究 AI</p></td>
+<td><p>5-10x</p></td>
+</tr>
+<tr class="row-odd"><td><p>开发</p></td>
+<td><p>Cursor、GitHub Copilot、v0</p></td>
+<td><p>3-5x</p></td>
+</tr>
+<tr class="row-even"><td><p>测试</p></td>
+<td><p>AI 测试生成、自动化测试</p></td>
+<td><p>5-10x</p></td>
+</tr>
+<tr class="row-odd"><td><p>运维</p></td>
+<td><p>AI 监控、自动修复</p></td>
+<td><p>10x+</p></td>
+</tr>
+<tr class="row-even"><td><p>营销</p></td>
+<td><p>AI 内容生成、SEO 优化</p></td>
+<td><p>5-10x</p></td>
+</tr>
+<tr class="row-odd"><td><p>客户支持</p></td>
+<td><p>AI 客服、知识库</p></td>
+<td><p>10x+</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="id16">
+<h3>25.5.2 自由职业的新机会<a class="headerlink" href="#id16" title="Link to this heading">#</a></h3>
+<p>AI 时代的自由职业机会：</p>
+<ol class="arabic simple">
+<li><p><strong>AI 应用开发</strong>：为企业构建定制 AI 解决方案</p></li>
+<li><p><strong>AI 咨询</strong>：帮助企业制定 AI 策略和实施计划</p></li>
+<li><p><strong>AI 培训</strong>：培训企业团队使用 AI 工具</p></li>
+<li><p><strong>AI 内容创作</strong>：技术写作、课程制作</p></li>
+<li><p><strong>开源项目维护</strong>：通过赞助和咨询获得收入</p></li>
+</ol>
+</section>
+<section id="id17">
+<h3>25.5.3 风险与挑战<a class="headerlink" href="#id17" title="Link to this heading">#</a></h3>
+<p>自由职业和一人公司也面临挑战：</p>
+<ul class="simple">
+<li><p><strong>技能更新压力</strong>：需要持续跟进 AI 技术的快速变化</p></li>
+<li><p><strong>竞争加剧</strong>：AI 降低了入门门槛，竞争更加激烈</p></li>
+<li><p><strong>收入不稳定</strong>：需要建立多元化的收入来源</p></li>
+<li><p><strong>孤独感</strong>：缺乏团队协作和社交互动</p></li>
+</ul>
+</section>
+</section>
+<section id="id18">
+<h2>25.6 开源贡献的价值<a class="headerlink" href="#id18" title="Link to this heading">#</a></h2>
+<section id="id19">
+<h3>25.6.1 开源作为职业加速器<a class="headerlink" href="#id19" title="Link to this heading">#</a></h3>
+<p>在 AI 时代，开源贡献的价值不减反增：</p>
+<p><strong>对职业发展的价值</strong>：</p>
+<ul class="simple">
+<li><p><strong>技能展示</strong>：开源贡献是最好的技能证明</p></li>
+<li><p><strong>网络建设</strong>：与全球顶尖开发者建立联系</p></li>
+<li><p><strong>学习机会</strong>：参与高质量项目是最好的学习方式</p></li>
+<li><p><strong>影响力建设</strong>：在特定领域建立技术影响力</p></li>
+</ul>
+<p><strong>AI 时代的开源机会</strong>：</p>
+<ul class="simple">
+<li><p>AI 工具和框架（LangChain、LlamaIndex、vLLM 等）</p></li>
+<li><p>AI 评估和基准测试工具</p></li>
+<li><p>AI 安全和隐私工具</p></li>
+<li><p>AI 辅助开发工具</p></li>
+</ul>
+</section>
+<section id="id20">
+<h3>25.6.2 如何开始开源贡献<a class="headerlink" href="#id20" title="Link to this heading">#</a></h3>
+<div class="highlight-markdown notranslate"><div class="highlight"><pre><span></span><span class="gu">## 开源贡献入门路径</span>
+
+<span class="gu">### 第一步：选择项目</span>
+<span class="k">-</span><span class="w"> </span>选择你日常使用的工具或框架
+<span class="k">-</span><span class="w"> </span>从 &quot;good first issue&quot; 标签开始
+<span class="k">-</span><span class="w"> </span>优先选择活跃维护的项目
+
+<span class="gu">### 第二步：从小处开始</span>
+<span class="k">-</span><span class="w"> </span>修复文档错误
+<span class="k">-</span><span class="w"> </span>添加测试用例
+<span class="k">-</span><span class="w"> </span>修复简单的 Bug
+
+<span class="gu">### 第三步：深入参与</span>
+<span class="k">-</span><span class="w"> </span>参与设计讨论
+<span class="k">-</span><span class="w"> </span>提出新功能建议
+<span class="k">-</span><span class="w"> </span>审查其他人的 PR
+
+<span class="gu">### 第四步：建立影响力</span>
+<span class="k">-</span><span class="w"> </span>成为项目的定期贡献者
+<span class="k">-</span><span class="w"> </span>撰写技术博客分享经验
+<span class="k">-</span><span class="w"> </span>在会议上分享项目相关话题
+</pre></div>
+</div>
+</section>
+</section>
+<section id="id21">
+<h2>25.7 个人品牌建设<a class="headerlink" href="#id21" title="Link to this heading">#</a></h2>
+<section id="id22">
+<h3>25.7.1 为什么个人品牌很重要<a class="headerlink" href="#id22" title="Link to this heading">#</a></h3>
+<p>在 AI 时代，个人品牌比以往任何时候都重要：</p>
+<ul class="simple">
+<li><p><strong>差异化</strong>：当 AI 让每个人都能写代码时，个人品牌是差异化的关键</p></li>
+<li><p><strong>机会吸引</strong>：好的个人品牌能吸引工作机会、合作邀请和演讲机会</p></li>
+<li><p><strong>信任建立</strong>：在信息过载的时代，个人品牌是信任的基础</p></li>
+<li><p><strong>知识变现</strong>：个人品牌是知识变现的前提</p></li>
+</ul>
+</section>
+<section id="id23">
+<h3>25.7.2 个人品牌建设策略<a class="headerlink" href="#id23" title="Link to this heading">#</a></h3>
+<div class="tip admonition">
+<p class="admonition-title">个人品牌建设的 CRAFT 框架</p>
+<ul class="simple">
+<li><p><strong>C - Content（内容）</strong>：持续输出高质量的技术内容</p>
+<ul>
+<li><p>技术博客（每月 2-4 篇）</p></li>
+<li><p>开源项目和代码示例</p></li>
+<li><p>技术演讲和播客</p></li>
+</ul>
+</li>
+<li><p><strong>R - Reputation（声誉）</strong>：在特定领域建立专业声誉</p>
+<ul>
+<li><p>深耕 1-2 个技术领域</p></li>
+<li><p>参与行业标准和最佳实践的制定</p></li>
+<li><p>获得同行认可</p></li>
+</ul>
+</li>
+<li><p><strong>A - Audience（受众）</strong>：建立和维护受众群体</p>
+<ul>
+<li><p>社交媒体（Twitter/X、LinkedIn、知乎）</p></li>
+<li><p>技术社区（GitHub、Stack Overflow）</p></li>
+<li><p>邮件列表或 Newsletter</p></li>
+</ul>
+</li>
+<li><p><strong>F - Feedback（反馈）</strong>：持续收集和响应反馈</p>
+<ul>
+<li><p>关注读者和用户的需求</p></li>
+<li><p>根据反馈调整内容方向</p></li>
+<li><p>建立双向互动</p></li>
+</ul>
+</li>
+<li><p><strong>T - Trust（信任）</strong>：建立长期信任</p>
+<ul>
+<li><p>保持真实和透明</p></li>
+<li><p>承认错误和局限</p></li>
+<li><p>持续交付价值</p></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+</section>
+<section id="id24">
+<h2>25.8 3-5 年职业规划路线图<a class="headerlink" href="#id24" title="Link to this heading">#</a></h2>
+<section id="id25">
+<h3>25.8.1 初级工程师（0-3 年经验）<a class="headerlink" href="#id25" title="Link to this heading">#</a></h3>
+<div class="highlight-markdown notranslate"><div class="highlight"><pre><span></span><span class="gu">## 年度目标</span>
+
+<span class="gu">### 第 1 年：建立基础</span>
+<span class="k">-</span><span class="w"> </span>掌握 1-2 种编程语言和主流框架
+<span class="k">-</span><span class="w"> </span>熟练使用 AI 辅助编程工具
+<span class="k">-</span><span class="w"> </span>完成 3-5 个完整项目
+<span class="k">-</span><span class="w"> </span>开始写技术博客
+
+<span class="gu">### 第 2 年：深化专长</span>
+<span class="k">-</span><span class="w"> </span>选择一个专业方向深入（AI 工程、系统架构、安全等）
+<span class="k">-</span><span class="w"> </span>开始参与开源项目
+<span class="k">-</span><span class="w"> </span>获得 1-2 个相关认证
+<span class="k">-</span><span class="w"> </span>建立初步的技术影响力
+
+<span class="gu">### 第 3 年：建立差异化</span>
+<span class="k">-</span><span class="w"> </span>在选定领域建立深度
+<span class="k">-</span><span class="w"> </span>开始在技术会议上分享
+<span class="k">-</span><span class="w"> </span>考虑是否转向管理或继续技术路线
+<span class="k">-</span><span class="w"> </span>建立个人品牌
+</pre></div>
+</div>
+</section>
+<section id="id26">
+<h3>25.8.2 中级工程师（3-7 年经验）<a class="headerlink" href="#id26" title="Link to this heading">#</a></h3>
+<div class="highlight-markdown notranslate"><div class="highlight"><pre><span></span><span class="gu">## 年度目标</span>
+
+<span class="gu">### 第 1 年：技能升级</span>
+<span class="k">-</span><span class="w"> </span>系统学习 AI 工程相关技能
+<span class="k">-</span><span class="w"> </span>重新评估技术栈和专业方向
+<span class="k">-</span><span class="w"> </span>开始承担架构级别的任务
+
+<span class="gu">### 第 2 年：影响力扩展</span>
+<span class="k">-</span><span class="w"> </span>在团队中推动 AI 工具的采用
+<span class="k">-</span><span class="w"> </span>指导初级工程师
+<span class="k">-</span><span class="w"> </span>参与技术决策
+
+<span class="gu">### 第 3 年：战略定位</span>
+<span class="k">-</span><span class="w"> </span>成为团队的技术领导者
+<span class="k">-</span><span class="w"> </span>建立跨团队的影响力
+<span class="k">-</span><span class="w"> </span>明确长期职业方向（技术专家 vs 管理者）
+</pre></div>
+</div>
+</section>
+<section id="id27">
+<h3>25.8.3 高级工程师（7+ 年经验）<a class="headerlink" href="#id27" title="Link to this heading">#</a></h3>
+<div class="highlight-markdown notranslate"><div class="highlight"><pre><span></span><span class="gu">## 年度目标</span>
+
+<span class="gu">### 第 1 年：转型与适应</span>
+<span class="k">-</span><span class="w"> </span>深入理解 AI 对现有技术栈的影响
+<span class="k">-</span><span class="w"> </span>重新定义个人价值主张
+<span class="k">-</span><span class="w"> </span>开始构建 AI 时代的新技能
+
+<span class="gu">### 第 2 年：引领变革</span>
+<span class="k">-</span><span class="w"> </span>在组织中推动 AI 转型
+<span class="k">-</span><span class="w"> </span>设计 AI 原生的开发流程
+<span class="k">-</span><span class="w"> </span>培养下一代技术领导者
+
+<span class="gu">### 第 3 年：行业影响</span>
+<span class="k">-</span><span class="w"> </span>在行业层面建立影响力
+<span class="k">-</span><span class="w"> </span>参与标准制定和最佳实践推广
+<span class="k">-</span><span class="w"> </span>考虑创业或高级顾问角色
+</pre></div>
+</div>
+</section>
+</section>
+<section id="id28">
+<h2>25.9 本章小结<a class="headerlink" href="#id28" title="Link to this heading">#</a></h2>
+<p>AI 时代的职业发展充满机遇和挑战。核心要点：</p>
+<ul class="simple">
+<li><p>AI 正在替代一些岗位，增强更多岗位，同时创造全新的岗位</p></li>
+<li><p>AI Engineer、Agent Developer、AI Safety Engineer 是最有前景的新兴岗位</p></li>
+<li><p>传统岗位需要主动转型，找到与 AI 协作的最佳定位</p></li>
+<li><p>一人公司和自由职业在 AI 赋能下变得更加可行</p></li>
+<li><p>开源贡献和个人品牌建设是职业发展的重要加速器</p></li>
+<li><p>制定清晰的 3-5 年职业规划，并根据行业变化持续调整</p></li>
+</ul>
+<blockquote class="epigraph">
+<div><p>“在 AI 时代，最好的职业策略不是预测未来，而是让自己具备适应任何未来的能力。持续学习、保持好奇、拥抱变化——这是永恒的职业发展法则。”</p>
+</div></blockquote>
+<p>下一章我们将探讨 AI 时代的工程文化与团队建设，了解如何在组织层面拥抱 AI 变革。</p>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="chapter24.html"
+       title="上一页">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">上一页</p>
+        <p class="prev-next-title">第二十四章：AI 时代的学习方法论</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="chapter26.html"
+       title="下一页">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">下一页</p>
+        <p class="prev-next-title">第二十六章：AI 时代的工程文化与团队建设</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> 目录
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">25.1 岗位的替代与增强</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">25.1.1 被替代风险评估框架</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">25.1.2 具体岗位分析</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">25.1.3 增强而非替代的现实</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">25.2 新兴岗位</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ai-engineer-ai">25.2.1 AI Engineer（AI 工程师）</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#prompt-engineer">25.2.2 Prompt Engineer（提示工程师）</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#agent-developer">25.2.3 Agent Developer（智能体开发者）</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ai-safety-engineer-ai">25.2.4 AI Safety Engineer（AI 安全工程师）</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">25.3 传统岗位的转型路径</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id7">25.3.1 前端工程师的转型</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id8">25.3.2 后端工程师的转型</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id9">25.3.3 测试工程师的转型</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id10">25.3.4 运维工程师的转型</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id11">25.4 技术管理者的新挑战</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id12">25.4.1 管理 AI 增强团队</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id13">25.4.2 技术管理者的新技能</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id14">25.5 自由职业与一人公司</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id15">25.5.1 AI 赋能的一人公司</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id16">25.5.2 自由职业的新机会</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id17">25.5.3 风险与挑战</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id18">25.6 开源贡献的价值</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id19">25.6.1 开源作为职业加速器</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id20">25.6.2 如何开始开源贡献</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id21">25.7 个人品牌建设</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id22">25.7.1 为什么个人品牌很重要</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id23">25.7.2 个人品牌建设策略</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id24">25.8 3-5 年职业规划路线图</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id25">25.8.1 初级工程师（0-3 年经验）</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id26">25.8.2 中级工程师（3-7 年经验）</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id27">25.8.3 高级工程师（7+ 年经验）</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id28">25.9 本章小结</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+作者： Walter Fan, AI Agent
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026, Walter Fan, AI 辅助创作.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
