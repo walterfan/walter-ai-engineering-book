@@ -18,7 +18,7 @@
 name = "walter-ai-engineering-book"
 version = "1.0.0"
 description = "Sphinx build toolchain for 'AI 时代的软件工程：从敏捷开发到氛围编程'"
-license = "CC-BY-NC-ND-4.0"
+license = "CC-BY-NC-SA-4.0"
 readme = "README.md"
 authors = [{ name = "Walter Fan" }]
 requires-python = ">=3.11,<4.0"

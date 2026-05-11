@@ -89,12 +89,14 @@ appendix_b
 
 ```{admonition} 版权与许可
 :class: note
-本书内容（含正文、插图等）采用 [**Creative Commons BY-NC-ND 4.0**](https://creativecommons.org/licenses/by-nc-nd/4.0/) 许可发布：
-**署名 — 非商业性使用 — 禁止演绎**。
+本书内容（含正文、插图等）采用 [**Creative Commons BY-NC-SA 4.0**](https://creativecommons.org/licenses/by-nc-sa/4.0/) 许可发布：
+**署名 — 非商业性使用 — 相同方式共享**。
+
+允许在注明原作者的前提下，对本书进行翻译、改编、二次创作并公开发布；演绎作品必须以相同的 CC BY-NC-SA 4.0 许可发布，且不得用于商业目的。
 
 附录 A、B 对应的示例代码（仓库中 `examples/` 目录下）单独采用 [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0) 许可，可自由用于商业项目。
 
-如需获得商业授权或衍生授权，请通过 GitHub [Issue](https://github.com/walterfan/walter-ai-engineering-book/issues) 联系作者。
+如需获得商业授权，请通过 GitHub [Issue](https://github.com/walterfan/walter-ai-engineering-book/issues) 联系作者。
 
 Copyright © 2026 Walter Fan
 ```

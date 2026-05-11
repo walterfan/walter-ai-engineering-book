@@ -134,13 +134,15 @@ walter-ai-engineering-book/
 
 | 内容范围 | 许可 | 文件 |
 | --- | --- | --- |
-| **书稿内容** —— `source/` 下的所有 Markdown / 插图、`README.md`、构建产物（`build/`、已发布的 HTML/PDF） | [Creative Commons BY-NC-ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/) | [`LICENSE`](LICENSE) |
+| **书稿内容** —— `source/` 下的所有 Markdown / 插图、`README.md`、构建产物（`build/`、已发布的 HTML/PDF） | [Creative Commons BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/) | [`LICENSE`](LICENSE) |
 | **示例代码** —— `examples/` 下的所有源代码（AI Coach、AI Editor 等附录项目） | [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0) | [`LICENSE-CODE`](LICENSE-CODE) |
 
-**书稿（CC BY-NC-ND 4.0）的关键约束**：
-- ✅ 允许：自由阅读、非商业目的的复制和传播，前提是注明作者并附上本仓库链接
-- ❌ 禁止：商业用途；以任何形式发布修改版（翻译、改编、二次创作均不允许公开分发）
-- 如需商业授权或衍生授权，请通过 [Issue](https://github.com/walterfan/walter-ai-engineering-book/issues) 联系作者
+**书稿（CC BY-NC-SA 4.0）的关键约束**：
+- ✅ 允许：自由阅读、复制、传播；允许翻译、改编、二次创作并公开发布
+- ⚠️ 演绎作品（翻译、改编、二次创作）必须以**相同的 CC BY-NC-SA 4.0 许可**发布（ShareAlike）
+- ✅ 必须：注明原作者（Walter Fan）并附上本仓库链接
+- ❌ 禁止：商业用途
+- 如需商业授权，请通过 [Issue](https://github.com/walterfan/walter-ai-engineering-book/issues) 联系作者
 
 **示例代码（Apache-2.0）**：可自由用于商业和非商业项目，需保留版权声明和许可文本。
 
